@@ -62,6 +62,7 @@ import { Route as AppBibliotecaAlimentosRouteImport } from './routes/_app.biblio
 import { Route as AppAvaliacaoFisicaNovaRouteImport } from './routes/_app.avaliacao-fisica.nova'
 import { Route as AppAvaliacaoFisicaIdRouteImport } from './routes/_app.avaliacao-fisica.$id'
 import { Route as AppAlunosIdRouteImport } from './routes/_app.alunos.$id'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksZapiReceiveRouteImport } from './routes/api/public/hooks/zapi-receive'
 import { Route as ApiPublicHooksZapiBoasVindasRouteImport } from './routes/api/public/hooks/zapi-boas-vindas'
 import { Route as ApiPublicHooksResumoFeedbacksGrupoRouteImport } from './routes/api/public/hooks/resumo-feedbacks-grupo'
@@ -348,6 +349,11 @@ const AppAlunosIdRoute = AppAlunosIdRouteImport.update({
   path: '/alunos/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksZapiReceiveRoute =
   ApiPublicHooksZapiReceiveRouteImport.update({
     id: '/api/public/hooks/zapi-receive',
@@ -453,6 +459,7 @@ export interface FileRoutesByFullPath {
   '/aluno/trocas': typeof AlunoTrocasRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -516,6 +523,7 @@ export interface FileRoutesByTo {
   '/aluno/trocas': typeof AlunoTrocasRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno': typeof AlunoIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -585,6 +593,7 @@ export interface FileRoutesById {
   '/aluno/trocas': typeof AlunoTrocasRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_app/alunos/$id': typeof AppAlunosIdRoute
   '/_app/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/_app/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -654,6 +663,7 @@ export interface FileRouteTypes {
     | '/aluno/trocas'
     | '/formularios/$token'
     | '/aluno/'
+    | '/.lovable/oauth/consent'
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/aluno/trocas'
     | '/formularios/$token'
     | '/aluno'
+    | '/.lovable/oauth/consent'
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
@@ -785,6 +796,7 @@ export interface FileRouteTypes {
     | '/aluno/trocas'
     | '/formularios/$token'
     | '/aluno/'
+    | '/.lovable/oauth/consent'
     | '/_app/alunos/$id'
     | '/_app/avaliacao-fisica/$id'
     | '/_app/avaliacao-fisica/nova'
@@ -837,6 +849,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   FormulariosTokenRoute: typeof FormulariosTokenRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   FormulariosIdRespostasRoute: typeof FormulariosIdRespostasRoute
   ApiPublicHooksAgendaCiclosRoute: typeof ApiPublicHooksAgendaCiclosRoute
   ApiPublicHooksAlertaRenovacoesRoute: typeof ApiPublicHooksAlertaRenovacoesRoute
@@ -1225,6 +1238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAlunosIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/zapi-receive': {
       id: '/api/public/hooks/zapi-receive'
       path: '/api/public/hooks/zapi-receive'
@@ -1471,6 +1491,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   FormulariosTokenRoute: FormulariosTokenRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   FormulariosIdRespostasRoute: FormulariosIdRespostasRoute,
   ApiPublicHooksAgendaCiclosRoute: ApiPublicHooksAgendaCiclosRoute,
   ApiPublicHooksAlertaRenovacoesRoute: ApiPublicHooksAlertaRenovacoesRoute,
