@@ -1,0 +1,12 @@
+# MPTEAM
+
+> Plataforma de consultoria fitness e nutricional online: dietas, treinos, acompanhamento de evolução e ranking dos alunos.
+
+MPTEAM é o sistema usado pela equipe e pelos alunos da consultoria MPTEAM. A área pública contém apenas o login e os formulários enviados aos alunos (anamnese, feedbacks). As demais áreas exigem autenticação.
+
+## Pages
+
+- [Entrar](/login): Acesso para equipe e alunos.
+- [Anamnese inicial](/anamnese): Formulário de anamnese para novos alunos.
+- [Feedback quinzenal](/feedback-quinzenal): Envio de feedback quinzenal pelos alunos.
+- [Feedback mensal](/feedback-mensal): Envio de feedback mensal pelos alunos.

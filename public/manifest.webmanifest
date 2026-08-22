@@ -1,0 +1,17 @@
+{
+  "name": "MPTEAM — App do Aluno",
+  "short_name": "MPTEAM",
+  "description": "Acompanhe sua dieta, evolução e ranking no MPTEAM.",
+  "start_url": "/aluno",
+  "scope": "/",
+  "id": "/aluno",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAFAFA",
+  "theme_color": "#F70906",
+  "icons": [
+    { "src": "/mp-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/mp-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/mp-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

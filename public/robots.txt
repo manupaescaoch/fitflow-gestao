@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /aluno
+Disallow: /visao-geral
+Disallow: /alunos
+Disallow: /financeiro
+Disallow: /configuracoes
+Disallow: /caixa-saida
+Disallow: /relatorios
+Disallow: /biblioteca
+Disallow: /feedbacks
+Disallow: /avaliacao-fisica
+Disallow: /formularios
+Disallow: /api/
+
+Sitemap: https://mpteam-app.com/sitemap.xml
