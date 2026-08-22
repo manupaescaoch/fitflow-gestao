@@ -8,7 +8,7 @@ import { loginAlunoPorEmail } from "@/server/aluno-auth.functions";
 import mpTeamLogo from "@/assets/mp-team-logo.png";
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({
     next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined,
   }),
   head: () => ({
