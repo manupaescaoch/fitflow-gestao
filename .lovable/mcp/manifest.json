@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.3",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://igfjvdptrthueirjtckd.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "crm-consultoria",
+      "version": "0.1.0",
+      "title": "CRM CONSULTORIA"
+    },
+    "tools": [
+      {
+        "name": "buscar_alunos",
+        "title": "Buscar alunos",
+        "description": "Lista ou busca alunos do CRM por nome, e-mail ou WhatsApp, com filtro opcional de status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "busca": {
+              "description": "Texto para buscar em nome, e-mail ou WhatsApp.",
+              "type": "string"
+            },
+            "status": {
+              "description": "Filtra por status do aluno (ex: ativo).",
+              "type": "string"
+            },
+            "limite": {
+              "description": "Máximo de resultados (padrão 20).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "detalhe_aluno",
+        "title": "Detalhe do aluno",
+        "description": "Retorna os dados completos de um aluno do CRM pelo seu ID.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "aluno_id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "ID (uuid) do aluno."
+            }
+          },
+          "required": [
+            "aluno_id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "resumo_financeiro",
+        "title": "Resumo financeiro",
+        "description": "Soma entradas e saídas das transações de uma competência (formato AAAA-MM) e retorna o saldo.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "competencia": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}$",
+              "description": "Competência no formato AAAA-MM, ex: 2026-08."
+            }
+          },
+          "required": [
+            "competencia"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "registrar_observacao_aluno",
+        "title": "Registrar observação do aluno",
+        "description": "Acrescenta um texto ao campo de observações do aluno, preservando o conteúdo existente.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "aluno_id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "ID (uuid) do aluno."
+            },
+            "observacao": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Texto a acrescentar às observações."
+            }
+          },
+          "required": [
+            "aluno_id",
+            "observacao"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

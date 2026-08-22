@@ -8,6 +8,9 @@ import { loginAlunoPorEmail } from "@/server/aluno-auth.functions";
 import mpTeamLogo from "@/assets/mp-team-logo.png";
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Entrar — MPTEAM" },
@@ -20,6 +23,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { signIn, session, loading } = useAuth();
   const nav = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -28,9 +32,12 @@ function LoginPage() {
   const loginAlunoFn = useServerFn(loginAlunoPorEmail);
 
   useEffect(() => {
-    if (!loading && session) nav({ to: "/visao-geral" });
+    if (!loading && session) {
+      if (next) { window.location.href = next; return; }
+      nav({ to: "/visao-geral" });
+    }
     else if (!loading && getAlunoSession()) nav({ to: "/aluno" });
-  }, [loading, session, nav]);
+  }, [loading, session, nav, next]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +47,7 @@ function LoginPage() {
     const equipe = await signIn(email.trim(), password);
     if (!equipe.error) {
       setBusy(false);
+      if (next) { window.location.href = next; return; }
       nav({ to: "/visao-geral" });
       return;
     }
