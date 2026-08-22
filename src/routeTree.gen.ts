@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FeedbackQuinzenalRouteImport } from './routes/feedback-quinzenal'
 import { Route as FeedbackMensalRouteImport } from './routes/feedback-mensal'
@@ -35,6 +36,8 @@ import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppConfiguracoesRouteImport } from './routes/_app.configuracoes'
 import { Route as AppCaixaSaidaRouteImport } from './routes/_app.caixa-saida'
 import { Route as AppBibliotecaRouteImport } from './routes/_app.biblioteca'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/_app.financeiro.index'
 import { Route as AppConfiguracoesIndexRouteImport } from './routes/_app.configuracoes.index'
 import { Route as AppBibliotecaIndexRouteImport } from './routes/_app.biblioteca.index'
@@ -62,6 +65,7 @@ import { Route as AppBibliotecaAlimentosRouteImport } from './routes/_app.biblio
 import { Route as AppAvaliacaoFisicaNovaRouteImport } from './routes/_app.avaliacao-fisica.nova'
 import { Route as AppAvaliacaoFisicaIdRouteImport } from './routes/_app.avaliacao-fisica.$id'
 import { Route as AppAlunosIdRouteImport } from './routes/_app.alunos.$id'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksZapiReceiveRouteImport } from './routes/api/public/hooks/zapi-receive'
 import { Route as ApiPublicHooksZapiBoasVindasRouteImport } from './routes/api/public/hooks/zapi-boas-vindas'
@@ -80,6 +84,11 @@ import { Route as AppAvaliacaoFisicaIdEditarRouteImport } from './routes/_app.av
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -206,6 +215,18 @@ const AppBibliotecaRoute = AppBibliotecaRouteImport.update({
   path: '/biblioteca',
   getParentRoute: () => AppRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -349,6 +370,12 @@ const AppAlunosIdRoute = AppAlunosIdRouteImport.update({
   path: '/alunos/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
   path: '/.lovable/oauth/consent',
@@ -440,7 +467,10 @@ export interface FileRoutesByFullPath {
   '/feedback-mensal': typeof FeedbackMensalRoute
   '/feedback-quinzenal': typeof FeedbackQuinzenalRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/caixa-saida': typeof AppCaixaSaidaRoute
   '/configuracoes': typeof AppConfiguracoesRouteWithChildren
@@ -460,6 +490,7 @@ export interface FileRoutesByFullPath {
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -507,7 +538,10 @@ export interface FileRoutesByTo {
   '/feedback-mensal': typeof FeedbackMensalRoute
   '/feedback-quinzenal': typeof FeedbackQuinzenalRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/caixa-saida': typeof AppCaixaSaidaRoute
   '/dashboard': typeof AppDashboardRoute
   '/feedbacks': typeof AppFeedbacksRoute
@@ -524,6 +558,7 @@ export interface FileRoutesByTo {
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -574,7 +609,10 @@ export interface FileRoutesById {
   '/feedback-mensal': typeof FeedbackMensalRoute
   '/feedback-quinzenal': typeof FeedbackQuinzenalRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_app/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/_app/caixa-saida': typeof AppCaixaSaidaRoute
   '/_app/configuracoes': typeof AppConfiguracoesRouteWithChildren
@@ -594,6 +632,7 @@ export interface FileRoutesById {
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_app/alunos/$id': typeof AppAlunosIdRoute
   '/_app/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/_app/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
@@ -644,7 +683,10 @@ export interface FileRouteTypes {
     | '/feedback-mensal'
     | '/feedback-quinzenal'
     | '/login'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/biblioteca'
     | '/caixa-saida'
     | '/configuracoes'
@@ -664,6 +706,7 @@ export interface FileRouteTypes {
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
@@ -711,7 +754,10 @@ export interface FileRouteTypes {
     | '/feedback-mensal'
     | '/feedback-quinzenal'
     | '/login'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/caixa-saida'
     | '/dashboard'
     | '/feedbacks'
@@ -728,6 +774,7 @@ export interface FileRouteTypes {
     | '/formularios/$token'
     | '/aluno'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
@@ -777,7 +824,10 @@ export interface FileRouteTypes {
     | '/feedback-mensal'
     | '/feedback-quinzenal'
     | '/login'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/_app/biblioteca'
     | '/_app/caixa-saida'
     | '/_app/configuracoes'
@@ -797,6 +847,7 @@ export interface FileRouteTypes {
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/_app/alunos/$id'
     | '/_app/avaliacao-fisica/$id'
     | '/_app/avaliacao-fisica/nova'
@@ -847,9 +898,13 @@ export interface RootRouteChildren {
   FeedbackMensalRoute: typeof FeedbackMensalRoute
   FeedbackQuinzenalRoute: typeof FeedbackQuinzenalRoute
   LoginRoute: typeof LoginRoute
+  McpRoute: typeof McpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   FormulariosTokenRoute: typeof FormulariosTokenRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   FormulariosIdRespostasRoute: typeof FormulariosIdRespostasRoute
   ApiPublicHooksAgendaCiclosRoute: typeof ApiPublicHooksAgendaCiclosRoute
   ApiPublicHooksAlertaRenovacoesRoute: typeof ApiPublicHooksAlertaRenovacoesRoute
@@ -872,6 +927,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1048,6 +1110,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/biblioteca'
       preLoaderRoute: typeof AppBibliotecaRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/financeiro/': {
       id: '/_app/financeiro/'
@@ -1237,6 +1313,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/alunos/$id'
       preLoaderRoute: typeof AppAlunosIdRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
@@ -1489,9 +1572,14 @@ const rootRouteChildren: RootRouteChildren = {
   FeedbackMensalRoute: FeedbackMensalRoute,
   FeedbackQuinzenalRoute: FeedbackQuinzenalRoute,
   LoginRoute: LoginRoute,
+  McpRoute: McpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   FormulariosTokenRoute: FormulariosTokenRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   FormulariosIdRespostasRoute: FormulariosIdRespostasRoute,
   ApiPublicHooksAgendaCiclosRoute: ApiPublicHooksAgendaCiclosRoute,
   ApiPublicHooksAlertaRenovacoesRoute: ApiPublicHooksAlertaRenovacoesRoute,
