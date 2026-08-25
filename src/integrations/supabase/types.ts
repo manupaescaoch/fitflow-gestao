@@ -2498,6 +2498,7 @@ export type Database = {
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_crm_user: { Args: { _user_id: string }; Returns: boolean }
       is_equipe_or_admin: { Args: { _user_id: string }; Returns: boolean }
+      next_brt_16h: { Args: { base: string }; Returns: string }
       next_brt_8am: { Args: { base: string }; Returns: string }
       next_brt_business_window: { Args: { base: string }; Returns: string }
       normalizar_telefone_br: { Args: { _telefone: string }; Returns: string }
