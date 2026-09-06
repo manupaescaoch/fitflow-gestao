@@ -457,7 +457,7 @@ function VisaoGeralPage() {
       ) : (
         <>
         {isAdmin && <RenovacoesUrgentesCard />}
-        <MensagensPendentesPanel />
+        
         <FeedbacksSemRespostaCard />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Coluna esquerda: calendário ~35% (4/12) */}
