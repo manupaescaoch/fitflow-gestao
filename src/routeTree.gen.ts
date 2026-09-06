@@ -45,6 +45,7 @@ import { Route as AppBibliotecaIndexRouteImport } from './routes/_app.biblioteca
 import { Route as AppAvaliacaoFisicaIndexRouteImport } from './routes/_app.avaliacao-fisica.index'
 import { Route as AppAlunosIndexRouteImport } from './routes/_app.alunos.index'
 import { Route as FormulariosIdRespostasRouteImport } from './routes/formularios.$id.respostas'
+import { Route as AppFormsIdRouteImport } from './routes/_app.forms.$id'
 import { Route as AppFinanceiroVendasRouteImport } from './routes/_app.financeiro.vendas'
 import { Route as AppFinanceiroTransacoesRouteImport } from './routes/_app.financeiro.transacoes'
 import { Route as AppFinanceiroResumoRouteImport } from './routes/_app.financeiro.resumo'
@@ -262,6 +263,11 @@ const FormulariosIdRespostasRoute = FormulariosIdRespostasRouteImport.update({
   id: '/formularios/$id/respostas',
   path: '/formularios/$id/respostas',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppFormsIdRoute = AppFormsIdRouteImport.update({
+  id: '/forms/$id',
+  path: '/forms/$id',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppFinanceiroVendasRoute = AppFinanceiroVendasRouteImport.update({
   id: '/vendas',
@@ -518,6 +524,7 @@ export interface FileRoutesByFullPath {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/forms/$id': typeof AppFormsIdRoute
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos/': typeof AppAlunosIndexRoute
   '/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
@@ -587,6 +594,7 @@ export interface FileRoutesByTo {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/forms/$id': typeof AppFormsIdRoute
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos': typeof AppAlunosIndexRoute
   '/avaliacao-fisica': typeof AppAvaliacaoFisicaIndexRoute
@@ -662,6 +670,7 @@ export interface FileRoutesById {
   '/_app/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/_app/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/_app/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/_app/forms/$id': typeof AppFormsIdRoute
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/_app/alunos/': typeof AppAlunosIndexRoute
   '/_app/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
@@ -737,6 +746,7 @@ export interface FileRouteTypes {
     | '/financeiro/resumo'
     | '/financeiro/transacoes'
     | '/financeiro/vendas'
+    | '/forms/$id'
     | '/formularios/$id/respostas'
     | '/alunos/'
     | '/avaliacao-fisica/'
@@ -806,6 +816,7 @@ export interface FileRouteTypes {
     | '/financeiro/resumo'
     | '/financeiro/transacoes'
     | '/financeiro/vendas'
+    | '/forms/$id'
     | '/formularios/$id/respostas'
     | '/alunos'
     | '/avaliacao-fisica'
@@ -880,6 +891,7 @@ export interface FileRouteTypes {
     | '/_app/financeiro/resumo'
     | '/_app/financeiro/transacoes'
     | '/_app/financeiro/vendas'
+    | '/_app/forms/$id'
     | '/formularios/$id/respostas'
     | '/_app/alunos/'
     | '/_app/avaliacao-fisica/'
@@ -1185,6 +1197,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/formularios/$id/respostas'
       preLoaderRoute: typeof FormulariosIdRespostasRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/forms/$id': {
+      id: '/_app/forms/$id'
+      path: '/forms/$id'
+      fullPath: '/forms/$id'
+      preLoaderRoute: typeof AppFormsIdRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/financeiro/vendas': {
       id: '/_app/financeiro/vendas'
@@ -1535,6 +1554,7 @@ interface AppRouteChildren {
   AppAlunosIdRoute: typeof AppAlunosIdRoute
   AppAvaliacaoFisicaIdRoute: typeof AppAvaliacaoFisicaIdRouteWithChildren
   AppAvaliacaoFisicaNovaRoute: typeof AppAvaliacaoFisicaNovaRoute
+  AppFormsIdRoute: typeof AppFormsIdRoute
   AppAlunosIndexRoute: typeof AppAlunosIndexRoute
   AppAvaliacaoFisicaIndexRoute: typeof AppAvaliacaoFisicaIndexRoute
   AppFormsIndexRoute: typeof AppFormsIndexRoute
@@ -1552,6 +1572,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAlunosIdRoute: AppAlunosIdRoute,
   AppAvaliacaoFisicaIdRoute: AppAvaliacaoFisicaIdRouteWithChildren,
   AppAvaliacaoFisicaNovaRoute: AppAvaliacaoFisicaNovaRoute,
+  AppFormsIdRoute: AppFormsIdRoute,
   AppAlunosIndexRoute: AppAlunosIndexRoute,
   AppAvaliacaoFisicaIndexRoute: AppAvaliacaoFisicaIndexRoute,
   AppFormsIndexRoute: AppFormsIndexRoute,
