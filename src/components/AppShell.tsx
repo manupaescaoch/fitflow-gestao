@@ -36,9 +36,9 @@ const NAV: NavItem[] = [
     to: "/configuracoes", label: "Configurações", icon: Settings, admin: true,
     children: [
       { to: "/configuracoes/usuarios", label: "Usuários" },
+      { to: "/configuracoes/permissoes", label: "Permissões" },
       { to: "/configuracoes/conexoes", label: "Conexões" },
-      { to: "/configuracoes/automacoes", label: "Workflows" },
-      { to: "/configuracoes/qa", label: "QA" },
+      { to: "/configuracoes/automacoes", label: "Workflow" },
     ],
   },
 ];
