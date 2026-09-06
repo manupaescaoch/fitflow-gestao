@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import { useSignedAnamneseUrls } from "@/lib/use-signed-anamnese-urls";
 import { RenovacoesUrgentesCard } from "@/components/visao-geral/RenovacoesUrgentesCard";
 import { FeedbacksSemRespostaCard } from "@/components/visao-geral/FeedbacksSemRespostaCard";
-import { MensagensPendentesPanel } from "@/components/visao-geral/MensagensPendentesPanel";
+
 
 function abrirJanelaPreparandoWhatsApp(): Window | null {
   const janela = window.open("", "_blank");
@@ -457,7 +457,7 @@ function VisaoGeralPage() {
       ) : (
         <>
         {isAdmin && <RenovacoesUrgentesCard />}
-        <MensagensPendentesPanel />
+        
         <FeedbacksSemRespostaCard />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Coluna esquerda: calendário ~35% (4/12) */}
