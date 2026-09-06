@@ -38,6 +38,7 @@ import { Route as AppCaixaSaidaRouteImport } from './routes/_app.caixa-saida'
 import { Route as AppBibliotecaRouteImport } from './routes/_app.biblioteca'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AppFormsIndexRouteImport } from './routes/_app.forms.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/_app.financeiro.index'
 import { Route as AppConfiguracoesIndexRouteImport } from './routes/_app.configuracoes.index'
 import { Route as AppBibliotecaIndexRouteImport } from './routes/_app.biblioteca.index'
@@ -227,6 +228,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppFormsIndexRoute = AppFormsIndexRouteImport.update({
+  id: '/forms/',
+  path: '/forms/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -518,6 +524,7 @@ export interface FileRoutesByFullPath {
   '/biblioteca/': typeof AppBibliotecaIndexRoute
   '/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/financeiro/': typeof AppFinanceiroIndexRoute
+  '/forms/': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
@@ -586,6 +593,7 @@ export interface FileRoutesByTo {
   '/biblioteca': typeof AppBibliotecaIndexRoute
   '/configuracoes': typeof AppConfiguracoesIndexRoute
   '/financeiro': typeof AppFinanceiroIndexRoute
+  '/forms': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
@@ -660,6 +668,7 @@ export interface FileRoutesById {
   '/_app/biblioteca/': typeof AppBibliotecaIndexRoute
   '/_app/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/_app/financeiro/': typeof AppFinanceiroIndexRoute
+  '/_app/forms/': typeof AppFormsIndexRoute
   '/_app/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
@@ -734,6 +743,7 @@ export interface FileRouteTypes {
     | '/biblioteca/'
     | '/configuracoes/'
     | '/financeiro/'
+    | '/forms/'
     | '/avaliacao-fisica/$id/editar'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
@@ -802,6 +812,7 @@ export interface FileRouteTypes {
     | '/biblioteca'
     | '/configuracoes'
     | '/financeiro'
+    | '/forms'
     | '/avaliacao-fisica/$id/editar'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
@@ -875,6 +886,7 @@ export interface FileRouteTypes {
     | '/_app/biblioteca/'
     | '/_app/configuracoes/'
     | '/_app/financeiro/'
+    | '/_app/forms/'
     | '/_app/avaliacao-fisica/$id/editar'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
@@ -1124,6 +1136,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.mcp/list-tools'
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/forms/': {
+      id: '/_app/forms/'
+      path: '/forms'
+      fullPath: '/forms/'
+      preLoaderRoute: typeof AppFormsIndexRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/financeiro/': {
       id: '/_app/financeiro/'
@@ -1518,6 +1537,7 @@ interface AppRouteChildren {
   AppAvaliacaoFisicaNovaRoute: typeof AppAvaliacaoFisicaNovaRoute
   AppAlunosIndexRoute: typeof AppAlunosIndexRoute
   AppAvaliacaoFisicaIndexRoute: typeof AppAvaliacaoFisicaIndexRoute
+  AppFormsIndexRoute: typeof AppFormsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1534,6 +1554,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAvaliacaoFisicaNovaRoute: AppAvaliacaoFisicaNovaRoute,
   AppAlunosIndexRoute: AppAlunosIndexRoute,
   AppAvaliacaoFisicaIndexRoute: AppAvaliacaoFisicaIndexRoute,
+  AppFormsIndexRoute: AppFormsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
