@@ -46,6 +46,7 @@ function LoginPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!ready || busy) return;
     setErr(null);
     setBusy(true);
 
@@ -146,10 +147,10 @@ function LoginPage() {
 
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || !ready}
             className="w-full h-[60px] mt-2 rounded-2xl bg-[#F70906] text-white text-[17px] font-bold shadow-[0_18px_40px_-12px_rgba(247,9,6,0.55)] hover:bg-[#F70906]/95 active:scale-[0.99] disabled:opacity-50 transition-all"
           >
-            {busy ? "Entrando..." : "Entrar"}
+            {busy ? "Entrando..." : !ready ? "Carregando..." : "Entrar"}
           </button>
         </form>
       </div>
