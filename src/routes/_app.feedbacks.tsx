@@ -111,12 +111,10 @@ function FeedbacksPage() {
         </div>
       </div>
 
-      {tab === "formularios" && <FormulariosTab />}
-      {tab === "prompts" && <PromptsTab canEdit={canEdit} />}
       {tab === "enviados" && <EnviadosTab />}
       {tab === "respondidos" && <RespondidosTab />}
       {tab === "agendamentos" && <AgendamentosTab />}
-      {tab === "pontos_contato" && <PontosContatoTab canEdit={canEdit} />}
+
     </div>
   );
 }
