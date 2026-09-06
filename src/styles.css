@@ -66,53 +66,53 @@
 }
 
 :root {
-  /* MPTEAM CRM — light palette inspired by MPFlow
-   * bg #FFFFFF, fg #0F1115, primary #FF0D0D (logo red),
-   * sidebar/cards muito claros, alertas em pastel.
+  /* Paleta clara estilo iOS: fundo cinza claro, cartões brancos,
+   * azul do sistema como cor principal.
    */
   --radius: 0.75rem;
-  --background: oklch(1 0 0);                /* #FFFFFF */
+  --background: oklch(0.975 0.002 260);      /* #F5F6F8 */
   --foreground: oklch(0.18 0.01 260);        /* near-black */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.01 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.01 260);
-  --primary: oklch(0.628 0.258 27);          /* #FF0D0D — logo red */
+  --primary: oklch(0.58 0.19 258);           /* #2563EB — azul iOS */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.005 260);
   --secondary-foreground: oklch(0.18 0.01 260);
   --muted: oklch(0.96 0.005 260);
-  --muted-foreground: oklch(0.5 0.01 260);
-  --accent: oklch(0.95 0.02 27);             /* soft red tint */
-  --accent-foreground: oklch(0.4 0.2 27);
-  --destructive: oklch(0.628 0.258 27);
+  --muted-foreground: oklch(0.52 0.012 260);
+  --accent: oklch(0.95 0.03 258);            /* azul bem claro */
+  --accent-foreground: oklch(0.48 0.18 258);
+  --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.92 0.005 260);
   --input: oklch(0.92 0.005 260);
-  --ring: oklch(0.628 0.258 27);
-  --chart-1: oklch(0.628 0.258 27);          /* red */
-  --chart-2: oklch(0.18 0.01 260);           /* near-black */
-  --chart-3: oklch(0.75 0.18 27);            /* light red */
-  --chart-4: oklch(0.45 0.2 27);             /* deep red */
-  --chart-5: oklch(0.55 0.01 260);           /* gray */
-  --sidebar: oklch(0.985 0.003 260);         /* very light */
-  --sidebar-foreground: oklch(0.25 0.01 260);
-  --sidebar-primary: oklch(0.628 0.258 27);
+  --ring: oklch(0.58 0.19 258);
+  --chart-1: oklch(0.58 0.19 258);           /* azul */
+  --chart-2: oklch(0.72 0.15 200);           /* ciano */
+  --chart-3: oklch(0.75 0.15 145);           /* verde */
+  --chart-4: oklch(0.8 0.15 85);             /* âmbar */
+  --chart-5: oklch(0.55 0.01 260);           /* cinza */
+  --sidebar: oklch(1 0 0);                   /* branco */
+  --sidebar-foreground: oklch(0.28 0.01 260);
+  --sidebar-primary: oklch(0.58 0.19 258);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.95 0.02 27);     /* soft red hover */
-  --sidebar-accent-foreground: oklch(0.4 0.2 27);
-  --sidebar-border: oklch(0.92 0.005 260);
-  --sidebar-ring: oklch(0.628 0.258 27);
+  --sidebar-accent: oklch(0.95 0.03 258);    /* hover azul claro */
+  --sidebar-accent-foreground: oklch(0.48 0.18 258);
+  --sidebar-border: oklch(0.93 0.004 260);
+  --sidebar-ring: oklch(0.58 0.19 258);
 
   /* Modality tag tokens */
-  --tag-mpteam: #F70906;       /* Vermelho MP */
+  --tag-mpteam: #2563EB;       /* Azul principal */
   --tag-elite:  #D4AF37;       /* Dourado premium */
-  --tag-presencial: #2563EB;   /* Azul royal */
+  --tag-presencial: #0EA5E9;   /* Azul claro */
 
   /* Critical alert tokens — pastel red */
   --alert-bg: oklch(0.97 0.03 27);
   --alert-border: oklch(0.88 0.08 27);
 }
+
 
 html, body { background: var(--background); color: var(--foreground); }
 
