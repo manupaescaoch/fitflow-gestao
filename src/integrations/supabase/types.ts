@@ -493,6 +493,33 @@ export type Database = {
         }
         Relationships: []
       }
+      app_branding: {
+        Row: {
+          atualizado_em: string
+          atualizado_por: string | null
+          id: boolean
+          logo_url: string | null
+          nome: string
+          subtitulo: string
+        }
+        Insert: {
+          atualizado_em?: string
+          atualizado_por?: string | null
+          id?: boolean
+          logo_url?: string | null
+          nome?: string
+          subtitulo?: string
+        }
+        Update: {
+          atualizado_em?: string
+          atualizado_por?: string | null
+          id?: boolean
+          logo_url?: string | null
+          nome?: string
+          subtitulo?: string
+        }
+        Relationships: []
+      }
       body_circumferences: {
         Row: {
           abdomen: number | null
