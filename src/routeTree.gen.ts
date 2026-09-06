@@ -54,6 +54,7 @@ import { Route as AppFinanceiroContasPagarRouteImport } from './routes/_app.fina
 import { Route as AppFinanceiroClientesRouteImport } from './routes/_app.financeiro.clientes'
 import { Route as AppFinanceiroCadastrosRouteImport } from './routes/_app.financeiro.cadastros'
 import { Route as AppConfiguracoesUsuariosRouteImport } from './routes/_app.configuracoes.usuarios'
+import { Route as AppConfiguracoesPersonalizarRouteImport } from './routes/_app.configuracoes.personalizar'
 import { Route as AppConfiguracoesPermissoesRouteImport } from './routes/_app.configuracoes.permissoes'
 import { Route as AppConfiguracoesMotorRouteImport } from './routes/_app.configuracoes.motor'
 import { Route as AppConfiguracoesConexoesRouteImport } from './routes/_app.configuracoes.conexoes'
@@ -307,6 +308,12 @@ const AppConfiguracoesUsuariosRoute =
     path: '/usuarios',
     getParentRoute: () => AppConfiguracoesRoute,
   } as any)
+const AppConfiguracoesPersonalizarRoute =
+  AppConfiguracoesPersonalizarRouteImport.update({
+    id: '/personalizar',
+    path: '/personalizar',
+    getParentRoute: () => AppConfiguracoesRoute,
+  } as any)
 const AppConfiguracoesPermissoesRoute =
   AppConfiguracoesPermissoesRouteImport.update({
     id: '/permissoes',
@@ -477,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
+  '/configuracoes/personalizar': typeof AppConfiguracoesPersonalizarRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
   '/financeiro/clientes': typeof AppFinanceiroClientesRoute
@@ -543,6 +551,7 @@ export interface FileRoutesByTo {
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
+  '/configuracoes/personalizar': typeof AppConfiguracoesPersonalizarRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
   '/financeiro/clientes': typeof AppFinanceiroClientesRoute
@@ -614,6 +623,7 @@ export interface FileRoutesById {
   '/_app/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/_app/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/_app/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
+  '/_app/configuracoes/personalizar': typeof AppConfiguracoesPersonalizarRoute
   '/_app/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/_app/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
   '/_app/financeiro/clientes': typeof AppFinanceiroClientesRoute
@@ -685,6 +695,7 @@ export interface FileRouteTypes {
     | '/configuracoes/conexoes'
     | '/configuracoes/motor'
     | '/configuracoes/permissoes'
+    | '/configuracoes/personalizar'
     | '/configuracoes/usuarios'
     | '/financeiro/cadastros'
     | '/financeiro/clientes'
@@ -751,6 +762,7 @@ export interface FileRouteTypes {
     | '/configuracoes/conexoes'
     | '/configuracoes/motor'
     | '/configuracoes/permissoes'
+    | '/configuracoes/personalizar'
     | '/configuracoes/usuarios'
     | '/financeiro/cadastros'
     | '/financeiro/clientes'
@@ -821,6 +833,7 @@ export interface FileRouteTypes {
     | '/_app/configuracoes/conexoes'
     | '/_app/configuracoes/motor'
     | '/_app/configuracoes/permissoes'
+    | '/_app/configuracoes/personalizar'
     | '/_app/configuracoes/usuarios'
     | '/_app/financeiro/cadastros'
     | '/_app/financeiro/clientes'
@@ -1202,6 +1215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppConfiguracoesUsuariosRouteImport
       parentRoute: typeof AppConfiguracoesRoute
     }
+    '/_app/configuracoes/personalizar': {
+      id: '/_app/configuracoes/personalizar'
+      path: '/personalizar'
+      fullPath: '/configuracoes/personalizar'
+      preLoaderRoute: typeof AppConfiguracoesPersonalizarRouteImport
+      parentRoute: typeof AppConfiguracoesRoute
+    }
     '/_app/configuracoes/permissoes': {
       id: '/_app/configuracoes/permissoes'
       path: '/permissoes'
@@ -1371,6 +1391,7 @@ interface AppConfiguracoesRouteChildren {
   AppConfiguracoesConexoesRoute: typeof AppConfiguracoesConexoesRoute
   AppConfiguracoesMotorRoute: typeof AppConfiguracoesMotorRoute
   AppConfiguracoesPermissoesRoute: typeof AppConfiguracoesPermissoesRoute
+  AppConfiguracoesPersonalizarRoute: typeof AppConfiguracoesPersonalizarRoute
   AppConfiguracoesUsuariosRoute: typeof AppConfiguracoesUsuariosRoute
   AppConfiguracoesIndexRoute: typeof AppConfiguracoesIndexRoute
 }
@@ -1380,6 +1401,7 @@ const AppConfiguracoesRouteChildren: AppConfiguracoesRouteChildren = {
   AppConfiguracoesConexoesRoute: AppConfiguracoesConexoesRoute,
   AppConfiguracoesMotorRoute: AppConfiguracoesMotorRoute,
   AppConfiguracoesPermissoesRoute: AppConfiguracoesPermissoesRoute,
+  AppConfiguracoesPersonalizarRoute: AppConfiguracoesPersonalizarRoute,
   AppConfiguracoesUsuariosRoute: AppConfiguracoesUsuariosRoute,
   AppConfiguracoesIndexRoute: AppConfiguracoesIndexRoute,
 }

@@ -5,7 +5,7 @@ import {
   LogOut, DollarSign, Settings, ChevronDown, Menu, MoreHorizontal, MessageSquare, Inbox, ClipboardList,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect } from "react";
-import mpLogo from "@/assets/mp-logo.png";
+import { useBranding } from "@/hooks/useBranding";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface NavItem {
@@ -35,6 +35,7 @@ const NAV: NavItem[] = [
   {
     to: "/configuracoes", label: "Configurações", icon: Settings, admin: true,
     children: [
+      { to: "/configuracoes/personalizar", label: "Personalizar" },
       { to: "/configuracoes/usuarios", label: "Usuários" },
       { to: "/configuracoes/permissoes", label: "Permissões" },
       { to: "/configuracoes/conexoes", label: "Conexões" },
@@ -48,6 +49,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const loc = useLocation();
   const nav = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const branding = useBranding();
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     NAV.forEach((i) => { if (i.children && loc.pathname.startsWith(i.to)) init[i.to] = true; });
@@ -165,10 +167,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="hidden md:flex w-[220px] flex-col border-r border-border bg-sidebar">
         <div className="px-5 py-7 border-b border-border">
           <Link to="/visao-geral" className="flex items-center gap-2.5">
-            <img src={mpLogo} alt="MP Team" className="h-8 w-8 rounded" />
+            <img src={branding.logo} alt={branding.nome} className="h-8 w-8 rounded object-contain" />
             <div>
-              <div className="text-[15px] font-black tracking-tight text-foreground leading-none">MPTEAM</div>
-              <div className="text-[9px] font-medium text-muted-foreground tracking-[0.3em] mt-1">CRM</div>
+              <div className="text-[15px] font-black tracking-tight text-foreground leading-none">{branding.nome}</div>
+              <div className="text-[9px] font-medium text-muted-foreground tracking-[0.3em] mt-1">{branding.subtitulo}</div>
             </div>
           </Link>
         </div>
@@ -205,10 +207,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <SheetContent side="left" className="w-[270px] p-0 flex flex-col">
                   <div className="px-5 py-5 border-b border-border">
                     <Link to="/visao-geral" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5">
-                      <img src={mpLogo} alt="MP Team" className="h-8 w-8 rounded" />
+                      <img src={branding.logo} alt={branding.nome} className="h-8 w-8 rounded object-contain" />
                       <div>
-                        <div className="text-[15px] font-black tracking-tight text-foreground leading-none">MPTEAM</div>
-                        <div className="text-[9px] font-medium text-muted-foreground tracking-[0.3em] mt-1">CRM</div>
+                        <div className="text-[15px] font-black tracking-tight text-foreground leading-none">{branding.nome}</div>
+                        <div className="text-[9px] font-medium text-muted-foreground tracking-[0.3em] mt-1">{branding.subtitulo}</div>
                       </div>
                     </Link>
                   </div>
@@ -230,8 +232,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </SheetContent>
               </Sheet>
               <Link to="/visao-geral" className="flex items-center gap-2">
-                <img src={mpLogo} alt="MP Team" className="h-7 w-7 rounded" />
-                <span className="text-base font-black text-foreground">MPTEAM</span>
+                <img src={branding.logo} alt={branding.nome} className="h-7 w-7 rounded object-contain" />
+                <span className="text-base font-black text-foreground">{branding.nome}</span>
               </Link>
             </div>
             <button
