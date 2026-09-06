@@ -55,6 +55,7 @@ import { Route as AppFinanceiroClientesRouteImport } from './routes/_app.finance
 import { Route as AppFinanceiroCadastrosRouteImport } from './routes/_app.financeiro.cadastros'
 import { Route as AppConfiguracoesUsuariosRouteImport } from './routes/_app.configuracoes.usuarios'
 import { Route as AppConfiguracoesPermissoesRouteImport } from './routes/_app.configuracoes.permissoes'
+import { Route as AppConfiguracoesMotorRouteImport } from './routes/_app.configuracoes.motor'
 import { Route as AppConfiguracoesConexoesRouteImport } from './routes/_app.configuracoes.conexoes'
 import { Route as AppConfiguracoesAutomacoesRouteImport } from './routes/_app.configuracoes.automacoes'
 import { Route as AppAvaliacaoFisicaNovaRouteImport } from './routes/_app.avaliacao-fisica.nova'
@@ -312,6 +313,11 @@ const AppConfiguracoesPermissoesRoute =
     path: '/permissoes',
     getParentRoute: () => AppConfiguracoesRoute,
   } as any)
+const AppConfiguracoesMotorRoute = AppConfiguracoesMotorRouteImport.update({
+  id: '/motor',
+  path: '/motor',
+  getParentRoute: () => AppConfiguracoesRoute,
+} as any)
 const AppConfiguracoesConexoesRoute =
   AppConfiguracoesConexoesRouteImport.update({
     id: '/conexoes',
@@ -469,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
   '/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
+  '/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
@@ -534,6 +541,7 @@ export interface FileRoutesByTo {
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
   '/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
+  '/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
@@ -604,6 +612,7 @@ export interface FileRoutesById {
   '/_app/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
   '/_app/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/_app/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
+  '/_app/configuracoes/motor': typeof AppConfiguracoesMotorRoute
   '/_app/configuracoes/permissoes': typeof AppConfiguracoesPermissoesRoute
   '/_app/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
   '/_app/financeiro/cadastros': typeof AppFinanceiroCadastrosRoute
@@ -674,6 +683,7 @@ export interface FileRouteTypes {
     | '/avaliacao-fisica/nova'
     | '/configuracoes/automacoes'
     | '/configuracoes/conexoes'
+    | '/configuracoes/motor'
     | '/configuracoes/permissoes'
     | '/configuracoes/usuarios'
     | '/financeiro/cadastros'
@@ -739,6 +749,7 @@ export interface FileRouteTypes {
     | '/avaliacao-fisica/nova'
     | '/configuracoes/automacoes'
     | '/configuracoes/conexoes'
+    | '/configuracoes/motor'
     | '/configuracoes/permissoes'
     | '/configuracoes/usuarios'
     | '/financeiro/cadastros'
@@ -808,6 +819,7 @@ export interface FileRouteTypes {
     | '/_app/avaliacao-fisica/nova'
     | '/_app/configuracoes/automacoes'
     | '/_app/configuracoes/conexoes'
+    | '/_app/configuracoes/motor'
     | '/_app/configuracoes/permissoes'
     | '/_app/configuracoes/usuarios'
     | '/_app/financeiro/cadastros'
@@ -1197,6 +1209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppConfiguracoesPermissoesRouteImport
       parentRoute: typeof AppConfiguracoesRoute
     }
+    '/_app/configuracoes/motor': {
+      id: '/_app/configuracoes/motor'
+      path: '/motor'
+      fullPath: '/configuracoes/motor'
+      preLoaderRoute: typeof AppConfiguracoesMotorRouteImport
+      parentRoute: typeof AppConfiguracoesRoute
+    }
     '/_app/configuracoes/conexoes': {
       id: '/_app/configuracoes/conexoes'
       path: '/conexoes'
@@ -1350,6 +1369,7 @@ declare module '@tanstack/react-router' {
 interface AppConfiguracoesRouteChildren {
   AppConfiguracoesAutomacoesRoute: typeof AppConfiguracoesAutomacoesRoute
   AppConfiguracoesConexoesRoute: typeof AppConfiguracoesConexoesRoute
+  AppConfiguracoesMotorRoute: typeof AppConfiguracoesMotorRoute
   AppConfiguracoesPermissoesRoute: typeof AppConfiguracoesPermissoesRoute
   AppConfiguracoesUsuariosRoute: typeof AppConfiguracoesUsuariosRoute
   AppConfiguracoesIndexRoute: typeof AppConfiguracoesIndexRoute
@@ -1358,6 +1378,7 @@ interface AppConfiguracoesRouteChildren {
 const AppConfiguracoesRouteChildren: AppConfiguracoesRouteChildren = {
   AppConfiguracoesAutomacoesRoute: AppConfiguracoesAutomacoesRoute,
   AppConfiguracoesConexoesRoute: AppConfiguracoesConexoesRoute,
+  AppConfiguracoesMotorRoute: AppConfiguracoesMotorRoute,
   AppConfiguracoesPermissoesRoute: AppConfiguracoesPermissoesRoute,
   AppConfiguracoesUsuariosRoute: AppConfiguracoesUsuariosRoute,
   AppConfiguracoesIndexRoute: AppConfiguracoesIndexRoute,
