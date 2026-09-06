@@ -27,9 +27,9 @@ const NAV: NavItem[] = [
     to: "/financeiro", label: "Financeiro", icon: DollarSign, admin: true,
     children: [
       { to: "/financeiro", label: "Dashboard", exact: true },
-      { to: "/financeiro/recebimentos", label: "Recebimentos" },
-      { to: "/financeiro/despesas", label: "Despesas" },
-      { to: "/financeiro/cadastros", label: "Cadastros" },
+      { to: "/financeiro/recebimentos", label: "Contas a receber" },
+      { to: "/financeiro/contas-pagar", label: "Contas a pagar" },
+      { to: "/financeiro/planos", label: "Planos" },
     ],
   },
   {
