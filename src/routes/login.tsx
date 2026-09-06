@@ -5,7 +5,6 @@ import { useAuth } from "@/lib/auth";
 import { setAlunoSession, getAlunoSession } from "@/lib/aluno-session";
 import { useServerFn } from "@tanstack/react-start";
 import { loginAlunoPorEmail } from "@/server/aluno-auth.functions";
-import mpTeamLogo from "@/assets/mp-team-logo.png";
 
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>): { next?: string } => ({
