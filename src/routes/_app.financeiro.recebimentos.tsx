@@ -22,7 +22,7 @@ function RecebimentosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Recebimentos</h1>
+        <h1 className="text-2xl font-bold">Contas a receber</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Vendas e clientes ativos do período.
         </p>
