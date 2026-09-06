@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { type ReactNode, useState, useEffect } from "react";
 import { useBranding } from "@/hooks/useBranding";
+import { NotificacoesSino } from "@/components/NotificacoesSino";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface NavItem {
@@ -178,6 +179,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {renderNavItems()}
         </nav>
         <div className="px-3 py-4 border-t border-border">
+          <div className="mb-1"><NotificacoesSino /></div>
           <div className="px-2 py-2 mb-2 text-xs">
             <div className="text-foreground font-medium truncate">{crmUser?.nome ?? crmUser?.email}</div>
             <div className="text-muted-foreground capitalize">{crmUser?.perfil}</div>
@@ -236,6 +238,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <span className="text-base font-black text-foreground">{branding.nome}</span>
               </Link>
             </div>
+            <div className="flex items-center gap-1">
+            <NotificacoesSino compact />
             <button
               onClick={handleLogout}
               aria-label="Sair"
@@ -243,6 +247,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               <LogOut className="h-4 w-4" />
             </button>
+            </div>
           </header>
         )}
         <div className="p-3 pb-mobile-nav sm:p-4 md:p-6 md:pb-6">{children}</div>

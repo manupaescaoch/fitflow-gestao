@@ -8,6 +8,8 @@ const supabase = supabaseClient as any;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Formulario, mapFormulario } from "@/lib/formularios";
+import { TratativaPanel, STATUS_TRATATIVA, PRIORIDADES } from "@/components/formularios/TratativaPanel";
+import { RelatorioAba } from "@/components/formularios/RelatorioAba";
 
 export const Route = createFileRoute("/_app/forms/$id/respostas")({
   head: () => ({
@@ -27,6 +29,7 @@ interface Item { pergunta_id: string | null; pergunta_titulo: string; pergunta_t
 interface Resposta {
   id: string; protocolo: string; respondente_nome: string | null; respondente_email: string | null;
   respondente_telefone: string | null; status: string; prioridade: string; enviado_em: string;
+  responsavel_id: string | null; prazo: string | null;
   itens: Item[];
 }
 
@@ -38,7 +41,7 @@ function RespostasPage() {
   const [form, setForm] = useState<Formulario | null>(null);
   const [itens, setItens] = useState<Resposta[]>([]);
   const [loading, setLoading] = useState(true);
-  const [aba, setAba] = useState<"resumo" | "individual" | "tabela">("resumo");
+  const [aba, setAba] = useState<"resumo" | "individual" | "tabela" | "relatorios">("resumo");
   const [pagina, setPagina] = useState(0);
   const [total, setTotal] = useState(0);
   const [atual, setAtual] = useState(0);
@@ -120,7 +123,7 @@ function RespostasPage() {
       </div>
 
       <div className="mt-4 flex gap-2 border-b border-border pb-3">
-        {(["resumo", "individual", "tabela"] as const).map((k) => (
+        {(["resumo", "individual", "tabela", "relatorios"] as const).map((k) => (
           <button key={k} onClick={() => setAba(k)}
             className={`rounded-lg px-3 py-1.5 text-[13px] capitalize transition-colors ${
               aba === k ? "bg-rose-50 font-medium text-rose-600" : "text-muted-foreground hover:bg-muted/40"}`}>
@@ -190,7 +193,19 @@ function RespostasPage() {
               </div>
             </div>
           )}
+          {r && (
+            <div className="mt-3">
+              <TratativaPanel
+                resposta={{ id: r.id, protocolo: r.protocolo, status: r.status, prioridade: r.prioridade, responsavel_id: r.responsavel_id, prazo: r.prazo }}
+                onAtualizado={(patch) =>
+                  setItens((prev) => prev.map((x) => (x.id === r.id ? { ...x, ...patch } as Resposta : x)))
+                }
+              />
+            </div>
+          )}
         </div>
+      ) : aba === "relatorios" ? (
+        <RelatorioAba formularioId={id} titulo={form?.titulo ?? "formulario"} />
       ) : (
         <div className="mt-5">
           <div className="relative mb-3 max-w-sm">
@@ -202,7 +217,7 @@ function RespostasPage() {
               <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="px-3 py-2.5">Protocolo</th><th className="px-3 py-2.5">Enviado</th>
-                  <th className="px-3 py-2.5">Respondente</th>
+                  <th className="px-3 py-2.5">Respondente</th><th className="px-3 py-2.5">Tratativa</th>
                   {colunas.map((c) => <th key={c} className="px-3 py-2.5">{c}</th>)}
                 </tr>
               </thead>
@@ -212,6 +227,10 @@ function RespostasPage() {
                     <td className="px-3 py-2.5 whitespace-nowrap">{row.protocolo}</td>
                     <td className="px-3 py-2.5 whitespace-nowrap text-muted-foreground">{new Date(row.enviado_em).toLocaleString("pt-BR")}</td>
                     <td className="px-3 py-2.5">{row.respondente_nome ?? "—"}</td>
+                    <td className="px-3 py-2.5 whitespace-nowrap text-xs">
+                      {STATUS_TRATATIVA.find((s) => s.value === (row.status || "nova"))?.label ?? row.status}
+                      <span className="text-muted-foreground"> · {PRIORIDADES.find((p) => p.value === (row.prioridade || "normal"))?.label ?? row.prioridade}</span>
+                    </td>
                     {colunas.map((c) => (
                       <td key={c} className="px-3 py-2.5">{row.itens.find((i) => i.pergunta_titulo === c)?.valor_texto ?? "—"}</td>
                     ))}
