@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import {
   LayoutGrid, Users, BarChart3,
-  LogOut, DollarSign, Settings, ChevronDown, Menu, MoreHorizontal, BookOpen, MessageSquare, Inbox, ClipboardList,
+  LogOut, DollarSign, Settings, ChevronDown, Menu, MoreHorizontal, MessageSquare, Inbox, ClipboardList,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect } from "react";
 import mpLogo from "@/assets/mp-logo.png";
