@@ -21,7 +21,7 @@ function MotorPage() {
     <div className="space-y-6">
       <ConfigHeader
         title="Motor de Automações"
-        description="Configure e controle o acompanhamento automático dos alunos, da anamnese à renovação do plano."
+        subtitle="Configure e controle o acompanhamento automático dos alunos, da anamnese à renovação do plano."
       />
       <MotorAutomacoesSection />
     </div>
