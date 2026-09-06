@@ -183,7 +183,7 @@ function FormularioPublico() {
       <p className="text-sm text-muted-foreground">{motivoFechado}</p></Centro>;
   }
 
-  const cor = form?.cor_primaria ?? "#e11d48";
+  const cor = form?.cor_primaria ?? "#2563EB";
 
   if (estado === "enviado") {
     return (
