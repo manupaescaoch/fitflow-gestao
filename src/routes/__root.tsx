@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth";
 import { PreviaPdfModal } from "@/components/dieta/PreviaPdfModal";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -107,6 +108,7 @@ function RootComponent() {
     <AuthProvider>
       <Outlet />
       <PreviaPdfModal />
+      <Toaster position="top-center" />
     </AuthProvider>
   );
 }
