@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { primeiroNome } from "@/lib/nome";
+import { lerCredencial } from "./credenciais.server";
 
 const BUCKET = "anamnese-uploads";
 const SIGN_TTL = 60 * 30; // 30 min
@@ -46,7 +47,7 @@ export const gerarCheckShapeLivre = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) return { mensagem: null as string | null, error: "OPENAI_API_KEY não configurado" };
 
     const [{ data: aluno }, { data: promptRow }] = await Promise.all([

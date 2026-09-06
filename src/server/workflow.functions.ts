@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { lerCredencial } from "./credenciais.server";
 
 const PROMPT_TIPOS = ["anamnese", "feedback_quinzenal", "feedback_mensal", "check_shape_mensal", "followup_d7", "followup_d21", "estrategia_treino", "estrategia_nutricional"] as const;
 type PromptTipo = (typeof PROMPT_TIPOS)[number];
@@ -87,7 +88,7 @@ export const testarPromptIA = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) return { ok: false, resposta: null, error: "OPENAI_API_KEY não configurado" };
     const exemplo = data.exemplo?.trim() || "Aluno exemplo: João, plano de 30 dias, foco em hipertrofia.";
     try {

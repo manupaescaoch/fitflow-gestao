@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { primeiroNome } from "@/lib/nome";
+import { lerCredencial } from "./credenciais.server";
 
 type Pergunta = {
   id: string;
@@ -30,7 +31,7 @@ export const gerarRespostaFeedback = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) return { mensagem: null as string | null, error: "OPENAI_API_KEY não configurado" };
 
     // Load envio + template + aluno
@@ -162,7 +163,7 @@ export const gerarRespostaFormulario = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) return { mensagem: null as string | null, error: "OPENAI_API_KEY não configurado" };
 
     const { data: form, error: fErr } = await supabaseAdmin

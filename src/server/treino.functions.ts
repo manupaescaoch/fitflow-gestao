@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { primeiroNome } from "@/lib/nome";
+import { lerCredencial } from "./credenciais.server";
 
 type Input = {
   nomeAluno: string;
@@ -16,7 +17,7 @@ export const gerarMensagemTreino = createServerFn({ method: "POST" }).middleware
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) {
       return {
         mensagem: null as string | null,
