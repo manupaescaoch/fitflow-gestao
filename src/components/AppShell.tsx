@@ -34,6 +34,7 @@ const NAV: NavItem[] = [
       { to: "/biblioteca/protocolos", label: "Protocolos", group: "Prescrição" },
     ],
   },
+  { to: "/forms", label: "Formulários", icon: ClipboardList },
   { to: "/feedbacks", label: "Feedbacks", icon: MessageSquare, admin: true },
   { to: "/relatorios",label: "Relatórios",icon: BarChart3, admin: true },
   {
