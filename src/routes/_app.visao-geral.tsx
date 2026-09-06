@@ -469,7 +469,7 @@ function VisaoGeralPage() {
               selectedDay={selectedDay}
               setSelectedDay={setSelectedDay}
             />
-            <Legend />
+            
             {selectedDay && (
               <DayDetails
                 day={selectedDay}
@@ -625,27 +625,6 @@ function CalendarPanel({
   );
 }
 
-function Legend() {
-  const items = [
-    { c: EVENT_COLORS.entrega, l: "Protocolo a entregar (até a data)", Icon: Package },
-    { c: EVENT_COLORS.d0, l: "Início do plano do aluno", Icon: Flag },
-    { c: EVENT_COLORS.feedback, l: "Feedback quinzenal — envio agendado", Icon: MessageSquare },
-    { c: EVENT_COLORS.checkshape, l: "Feedback mensal — envio agendado", Icon: Camera },
-    { c: EVENT_COLORS.ponto_contato, l: "Ponto de contato D+7 / D+21", Icon: Send },
-    { c: EVENT_COLORS.renovacao, l: "Renovação", Icon: RefreshCw },
-  ];
-  return (
-    <div className="rounded-xl border border-border bg-card p-2.5 space-y-1">
-      {items.map((it) => (
-        <div key={it.l} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: it.c }} />
-          <it.Icon className="h-3 w-3" style={{ color: it.c }} />
-          <span>{it.l}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function DayDetails({
   day, entregas, jobs, agendamentos, renovacoes, alunosD0, onClose,
