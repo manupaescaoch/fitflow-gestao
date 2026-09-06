@@ -67,17 +67,12 @@ export function WorkflowSection() {
         items={itens.filter((i) => i.secao === "ciclo")}
         onSaved={load}
       />
-      <FollowupCard
-        d1={getPrompt("followup_d7")}
-        d2={getPrompt("followup_d21")}
-        onSaved={load}
-      />
       <MensagensFixasCard
         items={itens.filter((i) => i.secao === "mensagens")}
         onSaved={load}
       />
       <PromptsIACard
-        prompts={prompts.filter((p) => ["feedback_quinzenal","feedback_mensal","check_shape_mensal","estrategia_treino","estrategia_nutricional"].includes(p.tipo))}
+        prompts={prompts.filter((p) => ["feedback_quinzenal","feedback_mensal"].includes(p.tipo))}
         onSaved={load}
       />
       <HistoricoCard />
