@@ -35,13 +35,11 @@ import { Route as AppFinanceiroRouteImport } from './routes/_app.financeiro'
 import { Route as AppFeedbacksRouteImport } from './routes/_app.feedbacks'
 import { Route as AppConfiguracoesRouteImport } from './routes/_app.configuracoes'
 import { Route as AppCaixaSaidaRouteImport } from './routes/_app.caixa-saida'
-import { Route as AppBibliotecaRouteImport } from './routes/_app.biblioteca'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AppFormsIndexRouteImport } from './routes/_app.forms.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/_app.financeiro.index'
 import { Route as AppConfiguracoesIndexRouteImport } from './routes/_app.configuracoes.index'
-import { Route as AppBibliotecaIndexRouteImport } from './routes/_app.biblioteca.index'
 import { Route as AppAvaliacaoFisicaIndexRouteImport } from './routes/_app.avaliacao-fisica.index'
 import { Route as AppAlunosIndexRouteImport } from './routes/_app.alunos.index'
 import { Route as FormulariosIdRespostasRouteImport } from './routes/formularios.$id.respostas'
@@ -58,12 +56,6 @@ import { Route as AppFinanceiroCadastrosRouteImport } from './routes/_app.financ
 import { Route as AppConfiguracoesUsuariosRouteImport } from './routes/_app.configuracoes.usuarios'
 import { Route as AppConfiguracoesConexoesRouteImport } from './routes/_app.configuracoes.conexoes'
 import { Route as AppConfiguracoesAutomacoesRouteImport } from './routes/_app.configuracoes.automacoes'
-import { Route as AppBibliotecaSuplementosRouteImport } from './routes/_app.biblioteca.suplementos'
-import { Route as AppBibliotecaReceitasRouteImport } from './routes/_app.biblioteca.receitas'
-import { Route as AppBibliotecaPrescricoesRouteImport } from './routes/_app.biblioteca.prescricoes'
-import { Route as AppBibliotecaFitoterapicosRouteImport } from './routes/_app.biblioteca.fitoterapicos'
-import { Route as AppBibliotecaCardapiosRouteImport } from './routes/_app.biblioteca.cardapios'
-import { Route as AppBibliotecaAlimentosRouteImport } from './routes/_app.biblioteca.alimentos'
 import { Route as AppAvaliacaoFisicaNovaRouteImport } from './routes/_app.avaliacao-fisica.nova'
 import { Route as AppAvaliacaoFisicaIdRouteImport } from './routes/_app.avaliacao-fisica.$id'
 import { Route as AppAlunosIdRouteImport } from './routes/_app.alunos.$id'
@@ -213,11 +205,6 @@ const AppCaixaSaidaRoute = AppCaixaSaidaRouteImport.update({
   path: '/caixa-saida',
   getParentRoute: () => AppRoute,
 } as any)
-const AppBibliotecaRoute = AppBibliotecaRouteImport.update({
-  id: '/biblioteca',
-  path: '/biblioteca',
-  getParentRoute: () => AppRoute,
-} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -244,11 +231,6 @@ const AppConfiguracoesIndexRoute = AppConfiguracoesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppConfiguracoesRoute,
-} as any)
-const AppBibliotecaIndexRoute = AppBibliotecaIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppBibliotecaRoute,
 } as any)
 const AppAvaliacaoFisicaIndexRoute = AppAvaliacaoFisicaIndexRouteImport.update({
   id: '/avaliacao-fisica/',
@@ -335,39 +317,6 @@ const AppConfiguracoesAutomacoesRoute =
     path: '/automacoes',
     getParentRoute: () => AppConfiguracoesRoute,
   } as any)
-const AppBibliotecaSuplementosRoute =
-  AppBibliotecaSuplementosRouteImport.update({
-    id: '/suplementos',
-    path: '/suplementos',
-    getParentRoute: () => AppBibliotecaRoute,
-  } as any)
-const AppBibliotecaReceitasRoute = AppBibliotecaReceitasRouteImport.update({
-  id: '/receitas',
-  path: '/receitas',
-  getParentRoute: () => AppBibliotecaRoute,
-} as any)
-const AppBibliotecaPrescricoesRoute =
-  AppBibliotecaPrescricoesRouteImport.update({
-    id: '/prescricoes',
-    path: '/prescricoes',
-    getParentRoute: () => AppBibliotecaRoute,
-  } as any)
-const AppBibliotecaFitoterapicosRoute =
-  AppBibliotecaFitoterapicosRouteImport.update({
-    id: '/fitoterapicos',
-    path: '/fitoterapicos',
-    getParentRoute: () => AppBibliotecaRoute,
-  } as any)
-const AppBibliotecaCardapiosRoute = AppBibliotecaCardapiosRouteImport.update({
-  id: '/cardapios',
-  path: '/cardapios',
-  getParentRoute: () => AppBibliotecaRoute,
-} as any)
-const AppBibliotecaAlimentosRoute = AppBibliotecaAlimentosRouteImport.update({
-  id: '/alimentos',
-  path: '/alimentos',
-  getParentRoute: () => AppBibliotecaRoute,
-} as any)
 const AppAvaliacaoFisicaNovaRoute = AppAvaliacaoFisicaNovaRouteImport.update({
   id: '/avaliacao-fisica/nova',
   path: '/avaliacao-fisica/nova',
@@ -489,7 +438,6 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/caixa-saida': typeof AppCaixaSaidaRoute
   '/configuracoes': typeof AppConfiguracoesRouteWithChildren
   '/feedbacks': typeof AppFeedbacksRoute
@@ -512,12 +460,6 @@ export interface FileRoutesByFullPath {
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
-  '/biblioteca/alimentos': typeof AppBibliotecaAlimentosRoute
-  '/biblioteca/cardapios': typeof AppBibliotecaCardapiosRoute
-  '/biblioteca/fitoterapicos': typeof AppBibliotecaFitoterapicosRoute
-  '/biblioteca/prescricoes': typeof AppBibliotecaPrescricoesRoute
-  '/biblioteca/receitas': typeof AppBibliotecaReceitasRoute
-  '/biblioteca/suplementos': typeof AppBibliotecaSuplementosRoute
   '/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
@@ -534,7 +476,6 @@ export interface FileRoutesByFullPath {
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos/': typeof AppAlunosIndexRoute
   '/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
-  '/biblioteca/': typeof AppBibliotecaIndexRoute
   '/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/financeiro/': typeof AppFinanceiroIndexRoute
   '/forms/': typeof AppFormsIndexRoute
@@ -583,12 +524,6 @@ export interface FileRoutesByTo {
   '/alunos/$id': typeof AppAlunosIdRoute
   '/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
-  '/biblioteca/alimentos': typeof AppBibliotecaAlimentosRoute
-  '/biblioteca/cardapios': typeof AppBibliotecaCardapiosRoute
-  '/biblioteca/fitoterapicos': typeof AppBibliotecaFitoterapicosRoute
-  '/biblioteca/prescricoes': typeof AppBibliotecaPrescricoesRoute
-  '/biblioteca/receitas': typeof AppBibliotecaReceitasRoute
-  '/biblioteca/suplementos': typeof AppBibliotecaSuplementosRoute
   '/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
@@ -605,7 +540,6 @@ export interface FileRoutesByTo {
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos': typeof AppAlunosIndexRoute
   '/avaliacao-fisica': typeof AppAvaliacaoFisicaIndexRoute
-  '/biblioteca': typeof AppBibliotecaIndexRoute
   '/configuracoes': typeof AppConfiguracoesIndexRoute
   '/financeiro': typeof AppFinanceiroIndexRoute
   '/forms': typeof AppFormsIndexRoute
@@ -637,7 +571,6 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_app/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/_app/caixa-saida': typeof AppCaixaSaidaRoute
   '/_app/configuracoes': typeof AppConfiguracoesRouteWithChildren
   '/_app/feedbacks': typeof AppFeedbacksRoute
@@ -660,12 +593,6 @@ export interface FileRoutesById {
   '/_app/alunos/$id': typeof AppAlunosIdRoute
   '/_app/avaliacao-fisica/$id': typeof AppAvaliacaoFisicaIdRouteWithChildren
   '/_app/avaliacao-fisica/nova': typeof AppAvaliacaoFisicaNovaRoute
-  '/_app/biblioteca/alimentos': typeof AppBibliotecaAlimentosRoute
-  '/_app/biblioteca/cardapios': typeof AppBibliotecaCardapiosRoute
-  '/_app/biblioteca/fitoterapicos': typeof AppBibliotecaFitoterapicosRoute
-  '/_app/biblioteca/prescricoes': typeof AppBibliotecaPrescricoesRoute
-  '/_app/biblioteca/receitas': typeof AppBibliotecaReceitasRoute
-  '/_app/biblioteca/suplementos': typeof AppBibliotecaSuplementosRoute
   '/_app/configuracoes/automacoes': typeof AppConfiguracoesAutomacoesRoute
   '/_app/configuracoes/conexoes': typeof AppConfiguracoesConexoesRoute
   '/_app/configuracoes/usuarios': typeof AppConfiguracoesUsuariosRoute
@@ -682,7 +609,6 @@ export interface FileRoutesById {
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/_app/alunos/': typeof AppAlunosIndexRoute
   '/_app/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
-  '/_app/biblioteca/': typeof AppBibliotecaIndexRoute
   '/_app/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/_app/financeiro/': typeof AppFinanceiroIndexRoute
   '/_app/forms/': typeof AppFormsIndexRoute
@@ -714,7 +640,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/biblioteca'
     | '/caixa-saida'
     | '/configuracoes'
     | '/feedbacks'
@@ -737,12 +662,6 @@ export interface FileRouteTypes {
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
-    | '/biblioteca/alimentos'
-    | '/biblioteca/cardapios'
-    | '/biblioteca/fitoterapicos'
-    | '/biblioteca/prescricoes'
-    | '/biblioteca/receitas'
-    | '/biblioteca/suplementos'
     | '/configuracoes/automacoes'
     | '/configuracoes/conexoes'
     | '/configuracoes/usuarios'
@@ -759,7 +678,6 @@ export interface FileRouteTypes {
     | '/formularios/$id/respostas'
     | '/alunos/'
     | '/avaliacao-fisica/'
-    | '/biblioteca/'
     | '/configuracoes/'
     | '/financeiro/'
     | '/forms/'
@@ -808,12 +726,6 @@ export interface FileRouteTypes {
     | '/alunos/$id'
     | '/avaliacao-fisica/$id'
     | '/avaliacao-fisica/nova'
-    | '/biblioteca/alimentos'
-    | '/biblioteca/cardapios'
-    | '/biblioteca/fitoterapicos'
-    | '/biblioteca/prescricoes'
-    | '/biblioteca/receitas'
-    | '/biblioteca/suplementos'
     | '/configuracoes/automacoes'
     | '/configuracoes/conexoes'
     | '/configuracoes/usuarios'
@@ -830,7 +742,6 @@ export interface FileRouteTypes {
     | '/formularios/$id/respostas'
     | '/alunos'
     | '/avaliacao-fisica'
-    | '/biblioteca'
     | '/configuracoes'
     | '/financeiro'
     | '/forms'
@@ -861,7 +772,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
-    | '/_app/biblioteca'
     | '/_app/caixa-saida'
     | '/_app/configuracoes'
     | '/_app/feedbacks'
@@ -884,12 +794,6 @@ export interface FileRouteTypes {
     | '/_app/alunos/$id'
     | '/_app/avaliacao-fisica/$id'
     | '/_app/avaliacao-fisica/nova'
-    | '/_app/biblioteca/alimentos'
-    | '/_app/biblioteca/cardapios'
-    | '/_app/biblioteca/fitoterapicos'
-    | '/_app/biblioteca/prescricoes'
-    | '/_app/biblioteca/receitas'
-    | '/_app/biblioteca/suplementos'
     | '/_app/configuracoes/automacoes'
     | '/_app/configuracoes/conexoes'
     | '/_app/configuracoes/usuarios'
@@ -906,7 +810,6 @@ export interface FileRouteTypes {
     | '/formularios/$id/respostas'
     | '/_app/alunos/'
     | '/_app/avaliacao-fisica/'
-    | '/_app/biblioteca/'
     | '/_app/configuracoes/'
     | '/_app/financeiro/'
     | '/_app/forms/'
@@ -1141,13 +1044,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCaixaSaidaRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/biblioteca': {
-      id: '/_app/biblioteca'
-      path: '/biblioteca'
-      fullPath: '/biblioteca'
-      preLoaderRoute: typeof AppBibliotecaRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -1182,13 +1078,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/configuracoes/'
       preLoaderRoute: typeof AppConfiguracoesIndexRouteImport
       parentRoute: typeof AppConfiguracoesRoute
-    }
-    '/_app/biblioteca/': {
-      id: '/_app/biblioteca/'
-      path: '/'
-      fullPath: '/biblioteca/'
-      preLoaderRoute: typeof AppBibliotecaIndexRouteImport
-      parentRoute: typeof AppBibliotecaRoute
     }
     '/_app/avaliacao-fisica/': {
       id: '/_app/avaliacao-fisica/'
@@ -1301,48 +1190,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/configuracoes/automacoes'
       preLoaderRoute: typeof AppConfiguracoesAutomacoesRouteImport
       parentRoute: typeof AppConfiguracoesRoute
-    }
-    '/_app/biblioteca/suplementos': {
-      id: '/_app/biblioteca/suplementos'
-      path: '/suplementos'
-      fullPath: '/biblioteca/suplementos'
-      preLoaderRoute: typeof AppBibliotecaSuplementosRouteImport
-      parentRoute: typeof AppBibliotecaRoute
-    }
-    '/_app/biblioteca/receitas': {
-      id: '/_app/biblioteca/receitas'
-      path: '/receitas'
-      fullPath: '/biblioteca/receitas'
-      preLoaderRoute: typeof AppBibliotecaReceitasRouteImport
-      parentRoute: typeof AppBibliotecaRoute
-    }
-    '/_app/biblioteca/prescricoes': {
-      id: '/_app/biblioteca/prescricoes'
-      path: '/prescricoes'
-      fullPath: '/biblioteca/prescricoes'
-      preLoaderRoute: typeof AppBibliotecaPrescricoesRouteImport
-      parentRoute: typeof AppBibliotecaRoute
-    }
-    '/_app/biblioteca/fitoterapicos': {
-      id: '/_app/biblioteca/fitoterapicos'
-      path: '/fitoterapicos'
-      fullPath: '/biblioteca/fitoterapicos'
-      preLoaderRoute: typeof AppBibliotecaFitoterapicosRouteImport
-      parentRoute: typeof AppBibliotecaRoute
-    }
-    '/_app/biblioteca/cardapios': {
-      id: '/_app/biblioteca/cardapios'
-      path: '/cardapios'
-      fullPath: '/biblioteca/cardapios'
-      preLoaderRoute: typeof AppBibliotecaCardapiosRouteImport
-      parentRoute: typeof AppBibliotecaRoute
-    }
-    '/_app/biblioteca/alimentos': {
-      id: '/_app/biblioteca/alimentos'
-      path: '/alimentos'
-      fullPath: '/biblioteca/alimentos'
-      preLoaderRoute: typeof AppBibliotecaAlimentosRouteImport
-      parentRoute: typeof AppBibliotecaRoute
     }
     '/_app/avaliacao-fisica/nova': {
       id: '/_app/avaliacao-fisica/nova'
@@ -1480,30 +1327,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AppBibliotecaRouteChildren {
-  AppBibliotecaAlimentosRoute: typeof AppBibliotecaAlimentosRoute
-  AppBibliotecaCardapiosRoute: typeof AppBibliotecaCardapiosRoute
-  AppBibliotecaFitoterapicosRoute: typeof AppBibliotecaFitoterapicosRoute
-  AppBibliotecaPrescricoesRoute: typeof AppBibliotecaPrescricoesRoute
-  AppBibliotecaReceitasRoute: typeof AppBibliotecaReceitasRoute
-  AppBibliotecaSuplementosRoute: typeof AppBibliotecaSuplementosRoute
-  AppBibliotecaIndexRoute: typeof AppBibliotecaIndexRoute
-}
-
-const AppBibliotecaRouteChildren: AppBibliotecaRouteChildren = {
-  AppBibliotecaAlimentosRoute: AppBibliotecaAlimentosRoute,
-  AppBibliotecaCardapiosRoute: AppBibliotecaCardapiosRoute,
-  AppBibliotecaFitoterapicosRoute: AppBibliotecaFitoterapicosRoute,
-  AppBibliotecaPrescricoesRoute: AppBibliotecaPrescricoesRoute,
-  AppBibliotecaReceitasRoute: AppBibliotecaReceitasRoute,
-  AppBibliotecaSuplementosRoute: AppBibliotecaSuplementosRoute,
-  AppBibliotecaIndexRoute: AppBibliotecaIndexRoute,
-}
-
-const AppBibliotecaRouteWithChildren = AppBibliotecaRoute._addFileChildren(
-  AppBibliotecaRouteChildren,
-)
-
 interface AppConfiguracoesRouteChildren {
   AppConfiguracoesAutomacoesRoute: typeof AppConfiguracoesAutomacoesRoute
   AppConfiguracoesConexoesRoute: typeof AppConfiguracoesConexoesRoute
@@ -1575,7 +1398,6 @@ const AppFormsIdRouteWithChildren = AppFormsIdRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppBibliotecaRoute: typeof AppBibliotecaRouteWithChildren
   AppCaixaSaidaRoute: typeof AppCaixaSaidaRoute
   AppConfiguracoesRoute: typeof AppConfiguracoesRouteWithChildren
   AppFeedbacksRoute: typeof AppFeedbacksRoute
@@ -1592,7 +1414,6 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppBibliotecaRoute: AppBibliotecaRouteWithChildren,
   AppCaixaSaidaRoute: AppCaixaSaidaRoute,
   AppConfiguracoesRoute: AppConfiguracoesRouteWithChildren,
   AppFeedbacksRoute: AppFeedbacksRoute,
