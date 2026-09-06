@@ -1,10 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { lerCredenciaisZapi } from "./credenciais.server";
 
 export const getZapiStatus = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   return {
     instance: { configured: !!instance, preview: instance ? mask(instance) : null },
     token: { configured: !!token, preview: token ? mask(token) : null },
@@ -14,9 +16,10 @@ export const getZapiStatus = createServerFn({ method: "GET" }).middleware([requi
 });
 
 export const testZapiConnection = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Credenciais Z-API não configuradas." };
   }
@@ -40,16 +43,17 @@ export const testZapiConnection = createServerFn({ method: "POST" }).middleware(
 });
 
 function zapiCreds() {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) return null;
   return { instance, token, clientToken };
 }
 
 /** Gera QR code (base64) para conectar o WhatsApp à instância Z-API. */
 export const connectZapi = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const c = zapiCreds();
+  const c = await zapiCreds();
   if (!c) return { ok: false as const, error: "Credenciais Z-API não configuradas." };
   try {
     const headers = { "Client-Token": c.clientToken, "Content-Type": "application/json" };
@@ -79,7 +83,7 @@ export const connectZapi = createServerFn({ method: "POST" }).middleware([requir
 
 /** Desconecta o WhatsApp da instância Z-API. */
 export const disconnectZapi = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const c = zapiCreds();
+  const c = await zapiCreds();
   if (!c) return { ok: false as const, error: "Credenciais Z-API não configuradas." };
   try {
     const url = `https://api.z-api.io/instances/${c.instance}/token/${c.token}/disconnect`;
@@ -103,9 +107,10 @@ function mask(v: string) {
 export type ZapiGroup = { id: string; name: string };
 
 export const listZapiGroups = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async (): Promise<{ ok: true; groups: ZapiGroup[] } | { ok: false; error: string }> => {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Credenciais Z-API não configuradas." };
   }

@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { lerCredencial } from "./credenciais.server";
 
 function mask(v: string) {
   if (v.length <= 8) return "••••";
@@ -7,7 +8,7 @@ function mask(v: string) {
 }
 
 export const getOpenAIStatus = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const key = process.env.OPENAI_API_KEY;
+  const key = await lerCredencial("OPENAI_API_KEY");
   return {
     apiKey: { configured: !!key, preview: key ? mask(key) : null },
     allConfigured: !!key,
@@ -15,7 +16,7 @@ export const getOpenAIStatus = createServerFn({ method: "GET" }).middleware([req
 });
 
 export const testOpenAIConnection = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async () => {
-  const key = process.env.OPENAI_API_KEY;
+  const key = await lerCredencial("OPENAI_API_KEY");
   if (!key) return { ok: false as const, error: "OPENAI_API_KEY não configurado." };
   try {
     const res = await fetch("https://api.openai.com/v1/models", {
