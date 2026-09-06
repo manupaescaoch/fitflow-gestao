@@ -195,7 +195,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
       <main className="flex-1 min-w-0 max-w-full overflow-x-hidden">
         {!isImmersive && (
-          <header className="md:hidden sticky top-0 z-40 flex items-center justify-between gap-2 border-b border-border bg-background/95 backdrop-blur px-3 py-2.5 pt-[max(0.625rem,var(--safe-top))] pl-[max(0.75rem,var(--safe-left))] pr-[max(0.75rem,var(--safe-right))]">
+          <header className="md:hidden sticky top-0 z-40 flex items-center justify-between gap-2 border-b border-border glass px-3 py-2.5 pt-[max(0.625rem,var(--safe-top))] pl-[max(0.75rem,var(--safe-left))] pr-[max(0.75rem,var(--safe-right))]">
             <div className="flex items-center gap-2">
               <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
                 <SheetTrigger asChild>
@@ -292,7 +292,7 @@ function MobileBottomNav({
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/95 backdrop-blur pb-safe pl-safe pr-safe"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border glass pb-safe pl-safe pr-safe"
       aria-label="Navegação principal"
     >
       <ul className={`grid ${gridCols}`}>
