@@ -182,23 +182,23 @@ function DashboardPage() {
   return (
     <div className="space-y-6" ref={dashboardRef}>
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Dashboard Financeiro</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold">Dashboard Financeiro</h1>
           <p className="text-sm fin-muted">{MES_LABELS[mes]} de {ano}</p>
         </div>
         {!exporting && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={exportarPDF}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold shadow-sm hover:opacity-90 transition border"
+              className="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-[13px] sm:text-sm font-semibold shadow-sm hover:opacity-90 transition border whitespace-nowrap"
               style={{ borderColor: "var(--fin-border, #e5e7eb)", background: "#fff", color: "#111" }}
             >
               <FileDown className="h-4 w-4" /> Exportar PDF
             </button>
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white shadow-sm hover:opacity-90 transition"
+              className="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-[13px] sm:text-sm font-semibold text-white shadow-sm hover:opacity-90 transition whitespace-nowrap"
               style={{ background: "var(--blue)" }}
             >
               <Plus className="h-4 w-4" /> Nova Transação
