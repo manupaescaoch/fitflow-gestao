@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import {
-  LayoutGrid, Users, BarChart3, Gauge,
+  LayoutGrid, Users, BarChart3,
   LogOut, DollarSign, Settings, ChevronDown, Menu, MoreHorizontal, BookOpen, MessageSquare, Inbox, ClipboardList,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect } from "react";
@@ -18,7 +18,6 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/visao-geral", label: "Visão Geral", icon: LayoutGrid },
-  { to: "/dashboard", label: "Dashboard", icon: Gauge, admin: true },
   { to: "/alunos",    label: "Alunos",    icon: Users },
   { to: "/caixa-saida", label: "Caixa de Saída", icon: Inbox, admin: true },
   {
@@ -348,7 +347,6 @@ function MobileBottomNav({
                 <MoreLink to="/biblioteca/protocolos" icon={BookOpen} label="Protocolos" indent />
                 {isAdmin && (
                   <>
-                    <MoreLink to="/dashboard" icon={Gauge} label="Dashboard" />
                     <MoreLink to="/feedbacks" icon={MessageSquare} label="Feedbacks" />
                     <MoreLink to="/financeiro" icon={DollarSign} label="Financeiro" />
                     <MoreLink to="/financeiro/recebimentos" icon={DollarSign} label="Recebimentos" indent />

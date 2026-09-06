@@ -20,7 +20,7 @@ function AppLayout() {
   // Bloqueia rotas admin-only para não-admins
   useEffect(() => {
     if (loading || !crmUser) return;
-    const adminOnly = ["/financeiro", "/configuracoes", "/admin", "/dashboard"];
+    const adminOnly = ["/financeiro", "/configuracoes", "/admin"];
     const blocked = adminOnly.some((p) => loc.pathname.startsWith(p));
     if (blocked && !isAdmin) nav({ to: "/visao-geral" });
   }, [loading, crmUser, isAdmin, loc.pathname, nav]);
