@@ -52,7 +52,6 @@ export function WorkflowSection() {
   useEffect(() => { void load(); }, []);
 
   const getItem = (chave: string) => itens.find((i) => i.chave === chave);
-  const getPrompt = (tipo: string) => prompts.find((p) => p.tipo === tipo);
 
   if (loading) {
     return <div className="flex items-center justify-center py-16 text-sm text-muted-foreground gap-2">
@@ -396,24 +395,20 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
   const test = useServerFn(testarPromptIA);
   const initial = useMemo(() => Object.fromEntries(prompts.map((p) => [p.tipo, p.prompt_sistema])), [prompts]);
   const [vals, setVals] = useState<Record<string, string>>(initial);
-  const [saving, setSaving] = useState(false);
+  const [savingTipo, setSavingTipo] = useState<string | null>(null);
   const [testing, setTesting] = useState<string | null>(null);
   const [testModal, setTestModal] = useState<{ tipo: string; resposta: string } | null>(null);
   useEffect(() => setVals(initial), [initial]);
   const dirty = JSON.stringify(vals) !== JSON.stringify(initial);
 
-  const handleSave = async () => {
-    setSaving(true);
+  const handleSave = async (tipo: string) => {
+    setSavingTipo(tipo);
     try {
-      for (const [tipo, prompt_sistema] of Object.entries(vals)) {
-        if (prompt_sistema !== initial[tipo]) {
-          await save({ data: { tipo: tipo as any, prompt_sistema } });
-        }
-      }
-      toast.success("Prompts salvos");
+      await save({ data: { tipo: tipo as any, prompt_sistema: vals[tipo] ?? "" } });
+      toast.success("Prompt salvo");
       onSaved();
     } catch (e) { toast.error(e instanceof Error ? e.message : "Falha ao salvar"); }
-    finally { setSaving(false); }
+    finally { setSavingTipo(null); }
   };
 
   const testar = async (tipo: string) => {
@@ -429,7 +424,7 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
     <SectionCard
       icon={Sparkles}
       title="Prompts da IA"
-      desc="Comportamento da IA que gera as respostas de Anamnese e Feedbacks."
+      desc="Comportamento da IA que gera as respostas dos feedbacks."
       ultima={prompts[0] ? { ...prompts[0], chave: "prompts", valor: "", tipo: "text", secao: "mensagens", atualizado_por_nome: null } as any : undefined}
       dirty={dirty}
     >
@@ -451,17 +446,22 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
                 rows={6}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
               />
-              <button onClick={() => testar(tipo)} disabled={!v || testing === tipo}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-                {testing === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-                Testar prompt
-              </button>
+              <div className="mt-2 flex items-center gap-2">
+                <button onClick={() => testar(tipo)} disabled={!v || testing === tipo}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
+                  {testing === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
+                  Testar prompt
+                </button>
+                <button onClick={() => handleSave(tipo)} disabled={v === (initial[tipo] ?? "") || savingTipo === tipo}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50">
+                  {savingTipo === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                  Salvar
+                </button>
+              </div>
             </div>
           );
         })}
       </div>
-      <SaveBar disabled={!dirty || saving} saving={saving} onSave={handleSave} />
-
       {testModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 px-safe" onClick={() => setTestModal(null)}>
           <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
