@@ -622,7 +622,47 @@ export function FeedbacksSemRespostaCard() {
                     </Link>
                   </div>
                 </div>
+                {histAluno === it.aluno_id && (
+                  <div className="mt-3 rounded-lg border border-border bg-muted/40 p-3">
+                    <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                      Histórico de envios — {it.aluno_nome}
+                    </div>
+                    {histLoading ? (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Carregando…
+                      </div>
+                    ) : histItens.length === 0 ? (
+                      <div className="text-xs text-muted-foreground">Nenhum envio registrado.</div>
+                    ) : (
+                      <ul className="space-y-1.5">
+                        {histItens.map((h) => (
+                          <li key={h.id} className="flex items-center justify-between gap-2 text-xs">
+                            <span className="flex items-center gap-2 min-w-0">
+                              <span className="text-muted-foreground shrink-0">{fmtData(h.enviado_em)}</span>
+                              <span className="font-medium truncate">{TIPO_LABEL[h.tipo] ?? h.tipo}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">
+                                {h.origem === "formulario" ? "Formulário" : "Mensagem"}
+                              </span>
+                            </span>
+                            <span className="shrink-0">
+                              {h.respondido_em ? (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">
+                                  Respondido {fmtData(h.respondido_em)}
+                                </span>
+                              ) : (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                                  {h.status === "erro" ? "Erro no envio" : "Sem resposta"}
+                                </span>
+                              )}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
               </div>
+
             );
           })}
         </div>
