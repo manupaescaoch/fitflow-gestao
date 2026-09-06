@@ -52,7 +52,6 @@ export function WorkflowSection() {
   useEffect(() => { void load(); }, []);
 
   const getItem = (chave: string) => itens.find((i) => i.chave === chave);
-  const getPrompt = (tipo: string) => prompts.find((p) => p.tipo === tipo);
 
   if (loading) {
     return <div className="flex items-center justify-center py-16 text-sm text-muted-foreground gap-2">
@@ -67,17 +66,12 @@ export function WorkflowSection() {
         items={itens.filter((i) => i.secao === "ciclo")}
         onSaved={load}
       />
-      <FollowupCard
-        d1={getPrompt("followup_d7")}
-        d2={getPrompt("followup_d21")}
-        onSaved={load}
-      />
       <MensagensFixasCard
         items={itens.filter((i) => i.secao === "mensagens")}
         onSaved={load}
       />
       <PromptsIACard
-        prompts={prompts.filter((p) => ["feedback_quinzenal","feedback_mensal","check_shape_mensal","estrategia_treino","estrategia_nutricional"].includes(p.tipo))}
+        prompts={prompts.filter((p) => ["feedback_quinzenal","feedback_mensal"].includes(p.tipo))}
         onSaved={load}
       />
       <HistoricoCard />
@@ -212,66 +206,6 @@ function CicloCard({ items, onSaved }: { items: ConfigItem[]; onSaved: () => voi
   );
 }
 
-/* ======================= FOLLOWUP PROMPTS ======================= */
-function FollowupCard({ d1, d2, onSaved }: { d1?: PromptItem; d2?: PromptItem; onSaved: () => void }) {
-  const save = useServerFn(savePromptIA);
-  const [v1, setV1] = useState(d1?.prompt_sistema ?? "");
-  const [v2, setV2] = useState(d2?.prompt_sistema ?? "");
-  const [saving, setSaving] = useState(false);
-  const [testing, setTesting] = useState<string | null>(null);
-  useEffect(() => { setV1(d1?.prompt_sistema ?? ""); setV2(d2?.prompt_sistema ?? ""); }, [d1, d2]);
-  const dirty = v1 !== (d1?.prompt_sistema ?? "") || v2 !== (d2?.prompt_sistema ?? "");
-  const testFn = useServerFn(testarPromptIA);
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      if (v1 !== (d1?.prompt_sistema ?? "")) await save({ data: { tipo: "followup_d7", prompt_sistema: v1 } });
-      if (v2 !== (d2?.prompt_sistema ?? "")) await save({ data: { tipo: "followup_d21", prompt_sistema: v2 } });
-      toast.success("Prompts de follow-up salvos");
-      onSaved();
-    } catch (e) { toast.error(e instanceof Error ? e.message : "Falha ao salvar"); }
-    finally { setSaving(false); }
-  };
-
-  const testar = async (tipo: string, prompt: string) => {
-    setTesting(tipo);
-    try {
-      const r = await testFn({ data: { prompt_sistema: prompt } });
-      if (r.ok) toast.success(r.resposta?.slice(0, 200) || "Resposta gerada", { duration: 8000 });
-      else toast.error(r.error || "Falha");
-    } finally { setTesting(null); }
-  };
-
-  return (
-    <SectionCard icon={MessageSquare} title="Mensagens de Follow-up (IA)" desc="Prompts que geram as mensagens dos dois follow-ups do ciclo." ultima={d1 ? { ...d1, chave: "followup_d7", valor: "", tipo: "text", secao: "mensagens", atualizado_por_nome: null } as any : undefined} dirty={dirty}>
-      <div className="space-y-4">
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Follow-up 1 — prompt</label>
-          <textarea value={v1} onChange={(e) => setV1(e.target.value)} rows={4}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <button onClick={() => testar("followup_d7", v1)} disabled={!v1 || testing === "followup_d7"}
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-            {testing === "followup_d7" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-            Testar prompt
-          </button>
-        </div>
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Follow-up 2 — prompt</label>
-          <textarea value={v2} onChange={(e) => setV2(e.target.value)} rows={4}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <button onClick={() => testar("followup_d21", v2)} disabled={!v2 || testing === "followup_d21"}
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-            {testing === "followup_d21" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-            Testar prompt
-          </button>
-        </div>
-      </div>
-      <SaveBar disabled={!dirty || saving} saving={saving} onSave={handleSave} />
-    </SectionCard>
-  );
-}
-
 /* ======================= MENSAGENS FIXAS ======================= */
 function MensagensFixasCard({ items, onSaved }: { items: ConfigItem[]; onSaved: () => void }) {
   const fetchVar = useServerFn(listMensagensVariantes);
@@ -291,11 +225,13 @@ function MensagensFixasCard({ items, onSaved }: { items: ConfigItem[]; onSaved: 
   useEffect(() => { void load(); }, []);
 
   const fields: { chave: string; titulo: string; hint: string }[] = [
-    { chave: "MSG_CHECKIN_QUINZENAL", titulo: "Check-in quinzenal (mensagem, sem link)", hint: "Use {nome} — pergunta sobre adesão ao treino e à dieta" },
-    { chave: "MSG_LINK_MENSAL", titulo: "Envio do link — Feedback Mensal", hint: "Use {nome} e {link}" },
     { chave: "MSG_CONFIRMACAO_ANAMNESE", titulo: "Confirmação após receber anamnese", hint: "Use {nome}" },
-    { chave: "MSG_POS_ENTREGA_D1", titulo: "D+1 após entrega do planejamento", hint: "Use {nome} — 1 dia após confirmação da entrega" },
-    { chave: "MSG_POS_FEEDBACK_MENSAL", titulo: "Pós feedback mensal (passo 9)", hint: "Enviada após a resposta IA do feedback mensal" },
+    { chave: "MSG_FOLLOWUP_D7", titulo: "Follow-up 1", hint: "Use {nome} — primeiro follow-up do ciclo" },
+    { chave: "MSG_LINK_QUINZENAL", titulo: "Feedback quinzenal", hint: "Use {nome} e {link}" },
+    { chave: "MSG_CONFIRMACAO_QUINZENAL", titulo: "Confirmação após receber Feedback quinzenal", hint: "Use {nome}" },
+    { chave: "MSG_FOLLOWUP_D21", titulo: "Follow-up 2", hint: "Use {nome} — segundo follow-up do ciclo" },
+    { chave: "MSG_LINK_MENSAL", titulo: "Feedback mensal", hint: "Use {nome} e {link}" },
+    { chave: "MSG_POS_FEEDBACK_MENSAL", titulo: "Confirmação após receber Feedback mensal", hint: "Use {nome}" },
   ];
 
   const itemMap = Object.fromEntries(items.map((i) => [i.chave, i.valor ?? ""]));
@@ -459,24 +395,20 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
   const test = useServerFn(testarPromptIA);
   const initial = useMemo(() => Object.fromEntries(prompts.map((p) => [p.tipo, p.prompt_sistema])), [prompts]);
   const [vals, setVals] = useState<Record<string, string>>(initial);
-  const [saving, setSaving] = useState(false);
+  const [savingTipo, setSavingTipo] = useState<string | null>(null);
   const [testing, setTesting] = useState<string | null>(null);
   const [testModal, setTestModal] = useState<{ tipo: string; resposta: string } | null>(null);
   useEffect(() => setVals(initial), [initial]);
   const dirty = JSON.stringify(vals) !== JSON.stringify(initial);
 
-  const handleSave = async () => {
-    setSaving(true);
+  const handleSave = async (tipo: string) => {
+    setSavingTipo(tipo);
     try {
-      for (const [tipo, prompt_sistema] of Object.entries(vals)) {
-        if (prompt_sistema !== initial[tipo]) {
-          await save({ data: { tipo: tipo as any, prompt_sistema } });
-        }
-      }
-      toast.success("Prompts salvos");
+      await save({ data: { tipo: tipo as any, prompt_sistema: vals[tipo] ?? "" } });
+      toast.success("Prompt salvo");
       onSaved();
     } catch (e) { toast.error(e instanceof Error ? e.message : "Falha ao salvar"); }
-    finally { setSaving(false); }
+    finally { setSavingTipo(null); }
   };
 
   const testar = async (tipo: string) => {
@@ -492,12 +424,12 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
     <SectionCard
       icon={Sparkles}
       title="Prompts da IA"
-      desc="Comportamento da IA que gera as respostas de Anamnese e Feedbacks."
+      desc="Comportamento da IA que gera as respostas dos feedbacks."
       ultima={prompts[0] ? { ...prompts[0], chave: "prompts", valor: "", tipo: "text", secao: "mensagens", atualizado_por_nome: null } as any : undefined}
       dirty={dirty}
     >
       <div className="space-y-5">
-        {(["anamnese","feedback_quinzenal","feedback_mensal","estrategia_treino","estrategia_nutricional"] as const).map((tipo) => {
+        {(["feedback_quinzenal","feedback_mensal"] as const).map((tipo) => {
           const meta = PROMPT_LABELS[tipo];
           const v = vals[tipo] ?? "";
           return (
@@ -514,17 +446,22 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
                 rows={6}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
               />
-              <button onClick={() => testar(tipo)} disabled={!v || testing === tipo}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-                {testing === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-                Testar prompt
-              </button>
+              <div className="mt-2 flex items-center gap-2">
+                <button onClick={() => testar(tipo)} disabled={!v || testing === tipo}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
+                  {testing === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
+                  Testar prompt
+                </button>
+                <button onClick={() => handleSave(tipo)} disabled={v === (initial[tipo] ?? "") || savingTipo === tipo}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50">
+                  {savingTipo === tipo ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                  Salvar
+                </button>
+              </div>
             </div>
           );
         })}
       </div>
-      <SaveBar disabled={!dirty || saving} saving={saving} onSave={handleSave} />
-
       {testModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 px-safe" onClick={() => setTestModal(null)}>
           <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
