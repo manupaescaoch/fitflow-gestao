@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowLeft, KeyRound, Send } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { solicitarResetSenhaAluno } from "@/server/aluno-auth.functions";
-import mpTeamLogo from "@/assets/mp-team-logo.png";
 
 export const Route = createFileRoute("/aluno/esqueci-senha")({
   head: () => ({ meta: [{ title: "Recuperar senha — MPTEAM" }] }),
@@ -43,13 +42,7 @@ function EsqueciSenhaPage() {
         </button>
 
         <div className="flex flex-col items-center">
-          <img
-            src={mpTeamLogo}
-            alt="MPTEAM"
-            className="h-24 w-24 object-contain select-none"
-            draggable={false}
-          />
-          <div className="mt-4 h-12 w-12 rounded-2xl bg-[#F70906]/10 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-2xl bg-[#F70906]/10 flex items-center justify-center">
             <KeyRound className="h-6 w-6 text-[#F70906]" />
           </div>
           <h1 className="mt-4 text-[28px] leading-none font-extrabold tracking-tight text-black">
