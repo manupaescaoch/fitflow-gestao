@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import { useSignedAnamneseUrls } from "@/lib/use-signed-anamnese-urls";
 import { RenovacoesUrgentesCard } from "@/components/visao-geral/RenovacoesUrgentesCard";
 import { FeedbacksSemRespostaCard } from "@/components/visao-geral/FeedbacksSemRespostaCard";
-import { MensagensPendentesPanel } from "@/components/visao-geral/MensagensPendentesPanel";
+
 
 function abrirJanelaPreparandoWhatsApp(): Window | null {
   const janela = window.open("", "_blank");
