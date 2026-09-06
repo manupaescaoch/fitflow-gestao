@@ -1523,6 +1523,85 @@ export type Database = {
           },
         ]
       }
+      form_resposta_comentarios: {
+        Row: {
+          autor_id: string | null
+          autor_nome: string | null
+          criado_em: string
+          id: string
+          interno: boolean
+          resposta_id: string
+          texto: string
+        }
+        Insert: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          criado_em?: string
+          id?: string
+          interno?: boolean
+          resposta_id: string
+          texto: string
+        }
+        Update: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          criado_em?: string
+          id?: string
+          interno?: boolean
+          resposta_id?: string
+          texto?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_resposta_comentarios_resposta_id_fkey"
+            columns: ["resposta_id"]
+            isOneToOne: false
+            referencedRelation: "form_respostas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_resposta_eventos: {
+        Row: {
+          autor_id: string | null
+          autor_nome: string | null
+          campo: string
+          criado_em: string
+          de: string | null
+          id: string
+          para: string | null
+          resposta_id: string
+        }
+        Insert: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          campo: string
+          criado_em?: string
+          de?: string | null
+          id?: string
+          para?: string | null
+          resposta_id: string
+        }
+        Update: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          campo?: string
+          criado_em?: string
+          de?: string | null
+          id?: string
+          para?: string | null
+          resposta_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_resposta_eventos_resposta_id_fkey"
+            columns: ["resposta_id"]
+            isOneToOne: false
+            referencedRelation: "form_respostas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       form_resposta_itens: {
         Row: {
           arquivos: Json
@@ -2082,6 +2161,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notificacoes: {
+        Row: {
+          criado_em: string
+          id: string
+          lida: boolean
+          link: string | null
+          mensagem: string | null
+          tipo: string
+          titulo: string
+          usuario_id: string
+        }
+        Insert: {
+          criado_em?: string
+          id?: string
+          lida?: boolean
+          link?: string | null
+          mensagem?: string | null
+          tipo?: string
+          titulo: string
+          usuario_id: string
+        }
+        Update: {
+          criado_em?: string
+          id?: string
+          lida?: boolean
+          link?: string | null
+          mensagem?: string | null
+          tipo?: string
+          titulo?: string
+          usuario_id?: string
+        }
+        Relationships: []
       }
       pendencias_comunicacao_acoes: {
         Row: {
