@@ -207,66 +207,6 @@ function CicloCard({ items, onSaved }: { items: ConfigItem[]; onSaved: () => voi
   );
 }
 
-/* ======================= FOLLOWUP PROMPTS ======================= */
-function FollowupCard({ d1, d2, onSaved }: { d1?: PromptItem; d2?: PromptItem; onSaved: () => void }) {
-  const save = useServerFn(savePromptIA);
-  const [v1, setV1] = useState(d1?.prompt_sistema ?? "");
-  const [v2, setV2] = useState(d2?.prompt_sistema ?? "");
-  const [saving, setSaving] = useState(false);
-  const [testing, setTesting] = useState<string | null>(null);
-  useEffect(() => { setV1(d1?.prompt_sistema ?? ""); setV2(d2?.prompt_sistema ?? ""); }, [d1, d2]);
-  const dirty = v1 !== (d1?.prompt_sistema ?? "") || v2 !== (d2?.prompt_sistema ?? "");
-  const testFn = useServerFn(testarPromptIA);
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      if (v1 !== (d1?.prompt_sistema ?? "")) await save({ data: { tipo: "followup_d7", prompt_sistema: v1 } });
-      if (v2 !== (d2?.prompt_sistema ?? "")) await save({ data: { tipo: "followup_d21", prompt_sistema: v2 } });
-      toast.success("Prompts de follow-up salvos");
-      onSaved();
-    } catch (e) { toast.error(e instanceof Error ? e.message : "Falha ao salvar"); }
-    finally { setSaving(false); }
-  };
-
-  const testar = async (tipo: string, prompt: string) => {
-    setTesting(tipo);
-    try {
-      const r = await testFn({ data: { prompt_sistema: prompt } });
-      if (r.ok) toast.success(r.resposta?.slice(0, 200) || "Resposta gerada", { duration: 8000 });
-      else toast.error(r.error || "Falha");
-    } finally { setTesting(null); }
-  };
-
-  return (
-    <SectionCard icon={MessageSquare} title="Mensagens de Follow-up (IA)" desc="Prompts que geram as mensagens dos dois follow-ups do ciclo." ultima={d1 ? { ...d1, chave: "followup_d7", valor: "", tipo: "text", secao: "mensagens", atualizado_por_nome: null } as any : undefined} dirty={dirty}>
-      <div className="space-y-4">
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Follow-up 1 — prompt</label>
-          <textarea value={v1} onChange={(e) => setV1(e.target.value)} rows={4}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <button onClick={() => testar("followup_d7", v1)} disabled={!v1 || testing === "followup_d7"}
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-            {testing === "followup_d7" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-            Testar prompt
-          </button>
-        </div>
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Follow-up 2 — prompt</label>
-          <textarea value={v2} onChange={(e) => setV2(e.target.value)} rows={4}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <button onClick={() => testar("followup_d21", v2)} disabled={!v2 || testing === "followup_d21"}
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
-            {testing === "followup_d21" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-            Testar prompt
-          </button>
-        </div>
-      </div>
-      <SaveBar disabled={!dirty || saving} saving={saving} onSave={handleSave} />
-    </SectionCard>
-  );
-}
-
 /* ======================= MENSAGENS FIXAS ======================= */
 function MensagensFixasCard({ items, onSaved }: { items: ConfigItem[]; onSaved: () => void }) {
   const fetchVar = useServerFn(listMensagensVariantes);
@@ -286,11 +226,13 @@ function MensagensFixasCard({ items, onSaved }: { items: ConfigItem[]; onSaved: 
   useEffect(() => { void load(); }, []);
 
   const fields: { chave: string; titulo: string; hint: string }[] = [
-    { chave: "MSG_CHECKIN_QUINZENAL", titulo: "Check-in quinzenal (mensagem, sem link)", hint: "Use {nome} — pergunta sobre adesão ao treino e à dieta" },
-    { chave: "MSG_LINK_MENSAL", titulo: "Envio do link — Feedback Mensal", hint: "Use {nome} e {link}" },
     { chave: "MSG_CONFIRMACAO_ANAMNESE", titulo: "Confirmação após receber anamnese", hint: "Use {nome}" },
-    { chave: "MSG_POS_ENTREGA_D1", titulo: "D+1 após entrega do planejamento", hint: "Use {nome} — 1 dia após confirmação da entrega" },
-    { chave: "MSG_POS_FEEDBACK_MENSAL", titulo: "Pós feedback mensal (passo 9)", hint: "Enviada após a resposta IA do feedback mensal" },
+    { chave: "MSG_FOLLOWUP_D7", titulo: "Follow-up 1", hint: "Use {nome} — primeiro follow-up do ciclo" },
+    { chave: "MSG_LINK_QUINZENAL", titulo: "Feedback quinzenal", hint: "Use {nome} e {link}" },
+    { chave: "MSG_CONFIRMACAO_QUINZENAL", titulo: "Confirmação após receber Feedback quinzenal", hint: "Use {nome}" },
+    { chave: "MSG_FOLLOWUP_D21", titulo: "Follow-up 2", hint: "Use {nome} — segundo follow-up do ciclo" },
+    { chave: "MSG_LINK_MENSAL", titulo: "Feedback mensal", hint: "Use {nome} e {link}" },
+    { chave: "MSG_POS_FEEDBACK_MENSAL", titulo: "Confirmação após receber Feedback mensal", hint: "Use {nome}" },
   ];
 
   const itemMap = Object.fromEntries(items.map((i) => [i.chave, i.valor ?? ""]));
@@ -492,7 +434,7 @@ function PromptsIACard({ prompts, onSaved }: { prompts: PromptItem[]; onSaved: (
       dirty={dirty}
     >
       <div className="space-y-5">
-        {(["anamnese","feedback_quinzenal","feedback_mensal","estrategia_treino","estrategia_nutricional"] as const).map((tipo) => {
+        {(["feedback_quinzenal","feedback_mensal"] as const).map((tipo) => {
           const meta = PROMPT_LABELS[tipo];
           const v = vals[tipo] ?? "";
           return (
