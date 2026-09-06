@@ -594,6 +594,15 @@ export function FeedbacksSemRespostaCard() {
                       {busyId === it.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                       <span className="hidden sm:inline">{lembreteEnviado ? "Reenviar" : "Lembrete"}</span>
                     </button>
+                    <button
+                      onClick={() => alternarHistorico(it.aluno_id)}
+                      title="Ver histórico de envios"
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-muted"
+                    >
+                      <History className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Histórico</span>
+                    </button>
+
                     <a
                       href={whatsappHref(it.whatsapp)}
                       target="_blank"
