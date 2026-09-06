@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, FileCheck2, Users, Inbox } from "lucide-react";
+import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listFeedbacksSemResposta,
