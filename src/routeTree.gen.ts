@@ -82,6 +82,7 @@ import { Route as ApiPublicHooksCuraEntregasRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksBoasVindasRetryRouteImport } from './routes/api/public/hooks/boas-vindas-retry'
 import { Route as ApiPublicHooksAlertaRenovacoesRouteImport } from './routes/api/public/hooks/alerta-renovacoes'
 import { Route as ApiPublicHooksAgendaCiclosRouteImport } from './routes/api/public/hooks/agenda-ciclos'
+import { Route as AppFormsIdRespostasRouteImport } from './routes/_app.forms.$id.respostas'
 import { Route as AppAvaliacaoFisicaIdEditarRouteImport } from './routes/_app.avaliacao-fisica.$id.editar'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -471,6 +472,11 @@ const ApiPublicHooksAgendaCiclosRoute =
     path: '/api/public/hooks/agenda-ciclos',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppFormsIdRespostasRoute = AppFormsIdRespostasRouteImport.update({
+  id: '/respostas',
+  path: '/respostas',
+  getParentRoute: () => AppFormsIdRoute,
+} as any)
 const AppAvaliacaoFisicaIdEditarRoute =
   AppAvaliacaoFisicaIdEditarRouteImport.update({
     id: '/editar',
@@ -531,7 +537,7 @@ export interface FileRoutesByFullPath {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
-  '/forms/$id': typeof AppFormsIdRoute
+  '/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos/': typeof AppAlunosIndexRoute
   '/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
@@ -540,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/financeiro/': typeof AppFinanceiroIndexRoute
   '/forms/': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -602,7 +609,7 @@ export interface FileRoutesByTo {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
-  '/forms/$id': typeof AppFormsIdRoute
+  '/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos': typeof AppAlunosIndexRoute
   '/avaliacao-fisica': typeof AppAvaliacaoFisicaIndexRoute
@@ -611,6 +618,7 @@ export interface FileRoutesByTo {
   '/financeiro': typeof AppFinanceiroIndexRoute
   '/forms': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -679,7 +687,7 @@ export interface FileRoutesById {
   '/_app/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/_app/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/_app/financeiro/vendas': typeof AppFinanceiroVendasRoute
-  '/_app/forms/$id': typeof AppFormsIdRoute
+  '/_app/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/_app/alunos/': typeof AppAlunosIndexRoute
   '/_app/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
@@ -688,6 +696,7 @@ export interface FileRoutesById {
   '/_app/financeiro/': typeof AppFinanceiroIndexRoute
   '/_app/forms/': typeof AppFormsIndexRoute
   '/_app/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/_app/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -765,6 +774,7 @@ export interface FileRouteTypes {
     | '/financeiro/'
     | '/forms/'
     | '/avaliacao-fisica/$id/editar'
+    | '/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -836,6 +846,7 @@ export interface FileRouteTypes {
     | '/financeiro'
     | '/forms'
     | '/avaliacao-fisica/$id/editar'
+    | '/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -912,6 +923,7 @@ export interface FileRouteTypes {
     | '/_app/financeiro/'
     | '/_app/forms/'
     | '/_app/avaliacao-fisica/$id/editar'
+    | '/_app/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -1470,6 +1482,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksAgendaCiclosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/forms/$id/respostas': {
+      id: '/_app/forms/$id/respostas'
+      path: '/respostas'
+      fullPath: '/forms/$id/respostas'
+      preLoaderRoute: typeof AppFormsIdRespostasRouteImport
+      parentRoute: typeof AppFormsIdRoute
+    }
     '/_app/avaliacao-fisica/$id/editar': {
       id: '/_app/avaliacao-fisica/$id/editar'
       path: '/editar'
@@ -1562,6 +1581,18 @@ const AppAvaliacaoFisicaIdRouteChildren: AppAvaliacaoFisicaIdRouteChildren = {
 const AppAvaliacaoFisicaIdRouteWithChildren =
   AppAvaliacaoFisicaIdRoute._addFileChildren(AppAvaliacaoFisicaIdRouteChildren)
 
+interface AppFormsIdRouteChildren {
+  AppFormsIdRespostasRoute: typeof AppFormsIdRespostasRoute
+}
+
+const AppFormsIdRouteChildren: AppFormsIdRouteChildren = {
+  AppFormsIdRespostasRoute: AppFormsIdRespostasRoute,
+}
+
+const AppFormsIdRouteWithChildren = AppFormsIdRoute._addFileChildren(
+  AppFormsIdRouteChildren,
+)
+
 interface AppRouteChildren {
   AppBibliotecaRoute: typeof AppBibliotecaRouteWithChildren
   AppCaixaSaidaRoute: typeof AppCaixaSaidaRoute
@@ -1574,7 +1605,7 @@ interface AppRouteChildren {
   AppAlunosIdRoute: typeof AppAlunosIdRoute
   AppAvaliacaoFisicaIdRoute: typeof AppAvaliacaoFisicaIdRouteWithChildren
   AppAvaliacaoFisicaNovaRoute: typeof AppAvaliacaoFisicaNovaRoute
-  AppFormsIdRoute: typeof AppFormsIdRoute
+  AppFormsIdRoute: typeof AppFormsIdRouteWithChildren
   AppAlunosIndexRoute: typeof AppAlunosIndexRoute
   AppAvaliacaoFisicaIndexRoute: typeof AppAvaliacaoFisicaIndexRoute
   AppFormsIndexRoute: typeof AppFormsIndexRoute
@@ -1592,7 +1623,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAlunosIdRoute: AppAlunosIdRoute,
   AppAvaliacaoFisicaIdRoute: AppAvaliacaoFisicaIdRouteWithChildren,
   AppAvaliacaoFisicaNovaRoute: AppAvaliacaoFisicaNovaRoute,
-  AppFormsIdRoute: AppFormsIdRoute,
+  AppFormsIdRoute: AppFormsIdRouteWithChildren,
   AppAlunosIndexRoute: AppAlunosIndexRoute,
   AppAvaliacaoFisicaIndexRoute: AppAvaliacaoFisicaIndexRoute,
   AppFormsIndexRoute: AppFormsIndexRoute,
