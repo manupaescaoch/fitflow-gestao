@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, FileCheck2, Users, Inbox } from "lucide-react";
+import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listFeedbacksSemResposta,
@@ -13,10 +13,13 @@ import {
   marcarJobsEnviadosManualmente,
   marcarDevolutivaEnviadaManualmente,
   enviarDevolutivaDireto,
+  listHistoricoFeedbacksAluno,
   type FeedbackPendente,
   type FeedbackAguardandoDevolutiva,
   type FeedbackAguardandoEnvio,
+  type HistoricoEnvioFeedback,
 } from "@/server/feedback-lembretes.functions";
+
 import { dispararJobsAgora } from "@/server/motor.functions";
 import { previewMensagemJob } from "@/server/motor-preview.functions";
 import { toast } from "sonner";
@@ -118,6 +121,28 @@ export function FeedbacksSemRespostaCard() {
   const [busyPreviewId, setBusyPreviewId] = useState<string | null>(null);
   const [busyDevPreviewId, setBusyDevPreviewId] = useState<string | null>(null);
   const [busyDevDiretoId, setBusyDevDiretoId] = useState<string | null>(null);
+
+  // Histórico de envios por aluno (o que foi enviado e quando)
+  const historicoFn = useServerFn(listHistoricoFeedbacksAluno);
+  const [histAluno, setHistAluno] = useState<string | null>(null);
+  const [histLoading, setHistLoading] = useState(false);
+  const [histItens, setHistItens] = useState<HistoricoEnvioFeedback[]>([]);
+
+  function alternarHistorico(alunoId: string) {
+    if (histAluno === alunoId) {
+      setHistAluno(null);
+      return;
+    }
+    setHistAluno(alunoId);
+    setHistItens([]);
+    setHistLoading(true);
+    historicoFn({ data: { alunoId } })
+      .then((r) => setHistItens(r.itens))
+      .catch(() => toast.error("Não foi possível carregar o histórico"))
+      .finally(() => setHistLoading(false));
+  }
+
+
 
   function abrirWhatsAppComMensagem(j: FeedbackAguardandoEnvio) {
     if (!j.whatsapp) {
@@ -569,6 +594,15 @@ export function FeedbacksSemRespostaCard() {
                       {busyId === it.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                       <span className="hidden sm:inline">{lembreteEnviado ? "Reenviar" : "Lembrete"}</span>
                     </button>
+                    <button
+                      onClick={() => alternarHistorico(it.aluno_id)}
+                      title="Ver histórico de envios"
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-muted"
+                    >
+                      <History className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Histórico</span>
+                    </button>
+
                     <a
                       href={whatsappHref(it.whatsapp)}
                       target="_blank"
@@ -588,7 +622,47 @@ export function FeedbacksSemRespostaCard() {
                     </Link>
                   </div>
                 </div>
+                {histAluno === it.aluno_id && (
+                  <div className="mt-3 rounded-lg border border-border bg-muted/40 p-3">
+                    <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                      Histórico de envios — {it.aluno_nome}
+                    </div>
+                    {histLoading ? (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Carregando…
+                      </div>
+                    ) : histItens.length === 0 ? (
+                      <div className="text-xs text-muted-foreground">Nenhum envio registrado.</div>
+                    ) : (
+                      <ul className="space-y-1.5">
+                        {histItens.map((h) => (
+                          <li key={h.id} className="flex items-center justify-between gap-2 text-xs">
+                            <span className="flex items-center gap-2 min-w-0">
+                              <span className="text-muted-foreground shrink-0">{fmtData(h.enviado_em)}</span>
+                              <span className="font-medium truncate">{TIPO_LABEL[h.tipo] ?? h.tipo}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">
+                                {h.origem === "formulario" ? "Formulário" : "Mensagem"}
+                              </span>
+                            </span>
+                            <span className="shrink-0">
+                              {h.respondido_em ? (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">
+                                  Respondido {fmtData(h.respondido_em)}
+                                </span>
+                              ) : (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                                  {h.status === "erro" ? "Erro no envio" : "Sem resposta"}
+                                </span>
+                              )}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
               </div>
+
             );
           })}
         </div>
