@@ -13,10 +13,13 @@ import {
   marcarJobsEnviadosManualmente,
   marcarDevolutivaEnviadaManualmente,
   enviarDevolutivaDireto,
+  listHistoricoFeedbacksAluno,
   type FeedbackPendente,
   type FeedbackAguardandoDevolutiva,
   type FeedbackAguardandoEnvio,
+  type HistoricoEnvioFeedback,
 } from "@/server/feedback-lembretes.functions";
+
 import { dispararJobsAgora } from "@/server/motor.functions";
 import { previewMensagemJob } from "@/server/motor-preview.functions";
 import { toast } from "sonner";
