@@ -497,6 +497,7 @@ export type Database = {
         Row: {
           atualizado_em: string
           atualizado_por: string | null
+          cor_primaria: string
           id: boolean
           logo_url: string | null
           nome: string
@@ -505,6 +506,7 @@ export type Database = {
         Insert: {
           atualizado_em?: string
           atualizado_por?: string | null
+          cor_primaria?: string
           id?: boolean
           logo_url?: string | null
           nome?: string
@@ -513,6 +515,7 @@ export type Database = {
         Update: {
           atualizado_em?: string
           atualizado_por?: string | null
+          cor_primaria?: string
           id?: boolean
           logo_url?: string | null
           nome?: string

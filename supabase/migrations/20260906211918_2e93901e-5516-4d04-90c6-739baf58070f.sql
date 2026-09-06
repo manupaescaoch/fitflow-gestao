@@ -1,0 +1,1 @@
+alter table public.app_branding add column if not exists cor_primaria text not null default '#2563EB';

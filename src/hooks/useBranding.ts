@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import mpLogo from "@/assets/mp-logo.png";
+import { aplicarCorSistema, COR_PADRAO } from "@/lib/tema";
 
-export type Branding = { nome: string; subtitulo: string; logo_url: string | null };
+export type Branding = { nome: string; subtitulo: string; logo_url: string | null; cor_primaria: string };
 
-export const BRANDING_PADRAO: Branding = { nome: "MPTEAM", subtitulo: "CRM", logo_url: null };
+export const BRANDING_PADRAO: Branding = { nome: "MPTEAM", subtitulo: "CRM", logo_url: null, cor_primaria: COR_PADRAO };
 export const LOGO_PADRAO = mpLogo;
 
 let cache: Branding | null = null;
@@ -14,16 +15,18 @@ const listeners = new Set<(b: Branding) => void>();
 async function fetchBranding(): Promise<Branding> {
   const { data } = await (supabase as any)
     .from("app_branding")
-    .select("nome, subtitulo, logo_url")
+    .select("nome, subtitulo, logo_url, cor_primaria")
     .maybeSingle();
   const b: Branding = data
     ? {
         nome: data.nome ?? BRANDING_PADRAO.nome,
         subtitulo: data.subtitulo ?? BRANDING_PADRAO.subtitulo,
         logo_url: data.logo_url ?? null,
+        cor_primaria: data.cor_primaria || COR_PADRAO,
       }
     : BRANDING_PADRAO;
   cache = b;
+  aplicarCorSistema(b.cor_primaria);
   listeners.forEach((l) => l(b));
   return b;
 }

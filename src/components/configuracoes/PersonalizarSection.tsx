@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBranding, recarregarBranding, LOGO_PADRAO } from "@/hooks/useBranding";
+import { aplicarCorSistema, COR_PADRAO } from "@/lib/tema";
 import { Loader2, Save, Upload, Trash2, Palette } from "lucide-react";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB no arquivo enviado
+const CORES_SUGERIDAS = ["#2563EB", "#0F172A", "#DC2626", "#EA580C", "#16A34A", "#7C3AED", "#DB2777", "#0891B2"];
 const MAX_LADO = 512; // a logo é reduzida para no máximo 512px
 
 // Reduz a imagem no navegador para que ela caiba sempre no sistema.
@@ -50,15 +52,23 @@ export function PersonalizarSection() {
   const [nome, setNome] = useState(atual.nome);
   const [subtitulo, setSubtitulo] = useState(atual.subtitulo);
   const [logo, setLogo] = useState<string | null>(atual.logo_url);
+  const [cor, setCor] = useState(atual.cor_primaria);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setNome(atual.nome);
     setSubtitulo(atual.subtitulo);
     setLogo(atual.logo_url);
-  }, [atual.nome, atual.subtitulo, atual.logo_url]);
+    setCor(atual.cor_primaria);
+  }, [atual.nome, atual.subtitulo, atual.logo_url, atual.cor_primaria]);
 
-  const dirty = nome !== atual.nome || subtitulo !== atual.subtitulo || logo !== atual.logo_url;
+  // pré-visualiza a cor na hora e volta ao salvo se sair sem salvar
+  useEffect(() => {
+    aplicarCorSistema(cor);
+    return () => aplicarCorSistema(atual.cor_primaria);
+  }, [cor, atual.cor_primaria]);
+
+  const dirty = nome !== atual.nome || subtitulo !== atual.subtitulo || logo !== atual.logo_url || cor !== atual.cor_primaria;
 
   const escolherArquivo = async (file?: File | null) => {
     if (!file) return;
@@ -83,7 +93,7 @@ export function PersonalizarSection() {
     try {
       const { error } = await (supabase as any)
         .from("app_branding")
-        .update({ nome: nomeLimpo, subtitulo: subtitulo.trim(), logo_url: logo })
+        .update({ nome: nomeLimpo, subtitulo: subtitulo.trim(), logo_url: logo, cor_primaria: cor })
         .eq("id", true);
       if (error) throw new Error(error.message);
       await recarregarBranding();
@@ -129,6 +139,47 @@ export function PersonalizarSection() {
               className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
           </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Cor do sistema</label>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <input
+                type="color"
+                value={cor}
+                onChange={(e) => setCor(e.target.value)}
+                className="h-9 w-12 cursor-pointer rounded-md border border-input bg-background p-1"
+                aria-label="Escolher a cor do sistema"
+              />
+              <input
+                value={cor}
+                onChange={(e) => setCor(e.target.value)}
+                maxLength={7}
+                className="w-28 rounded-md border border-input bg-background px-3 py-2 text-sm uppercase"
+              />
+              {CORES_SUGERIDAS.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCor(c)}
+                  style={{ backgroundColor: c }}
+                  aria-label={`Usar a cor ${c}`}
+                  className="h-7 w-7 rounded-full border border-border"
+                />
+              ))}
+              {cor.toLowerCase() !== COR_PADRAO.toLowerCase() && (
+                <button
+                  type="button"
+                  onClick={() => setCor(COR_PADRAO)}
+                  className="rounded-md border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted"
+                >
+                  Cor padrão
+                </button>
+              )}
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              O fundo continua branco; muda apenas o que hoje é azul (botões, menu ativo, destaques).
+            </p>
+          </div>
+
           <div>
             <label className="text-xs font-medium text-muted-foreground">Logo</label>
             <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -176,6 +227,10 @@ export function PersonalizarSection() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">Botão principal</span>
+            <span className="inline-flex items-center rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">Item ativo</span>
           </div>
         </div>
       </div>
