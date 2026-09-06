@@ -57,9 +57,7 @@ type SectionKey =
 
 const SECTIONS: { key: SectionKey; label: string; icon: any }[] = [
   { key: "perfil", label: "Perfil", icon: UserIcon },
-  { key: "dieta", label: "Dieta", icon: UtensilsCrossed },
   { key: "avaliacao", label: "Avaliação Física", icon: Activity },
-  { key: "treino", label: "Treino", icon: Dumbbell },
   { key: "formularios", label: "Formulários", icon: ClipboardList },
   { key: "fotos", label: "Fotos", icon: Camera },
   { key: "financeiro", label: "Financeiro", icon: Wallet },
