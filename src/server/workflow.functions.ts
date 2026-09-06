@@ -35,7 +35,7 @@ export const getWorkflowConfig = createServerFn({ method: "GET" })
 
 export const saveWorkflowConfig = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { secao: "motor" | "ciclo" | "mensagens"; valores: Record<string, string> }) => {
+  .inputValidator((data: { secao: "motor" | "ciclo" | "mensagens" | "ia" | "lembretes" | "renovacao"; valores: Record<string, string> }) => {
     if (!data?.secao) throw new Error("seção obrigatória");
     if (!data.valores || typeof data.valores !== "object") throw new Error("valores obrigatórios");
     return data;

@@ -38,7 +38,7 @@ const NAV: NavItem[] = [
       { to: "/configuracoes/usuarios", label: "Usuários" },
       { to: "/configuracoes/permissoes", label: "Permissões" },
       { to: "/configuracoes/conexoes", label: "Conexões" },
-      { to: "/configuracoes/automacoes", label: "Workflow" },
+      { to: "/configuracoes/motor", label: "Motor de Automações" },
     ],
   },
 ];
@@ -334,7 +334,7 @@ function MobileBottomNav({
                     <MoreLink to="/configuracoes" icon={Settings} label="Configurações" />
                     <MoreLink to="/configuracoes/usuarios" icon={Settings} label="Usuários" indent />
                     <MoreLink to="/configuracoes/conexoes" icon={Settings} label="Conexões" indent />
-                    <MoreLink to="/configuracoes/automacoes" icon={Settings} label="Workflows" indent />
+                    <MoreLink to="/configuracoes/motor" icon={Settings} label="Motor de Automações" indent />
                   </>
                 )}
               </div>

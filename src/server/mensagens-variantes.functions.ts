@@ -4,10 +4,18 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const CHAVES_VARIANTES = [
   "MSG_CONFIRMACAO_ANAMNESE",
+  "MSG_CONFIRMACAO_ENTREGA",
   "MSG_POS_ENTREGA_D1",
+  "MSG_FOLLOWUP_D7",
   "MSG_LINK_QUINZENAL",
+  "MSG_LEMBRETE_QUINZENAL",
+  "MSG_FOLLOWUP_D21",
   "MSG_LINK_MENSAL",
+  "MSG_LEMBRETE_MENSAL",
   "MSG_POS_FEEDBACK_MENSAL",
+  "MSG_RENOVACAO_ANTES",
+  "MSG_RENOVACAO_DIA",
+  "MSG_RENOVACAO_APOS",
 ] as const;
 export type ChaveVariante = (typeof CHAVES_VARIANTES)[number];
 
