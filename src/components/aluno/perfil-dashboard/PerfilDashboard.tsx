@@ -327,83 +327,6 @@ function AlunoHeroCard({
   );
 }
 
-/* ============== Visão Geral ============== */
-function VisaoGeralCard({ kpis }: { kpis: any }) {
-  const fmtScore = (n: number) => n.toLocaleString("pt-BR");
-  return (
-    <Card className="p-5">
-      <CardTitle title="Visão geral" />
-      <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3">
-        <KpiBig
-          highlight
-          icon={<Flame className="h-4 w-4 text-rose-500" />}
-          label="Score atual"
-          value={fmtScore(kpis.scoreSemana)}
-          sub={kpis.scoreHoje > 0 ? `+${kpis.scoreHoje} hoje` : "—"}
-        />
-        <KpiBig
-          icon={<Activity className="h-4 w-4 text-amber-500" />}
-          label="Sequência"
-          value={String(kpis.sequencia)}
-          sub={kpis.sequencia === 1 ? "dia" : "dias"}
-        />
-        <KpiRing label="Aderência" value={kpis.aderencia7} sub={kpis.labelTone(kpis.aderencia7)} />
-        <KpiRing label="Treino" value={kpis.treinoPct} sub={kpis.labelTone(kpis.treinoPct)} icon={<Dumbbell className="h-3.5 w-3.5 text-zinc-500" />} />
-        <KpiRing label="Dieta" value={kpis.dietaPct} sub={kpis.labelTone(kpis.dietaPct)} icon={<UtensilsCrossed className="h-3.5 w-3.5 text-emerald-600" />} />
-        <KpiRing label="Cardio" value={kpis.cardioPct} sub={kpis.labelTone(kpis.cardioPct)} icon={<Heart className="h-3.5 w-3.5 text-rose-500" />} />
-        <KpiRisk risco={kpis.riscoAbandono} />
-      </div>
-    </Card>
-  );
-}
-
-/* ============== Insights da IA ============== */
-function InsightsIACard() {
-  const items: Array<{ icon: any; tone: string; text: string; trend: "up" | "down" }> = [];
-
-  return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-100 to-rose-100 flex items-center justify-center">
-            <Sparkles className="h-3.5 w-3.5 text-violet-600" />
-          </span>
-          <h3 className="text-[14px] font-bold tracking-tight text-zinc-900 uppercase">Insights da IA</h3>
-          <span className="text-[9.5px] font-bold text-violet-600 bg-violet-50 ring-1 ring-violet-100 rounded-md px-1.5 py-0.5 tracking-wider">BETA</span>
-        </div>
-      </div>
-      <ul className="mt-4 space-y-1.5">
-        {items.length === 0 && (
-          <li className="px-3 py-6 text-center text-[12px] text-zinc-400">
-            Sem insights suficientes ainda. Aguardando mais respostas do aluno.
-          </li>
-        )}
-        {items.map((it, i) => {
-          const Icon = it.icon;
-          const TrendIcon = it.trend === "down" ? TrendingDown : TrendingUp;
-          const trendColor = it.trend === "down" ? "text-rose-500" : "text-emerald-500";
-          const dotBg =
-            it.tone === "rose" ? "bg-rose-50 text-rose-500"
-            : it.tone === "amber" ? "bg-amber-50 text-amber-600"
-            : "bg-emerald-50 text-emerald-600";
-          return (
-            <li key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-50 transition">
-              <span className={`h-7 w-7 rounded-full ${dotBg} flex items-center justify-center shrink-0`}>
-                <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
-              </span>
-              <span className="flex-1 text-[13px] text-zinc-800">{it.text}</span>
-              <TrendIcon className={`h-3.5 w-3.5 ${trendColor}`} strokeWidth={2.6} />
-            </li>
-          );
-        })}
-      </ul>
-      <button className="mt-4 w-full h-10 rounded-xl bg-zinc-50 hover:bg-zinc-100 transition text-[13px] font-semibold text-zinc-800 inline-flex items-center justify-center gap-1.5">
-        Ver análise completa <ArrowUpRight className="h-3.5 w-3.5" />
-      </button>
-    </Card>
-  );
-}
-
 /* ============== Evolução ============== */
 function EvolucaoCard() {
   const [tab, setTab] = useState<"peso" | "medidas" | "score" | "aderencia">("peso");
@@ -582,50 +505,6 @@ function CheckinsCard({ checkins }: { checkins: any[] }) {
             </li>
           ))}
         </ul>
-      </div>
-    </Card>
-  );
-}
-
-/* ============== Saúde do aluno (faixa) ============== */
-function SaudeFaixa({ kpis }: { kpis: any }) {
-  const fmtH = (n: number | null) =>
-    n ? `${Math.floor(n)}h ${String(Math.round((n % 1) * 60)).padStart(2, "0")}m` : "—";
-  const fmt5 = (n: number | null) =>
-    n != null ? `${n.toFixed(1).replace(".", ",")} / 5` : "—";
-  const fmtL = (ml: number | null) =>
-    ml != null ? `${(ml / 1000).toFixed(1).replace(".", ",")} L` : "—";
-  const items = [
-    { icon: Moon,    tone: "violet",  label: "Sono médio",        value: fmtH(kpis.sonoMedia) },
-    { icon: Zap,     tone: "amber",   label: "Energia média",     value: fmt5(kpis.energiaMedia) },
-    { icon: Smile,   tone: "emerald", label: "Humor médio",       value: fmt5(kpis.humorMedia) },
-    { icon: Droplet, tone: "sky",     label: "Água média",        value: fmtL(kpis.aguaMediaMl) },
-    { icon: Dumbbell,tone: "rose",    label: "Treinos 7d",        value: `${kpis.treinosFeitos7} / 7` },
-    { icon: Heart,   tone: "rose",    label: "Cardios 7d",        value: `${kpis.cardiosFeitos7} / 7` },
-    { icon: UtensilsCrossed, tone: "emerald", label: "Dieta 7d", value: `${kpis.dietaPct}%` },
-  ] as const;
-  return (
-    <Card className="p-4">
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-        {items.map((it, i) => {
-          const Icon = it.icon;
-          const tone = it.tone === "violet" ? "bg-violet-50 text-violet-600"
-            : it.tone === "amber" ? "bg-amber-50 text-amber-600"
-            : it.tone === "emerald" ? "bg-emerald-50 text-emerald-600"
-            : it.tone === "sky" ? "bg-sky-50 text-sky-600"
-            : "bg-rose-50 text-rose-500";
-          return (
-            <div key={i} className="flex items-center gap-2.5">
-              <span className={`h-9 w-9 rounded-xl ${tone} flex items-center justify-center shrink-0`}>
-                <Icon className="h-4 w-4" strokeWidth={2.4} />
-              </span>
-              <div className="min-w-0">
-                <div className="text-[10.5px] font-semibold text-zinc-400 uppercase tracking-wider truncate">{it.label}</div>
-                <div className="text-[14px] font-bold text-zinc-900 tabular-nums leading-tight">{it.value}</div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </Card>
   );
