@@ -97,9 +97,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                     onClick?.();
                   }
                 }}
-                className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-[13px] transition-colors text-left ${
+                className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-[13px] transition-colors text-left ${
                   active
-                    ? "bg-rose-50 text-rose-600 font-medium"
+                    ? "bg-primary/10 text-primary font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                 }`}
               >
@@ -127,9 +127,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                         <Link
                           to={c.to}
                           onClick={onClick}
-                          className={`block rounded-md px-3 py-1.5 text-[13px] transition-colors ${
+                          className={`block rounded-md px-3 py-2 text-[13px] transition-colors ${
                             childActive
-                              ? "bg-muted text-rose-600 font-medium"
+                              ? "bg-primary/10 text-primary font-semibold"
                               : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                           }`}
                         >
@@ -150,7 +150,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             onClick={onClick}
             className={`flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] transition-colors ${
               active
-                ? "bg-rose-50 text-rose-600 font-medium"
+                ? "bg-primary/10 text-primary font-semibold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
@@ -288,7 +288,7 @@ function MobileBottomNav({
   const tabs = allTabs.filter((t) => !t.admin || isAdmin);
   const gridCols = tabs.length === 3 ? "grid-cols-4" : "grid-cols-3";
 
-  const moreActive = currentPath.startsWith("/financeiro") || currentPath.startsWith("/configuracoes") || currentPath.startsWith("/feedbacks");
+  const moreActive = ["/financeiro", "/configuracoes", "/feedbacks", "/forms", "/caixa-saida"].some((p) => currentPath.startsWith(p));
 
   return (
     <nav
@@ -303,7 +303,7 @@ function MobileBottomNav({
             <li key={t.to}>
               <Link
                 to={t.to}
-                className={`flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
+                className={`flex flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] font-medium transition-colors ${
                   active ? "text-primary" : "text-muted-foreground"
                 }`}
               >
@@ -317,7 +317,7 @@ function MobileBottomNav({
           <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
             <SheetTrigger asChild>
               <button
-                className={`flex w-full flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
+                className={`flex w-full flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] font-medium transition-colors ${
                   moreActive ? "text-primary" : "text-muted-foreground"
                 }`}
               >
@@ -331,15 +331,19 @@ function MobileBottomNav({
                 {userPerfil && <div className="text-xs text-muted-foreground capitalize">{userPerfil}</div>}
               </div>
               <div className="px-3 pb-3 space-y-1">
+                <MoreLink to="/forms" icon={ClipboardList} label="Formulários" />
                 {isAdmin && (
                   <>
+                    <MoreLink to="/caixa-saida" icon={Inbox} label="Caixa de Saída" />
                     <MoreLink to="/feedbacks" icon={MessageSquare} label="Feedbacks" />
                     <MoreLink to="/financeiro" icon={DollarSign} label="Financeiro" />
-                    <MoreLink to="/financeiro/recebimentos" icon={DollarSign} label="Recebimentos" indent />
-                    <MoreLink to="/financeiro/despesas" icon={DollarSign} label="Despesas" indent />
-                    <MoreLink to="/financeiro/cadastros" icon={DollarSign} label="Cadastros" indent />
+                    <MoreLink to="/financeiro/recebimentos" icon={DollarSign} label="Contas a receber" indent />
+                    <MoreLink to="/financeiro/contas-pagar" icon={DollarSign} label="Contas a pagar" indent />
+                    <MoreLink to="/financeiro/planos" icon={DollarSign} label="Planos" indent />
                     <MoreLink to="/configuracoes" icon={Settings} label="Configurações" />
+                    <MoreLink to="/configuracoes/personalizar" icon={Settings} label="Personalizar" indent />
                     <MoreLink to="/configuracoes/usuarios" icon={Settings} label="Usuários" indent />
+                    <MoreLink to="/configuracoes/permissoes" icon={Settings} label="Permissões" indent />
                     <MoreLink to="/configuracoes/conexoes" icon={Settings} label="Conexões" indent />
                     <MoreLink to="/configuracoes/motor" icon={Settings} label="Motor de Automações" indent />
                   </>
