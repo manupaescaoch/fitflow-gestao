@@ -19,6 +19,9 @@
  */
 
 @theme inline {
+  /* Apple HIG — tipografia do sistema (San Francisco quando disponível) */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Helvetica Neue", "Segoe UI", Roboto, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -26,6 +29,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -66,7 +70,7 @@
    * bg #FFFFFF, fg #0F1115, primary #FF0D0D (logo red),
    * sidebar/cards muito claros, alertas em pastel.
    */
-  --radius: 0.5rem;
+  --radius: 0.75rem;
   --background: oklch(1 0 0);                /* #FFFFFF */
   --foreground: oklch(0.18 0.01 260);        /* near-black */
   --card: oklch(1 0 0);
@@ -111,6 +115,44 @@
 }
 
 html, body { background: var(--background); color: var(--foreground); }
+
+/* ============================================================
+ * Apple HIG — tipografia, materiais e profundidade
+ * (mesma paleta de cores do sistema; muda só o acabamento)
+ * ============================================================ */
+html, body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.011em;
+}
+h1, h2, h3, h4 { letter-spacing: -0.021em; }
+
+/* Material translúcido (Liquid Glass) para barras fixas e popovers */
+@utility glass {
+  background: color-mix(in oklab, var(--background) 72%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Sombra suave estilo Apple para cartões elevados */
+@utility elevated {
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 6%, transparent),
+              0 8px 24px -12px color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+
+/* Toques com feedback sutil, como nos controles do iOS */
+button, [role="button"], a { -webkit-tap-highlight-color: transparent; }
+button:active:not(:disabled), [role="button"]:active { transform: scale(0.985); }
+button, [role="button"] { transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease; }
+@media (prefers-reduced-motion: reduce) {
+  button:active:not(:disabled), [role="button"]:active { transform: none; }
+}
+
+/* Foco visível e discreto */
+:focus-visible { outline: 2px solid color-mix(in oklab, var(--ring) 60%, transparent); outline-offset: 2px; }
+
 html { color-scheme: light; }
 
 /* ============================================================
