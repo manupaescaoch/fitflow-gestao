@@ -306,5 +306,3 @@ function Centro({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export { condicoesAtendidas };
