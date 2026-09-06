@@ -4,7 +4,44 @@ import { supabase } from "@/integrations/supabase/client";
 import { useBranding, recarregarBranding, LOGO_PADRAO } from "@/hooks/useBranding";
 import { Loader2, Save, Upload, Trash2, Palette } from "lucide-react";
 
-const MAX_BYTES = 300 * 1024; // 300 KB
+const MAX_BYTES = 10 * 1024 * 1024; // 10 MB no arquivo enviado
+const MAX_LADO = 512; // a logo é reduzida para no máximo 512px
+
+// Reduz a imagem no navegador para que ela caiba sempre no sistema.
+function prepararLogo(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (file.type === "image/svg+xml") {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result));
+      r.onerror = () => reject(new Error("Não foi possível ler a imagem"));
+      r.readAsDataURL(file);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const escala = Math.min(1, MAX_LADO / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * escala));
+      const h = Math.max(1, Math.round(img.height * escala));
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Não foi possível processar a imagem"));
+      ctx.drawImage(img, 0, 0, w, h);
+      let out = canvas.toDataURL("image/webp", 0.9);
+      if (out.length > 400 * 1024) out = canvas.toDataURL("image/webp", 0.7);
+      if (!out.startsWith("data:image/webp")) out = canvas.toDataURL("image/png");
+      resolve(out);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Não foi possível ler a imagem"));
+    };
+    img.src = url;
+  });
+}
 
 export function PersonalizarSection() {
   const atual = useBranding();
@@ -23,15 +60,18 @@ export function PersonalizarSection() {
 
   const dirty = nome !== atual.nome || subtitulo !== atual.subtitulo || logo !== atual.logo_url;
 
-  const escolherArquivo = (file?: File | null) => {
+  const escolherArquivo = async (file?: File | null) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) return toast.error("Envie um arquivo de imagem");
-    if (file.size > MAX_BYTES) return toast.error("A imagem deve ter no máximo 300 KB");
-    const reader = new FileReader();
-    reader.onload = () => setLogo(String(reader.result));
-    reader.onerror = () => toast.error("Não foi possível ler a imagem");
-    reader.readAsDataURL(file);
+    if (file.size > MAX_BYTES) return toast.error("A imagem deve ter no máximo 10 MB");
+    try {
+      const dataUrl = await prepararLogo(file);
+      setLogo(dataUrl);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível ler a imagem");
+    }
   };
+
 
   const salvar = async () => {
     const nomeLimpo = nome.trim();
