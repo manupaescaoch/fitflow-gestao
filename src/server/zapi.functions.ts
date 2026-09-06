@@ -42,7 +42,7 @@ export const testZapiConnection = createServerFn({ method: "POST" }).middleware(
   }
 });
 
-function zapiCreds() {
+async function zapiCreds() {
   const creds = await lerCredenciaisZapi();
   const instance = creds?.instance;
   const token = creds?.token;
