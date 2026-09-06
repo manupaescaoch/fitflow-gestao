@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CampoResposta } from "@/components/formularios/CampoResposta";
 import {
-  Formulario, Pergunta, Secao, TIPOS_ESTATICOS, condicoesAtendidas, mapFormulario, mapPergunta,
+  Formulario, Pergunta, Secao, TIPOS_ESTATICOS, mapFormulario, mapPergunta,
   perguntaVisivel, validarPergunta, type Valores,
 } from "@/lib/formularios";
+
 
 export const Route = createFileRoute("/f/$slug")({
   head: () => ({
