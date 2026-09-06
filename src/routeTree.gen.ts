@@ -33,7 +33,6 @@ import { Route as AppVisaoGeralRouteImport } from './routes/_app.visao-geral'
 import { Route as AppRelatoriosRouteImport } from './routes/_app.relatorios'
 import { Route as AppFinanceiroRouteImport } from './routes/_app.financeiro'
 import { Route as AppFeedbacksRouteImport } from './routes/_app.feedbacks'
-import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppConfiguracoesRouteImport } from './routes/_app.configuracoes'
 import { Route as AppCaixaSaidaRouteImport } from './routes/_app.caixa-saida'
 import { Route as AppBibliotecaRouteImport } from './routes/_app.biblioteca'
@@ -202,11 +201,6 @@ const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
 const AppFeedbacksRoute = AppFeedbacksRouteImport.update({
   id: '/feedbacks',
   path: '/feedbacks',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
 const AppConfiguracoesRoute = AppConfiguracoesRouteImport.update({
@@ -498,7 +492,6 @@ export interface FileRoutesByFullPath {
   '/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/caixa-saida': typeof AppCaixaSaidaRoute
   '/configuracoes': typeof AppConfiguracoesRouteWithChildren
-  '/dashboard': typeof AppDashboardRoute
   '/feedbacks': typeof AppFeedbacksRoute
   '/financeiro': typeof AppFinanceiroRouteWithChildren
   '/relatorios': typeof AppRelatoriosRoute
@@ -571,7 +564,6 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/caixa-saida': typeof AppCaixaSaidaRoute
-  '/dashboard': typeof AppDashboardRoute
   '/feedbacks': typeof AppFeedbacksRoute
   '/relatorios': typeof AppRelatoriosRoute
   '/visao-geral': typeof AppVisaoGeralRoute
@@ -648,7 +640,6 @@ export interface FileRoutesById {
   '/_app/biblioteca': typeof AppBibliotecaRouteWithChildren
   '/_app/caixa-saida': typeof AppCaixaSaidaRoute
   '/_app/configuracoes': typeof AppConfiguracoesRouteWithChildren
-  '/_app/dashboard': typeof AppDashboardRoute
   '/_app/feedbacks': typeof AppFeedbacksRoute
   '/_app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/_app/relatorios': typeof AppRelatoriosRoute
@@ -726,7 +717,6 @@ export interface FileRouteTypes {
     | '/biblioteca'
     | '/caixa-saida'
     | '/configuracoes'
-    | '/dashboard'
     | '/feedbacks'
     | '/financeiro'
     | '/relatorios'
@@ -799,7 +789,6 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/caixa-saida'
-    | '/dashboard'
     | '/feedbacks'
     | '/relatorios'
     | '/visao-geral'
@@ -875,7 +864,6 @@ export interface FileRouteTypes {
     | '/_app/biblioteca'
     | '/_app/caixa-saida'
     | '/_app/configuracoes'
-    | '/_app/dashboard'
     | '/_app/feedbacks'
     | '/_app/financeiro'
     | '/_app/relatorios'
@@ -1137,13 +1125,6 @@ declare module '@tanstack/react-router' {
       path: '/feedbacks'
       fullPath: '/feedbacks'
       preLoaderRoute: typeof AppFeedbacksRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/configuracoes': {
@@ -1597,7 +1578,6 @@ interface AppRouteChildren {
   AppBibliotecaRoute: typeof AppBibliotecaRouteWithChildren
   AppCaixaSaidaRoute: typeof AppCaixaSaidaRoute
   AppConfiguracoesRoute: typeof AppConfiguracoesRouteWithChildren
-  AppDashboardRoute: typeof AppDashboardRoute
   AppFeedbacksRoute: typeof AppFeedbacksRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppRelatoriosRoute: typeof AppRelatoriosRoute
@@ -1615,7 +1595,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppBibliotecaRoute: AppBibliotecaRouteWithChildren,
   AppCaixaSaidaRoute: AppCaixaSaidaRoute,
   AppConfiguracoesRoute: AppConfiguracoesRouteWithChildren,
-  AppDashboardRoute: AppDashboardRoute,
   AppFeedbacksRoute: AppFeedbacksRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppRelatoriosRoute: AppRelatoriosRoute,

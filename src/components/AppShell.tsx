@@ -18,7 +18,6 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/visao-geral", label: "Visão Geral", icon: LayoutGrid },
-  { to: "/dashboard", label: "Dashboard", icon: Gauge, admin: true },
   { to: "/alunos",    label: "Alunos",    icon: Users },
   { to: "/caixa-saida", label: "Caixa de Saída", icon: Inbox, admin: true },
   {
@@ -348,7 +347,6 @@ function MobileBottomNav({
                 <MoreLink to="/biblioteca/protocolos" icon={BookOpen} label="Protocolos" indent />
                 {isAdmin && (
                   <>
-                    <MoreLink to="/dashboard" icon={Gauge} label="Dashboard" />
                     <MoreLink to="/feedbacks" icon={MessageSquare} label="Feedbacks" />
                     <MoreLink to="/financeiro" icon={DollarSign} label="Financeiro" />
                     <MoreLink to="/financeiro/recebimentos" icon={DollarSign} label="Recebimentos" indent />
