@@ -28,7 +28,13 @@ function LoginPage() {
   const [showPwd, setShowPwd] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState(false);
   const loginAlunoFn = useServerFn(loginAlunoPorEmail);
+
+  // Evita que o formulário seja enviado nativamente (recarregando a página)
+  // antes do JS terminar de carregar — sintoma: "clico em Entrar e volta pro login".
+  useEffect(() => setReady(true), []);
+
 
   useEffect(() => {
     if (!loading && session) {
