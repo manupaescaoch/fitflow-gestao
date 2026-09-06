@@ -20,19 +20,6 @@ const NAV: NavItem[] = [
   { to: "/visao-geral", label: "Visão Geral", icon: LayoutGrid },
   { to: "/alunos",    label: "Alunos",    icon: Users },
   { to: "/caixa-saida", label: "Caixa de Saída", icon: Inbox, admin: true },
-  {
-    to: "/biblioteca", label: "Biblioteca", icon: BookOpen,
-    children: [
-      { to: "/biblioteca", label: "Visão geral", exact: true },
-      { to: "/biblioteca/cardapios", label: "Cardápios", group: "Plano alimentar" },
-      { to: "/biblioteca/alimentos", label: "Alimentos", group: "Plano alimentar" },
-      { to: "/biblioteca/receitas", label: "Receitas", group: "Plano alimentar" },
-      { to: "/biblioteca/prescricoes", label: "Modelos de Prescrição", group: "Prescrição" },
-      { to: "/biblioteca/suplementos", label: "Suplementos", group: "Prescrição" },
-      { to: "/biblioteca/fitoterapicos", label: "Fitoterápicos", group: "Prescrição" },
-      { to: "/biblioteca/protocolos", label: "Protocolos", group: "Prescrição" },
-    ],
-  },
   { to: "/forms", label: "Formulários", icon: ClipboardList },
   { to: "/feedbacks", label: "Feedbacks", icon: MessageSquare, admin: true },
   { to: "/relatorios",label: "Relatórios",icon: BarChart3, admin: true },
@@ -337,14 +324,6 @@ function MobileBottomNav({
                 {userPerfil && <div className="text-xs text-muted-foreground capitalize">{userPerfil}</div>}
               </div>
               <div className="px-3 pb-3 space-y-1">
-                <MoreLink to="/biblioteca" icon={BookOpen} label="Biblioteca" />
-                <MoreLink to="/biblioteca/cardapios" icon={BookOpen} label="Cardápios" indent />
-                <MoreLink to="/biblioteca/alimentos" icon={BookOpen} label="Alimentos" indent />
-                <MoreLink to="/biblioteca/receitas" icon={BookOpen} label="Receitas" indent />
-                <MoreLink to="/biblioteca/prescricoes" icon={BookOpen} label="Modelos de Prescrição" indent />
-                <MoreLink to="/biblioteca/suplementos" icon={BookOpen} label="Suplementos" indent />
-                <MoreLink to="/biblioteca/fitoterapicos" icon={BookOpen} label="Fitoterápicos" indent />
-                <MoreLink to="/biblioteca/protocolos" icon={BookOpen} label="Protocolos" indent />
                 {isAdmin && (
                   <>
                     <MoreLink to="/feedbacks" icon={MessageSquare} label="Feedbacks" />
