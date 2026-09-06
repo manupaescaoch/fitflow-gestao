@@ -59,7 +59,7 @@ export function NotificacoesSino({ compact = false }: { compact?: boolean }) {
       await supabase.from("notificacoes").update({ lida: true }).eq("id", n.id);
     }
     setAberto(false);
-    if (n.link) nav({ to: n.link });
+    if (n.link) nav({ to: n.link } as never);
   }
 
   return (
