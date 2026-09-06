@@ -77,16 +77,8 @@ function LoginPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center px-6 pt-16 pb-10">
       <div className="w-full max-w-sm flex flex-col items-center">
-        {/* Logo */}
-        <img
-          src={mpTeamLogo}
-          alt="MPTEAM"
-          className="h-40 w-40 object-contain select-none"
-          draggable={false}
-        />
-
         {/* Título */}
-        <h1 className="mt-6 text-[42px] leading-none font-extrabold tracking-tight text-black">
+        <h1 className="text-[42px] leading-none font-extrabold tracking-tight text-black">
           Bem-vindo
         </h1>
         <p className="mt-3 text-[15px] text-black/55 text-center">
