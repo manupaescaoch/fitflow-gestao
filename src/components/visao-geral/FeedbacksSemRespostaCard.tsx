@@ -119,6 +119,28 @@ export function FeedbacksSemRespostaCard() {
   const [busyDevPreviewId, setBusyDevPreviewId] = useState<string | null>(null);
   const [busyDevDiretoId, setBusyDevDiretoId] = useState<string | null>(null);
 
+  // Histórico de envios por aluno (o que foi enviado e quando)
+  const historicoFn = useServerFn(listHistoricoFeedbacksAluno);
+  const [histAluno, setHistAluno] = useState<string | null>(null);
+  const [histLoading, setHistLoading] = useState(false);
+  const [histItens, setHistItens] = useState<HistoricoEnvioFeedback[]>([]);
+
+  function alternarHistorico(alunoId: string) {
+    if (histAluno === alunoId) {
+      setHistAluno(null);
+      return;
+    }
+    setHistAluno(alunoId);
+    setHistItens([]);
+    setHistLoading(true);
+    historicoFn({ data: { alunoId } })
+      .then((r) => setHistItens(r.itens))
+      .catch(() => toast.error("Não foi possível carregar o histórico"))
+      .finally(() => setHistLoading(false));
+  }
+
+
+
   function abrirWhatsAppComMensagem(j: FeedbackAguardandoEnvio) {
     if (!j.whatsapp) {
       toast.error("Aluno sem WhatsApp cadastrado");
