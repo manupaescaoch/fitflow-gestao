@@ -2106,6 +2106,30 @@ export type Database = {
           },
         ]
       }
+      permissoes_modulos: {
+        Row: {
+          ativo: boolean
+          criado_em: string
+          id: string
+          modulo: string
+          perfil: string
+        }
+        Insert: {
+          ativo?: boolean
+          criado_em?: string
+          id?: string
+          modulo: string
+          perfil: string
+        }
+        Update: {
+          ativo?: boolean
+          criado_em?: string
+          id?: string
+          modulo?: string
+          perfil?: string
+        }
+        Relationships: []
+      }
       photo_audit_logs: {
         Row: {
           aluno_id: string | null
