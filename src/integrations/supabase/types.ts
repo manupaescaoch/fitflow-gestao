@@ -1337,6 +1337,357 @@ export type Database = {
         }
         Relationships: []
       }
+      form_formularios: {
+        Row: {
+          abre_em: string | null
+          atualizado_em: string
+          autor_id: string | null
+          autor_nome: string | null
+          capa_url: string | null
+          config: Json
+          cor_primaria: string
+          criado_em: string
+          descricao: string | null
+          encerra_em: string | null
+          excluido_em: string | null
+          id: string
+          max_respostas: number | null
+          mensagem_sucesso: string
+          publicado_em: string | null
+          redirect_url: string | null
+          responsavel_id: string | null
+          slug: string
+          status: string
+          titulo: string
+          total_respostas: number
+          ultima_resposta_em: string | null
+          versao: number
+        }
+        Insert: {
+          abre_em?: string | null
+          atualizado_em?: string
+          autor_id?: string | null
+          autor_nome?: string | null
+          capa_url?: string | null
+          config?: Json
+          cor_primaria?: string
+          criado_em?: string
+          descricao?: string | null
+          encerra_em?: string | null
+          excluido_em?: string | null
+          id?: string
+          max_respostas?: number | null
+          mensagem_sucesso?: string
+          publicado_em?: string | null
+          redirect_url?: string | null
+          responsavel_id?: string | null
+          slug?: string
+          status?: string
+          titulo?: string
+          total_respostas?: number
+          ultima_resposta_em?: string | null
+          versao?: number
+        }
+        Update: {
+          abre_em?: string | null
+          atualizado_em?: string
+          autor_id?: string | null
+          autor_nome?: string | null
+          capa_url?: string | null
+          config?: Json
+          cor_primaria?: string
+          criado_em?: string
+          descricao?: string | null
+          encerra_em?: string | null
+          excluido_em?: string | null
+          id?: string
+          max_respostas?: number | null
+          mensagem_sucesso?: string
+          publicado_em?: string | null
+          redirect_url?: string | null
+          responsavel_id?: string | null
+          slug?: string
+          status?: string
+          titulo?: string
+          total_respostas?: number
+          ultima_resposta_em?: string | null
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_formularios_autor_id_fkey"
+            columns: ["autor_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios_crm"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_formularios_responsavel_id_fkey"
+            columns: ["responsavel_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios_crm"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_perguntas: {
+        Row: {
+          atualizado_em: string
+          condicoes: Json
+          config: Json
+          criado_em: string
+          descricao: string | null
+          excluido_em: string | null
+          formulario_id: string
+          id: string
+          obrigatoria: boolean
+          opcoes: Json
+          ordem: number
+          secao_id: string | null
+          tipo: string
+          titulo: string
+        }
+        Insert: {
+          atualizado_em?: string
+          condicoes?: Json
+          config?: Json
+          criado_em?: string
+          descricao?: string | null
+          excluido_em?: string | null
+          formulario_id: string
+          id?: string
+          obrigatoria?: boolean
+          opcoes?: Json
+          ordem?: number
+          secao_id?: string | null
+          tipo?: string
+          titulo?: string
+        }
+        Update: {
+          atualizado_em?: string
+          condicoes?: Json
+          config?: Json
+          criado_em?: string
+          descricao?: string | null
+          excluido_em?: string | null
+          formulario_id?: string
+          id?: string
+          obrigatoria?: boolean
+          opcoes?: Json
+          ordem?: number
+          secao_id?: string | null
+          tipo?: string
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_perguntas_formulario_id_fkey"
+            columns: ["formulario_id"]
+            isOneToOne: false
+            referencedRelation: "form_formularios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_perguntas_secao_id_fkey"
+            columns: ["secao_id"]
+            isOneToOne: false
+            referencedRelation: "form_secoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_resposta_itens: {
+        Row: {
+          arquivos: Json
+          criado_em: string
+          id: string
+          ordem: number
+          pergunta_id: string | null
+          pergunta_tipo: string
+          pergunta_titulo: string
+          resposta_id: string
+          valor_data: string | null
+          valor_json: Json | null
+          valor_num: number | null
+          valor_texto: string | null
+        }
+        Insert: {
+          arquivos?: Json
+          criado_em?: string
+          id?: string
+          ordem?: number
+          pergunta_id?: string | null
+          pergunta_tipo: string
+          pergunta_titulo: string
+          resposta_id: string
+          valor_data?: string | null
+          valor_json?: Json | null
+          valor_num?: number | null
+          valor_texto?: string | null
+        }
+        Update: {
+          arquivos?: Json
+          criado_em?: string
+          id?: string
+          ordem?: number
+          pergunta_id?: string | null
+          pergunta_tipo?: string
+          pergunta_titulo?: string
+          resposta_id?: string
+          valor_data?: string | null
+          valor_json?: Json | null
+          valor_num?: number | null
+          valor_texto?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_resposta_itens_pergunta_id_fkey"
+            columns: ["pergunta_id"]
+            isOneToOne: false
+            referencedRelation: "form_perguntas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_resposta_itens_resposta_id_fkey"
+            columns: ["resposta_id"]
+            isOneToOne: false
+            referencedRelation: "form_respostas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_respostas: {
+        Row: {
+          aluno_id: string | null
+          atualizado_em: string
+          critica: boolean
+          duracao_seg: number | null
+          edit_token: string
+          enviado_em: string
+          formulario_id: string
+          id: string
+          identificador: string | null
+          prazo: string | null
+          prioridade: string
+          protocolo: string
+          respondente_email: string | null
+          respondente_nome: string | null
+          respondente_telefone: string | null
+          responsavel_id: string | null
+          revisada: boolean
+          status: string
+        }
+        Insert: {
+          aluno_id?: string | null
+          atualizado_em?: string
+          critica?: boolean
+          duracao_seg?: number | null
+          edit_token?: string
+          enviado_em?: string
+          formulario_id: string
+          id?: string
+          identificador?: string | null
+          prazo?: string | null
+          prioridade?: string
+          protocolo?: string
+          respondente_email?: string | null
+          respondente_nome?: string | null
+          respondente_telefone?: string | null
+          responsavel_id?: string | null
+          revisada?: boolean
+          status?: string
+        }
+        Update: {
+          aluno_id?: string | null
+          atualizado_em?: string
+          critica?: boolean
+          duracao_seg?: number | null
+          edit_token?: string
+          enviado_em?: string
+          formulario_id?: string
+          id?: string
+          identificador?: string | null
+          prazo?: string | null
+          prioridade?: string
+          protocolo?: string
+          respondente_email?: string | null
+          respondente_nome?: string | null
+          respondente_telefone?: string | null
+          responsavel_id?: string | null
+          revisada?: boolean
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_respostas_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_respostas_formulario_id_fkey"
+            columns: ["formulario_id"]
+            isOneToOne: false
+            referencedRelation: "form_formularios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_respostas_responsavel_id_fkey"
+            columns: ["responsavel_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios_crm"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_secoes: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          descricao: string | null
+          destino: string
+          destino_secao_id: string | null
+          excluido_em: string | null
+          formulario_id: string
+          id: string
+          ordem: number
+          titulo: string
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          descricao?: string | null
+          destino?: string
+          destino_secao_id?: string | null
+          excluido_em?: string | null
+          formulario_id: string
+          id?: string
+          ordem?: number
+          titulo?: string
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          descricao?: string | null
+          destino?: string
+          destino_secao_id?: string | null
+          excluido_em?: string | null
+          formulario_id?: string
+          id?: string
+          ordem?: number
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_secoes_formulario_id_fkey"
+            columns: ["formulario_id"]
+            isOneToOne: false
+            referencedRelation: "form_formularios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       formularios: {
         Row: {
           aluno_id: string | null

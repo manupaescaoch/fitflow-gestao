@@ -20,6 +20,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlunoIndexRouteImport } from './routes/aluno.index'
 import { Route as FormulariosTokenRouteImport } from './routes/formularios.$token'
+import { Route as FSlugRouteImport } from './routes/f.$slug'
 import { Route as AlunoTrocasRouteImport } from './routes/aluno.trocas'
 import { Route as AlunoTrocarSenhaRouteImport } from './routes/aluno.trocar-senha'
 import { Route as AlunoRankingRouteImport } from './routes/aluno.ranking'
@@ -38,12 +39,14 @@ import { Route as AppCaixaSaidaRouteImport } from './routes/_app.caixa-saida'
 import { Route as AppBibliotecaRouteImport } from './routes/_app.biblioteca'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AppFormsIndexRouteImport } from './routes/_app.forms.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/_app.financeiro.index'
 import { Route as AppConfiguracoesIndexRouteImport } from './routes/_app.configuracoes.index'
 import { Route as AppBibliotecaIndexRouteImport } from './routes/_app.biblioteca.index'
 import { Route as AppAvaliacaoFisicaIndexRouteImport } from './routes/_app.avaliacao-fisica.index'
 import { Route as AppAlunosIndexRouteImport } from './routes/_app.alunos.index'
 import { Route as FormulariosIdRespostasRouteImport } from './routes/formularios.$id.respostas'
+import { Route as AppFormsIdRouteImport } from './routes/_app.forms.$id'
 import { Route as AppFinanceiroVendasRouteImport } from './routes/_app.financeiro.vendas'
 import { Route as AppFinanceiroTransacoesRouteImport } from './routes/_app.financeiro.transacoes'
 import { Route as AppFinanceiroResumoRouteImport } from './routes/_app.financeiro.resumo'
@@ -79,6 +82,7 @@ import { Route as ApiPublicHooksCuraEntregasRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksBoasVindasRetryRouteImport } from './routes/api/public/hooks/boas-vindas-retry'
 import { Route as ApiPublicHooksAlertaRenovacoesRouteImport } from './routes/api/public/hooks/alerta-renovacoes'
 import { Route as ApiPublicHooksAgendaCiclosRouteImport } from './routes/api/public/hooks/agenda-ciclos'
+import { Route as AppFormsIdRespostasRouteImport } from './routes/_app.forms.$id.respostas'
 import { Route as AppAvaliacaoFisicaIdEditarRouteImport } from './routes/_app.avaliacao-fisica.$id.editar'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -133,6 +137,11 @@ const AlunoIndexRoute = AlunoIndexRouteImport.update({
 const FormulariosTokenRoute = FormulariosTokenRouteImport.update({
   id: '/formularios/$token',
   path: '/formularios/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FSlugRoute = FSlugRouteImport.update({
+  id: '/f/$slug',
+  path: '/f/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AlunoTrocasRoute = AlunoTrocasRouteImport.update({
@@ -227,6 +236,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppFormsIndexRoute = AppFormsIndexRouteImport.update({
+  id: '/forms/',
+  path: '/forms/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -256,6 +270,11 @@ const FormulariosIdRespostasRoute = FormulariosIdRespostasRouteImport.update({
   id: '/formularios/$id/respostas',
   path: '/formularios/$id/respostas',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppFormsIdRoute = AppFormsIdRouteImport.update({
+  id: '/forms/$id',
+  path: '/forms/$id',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppFinanceiroVendasRoute = AppFinanceiroVendasRouteImport.update({
   id: '/vendas',
@@ -453,6 +472,11 @@ const ApiPublicHooksAgendaCiclosRoute =
     path: '/api/public/hooks/agenda-ciclos',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppFormsIdRespostasRoute = AppFormsIdRespostasRouteImport.update({
+  id: '/respostas',
+  path: '/respostas',
+  getParentRoute: () => AppFormsIdRoute,
+} as any)
 const AppAvaliacaoFisicaIdEditarRoute =
   AppAvaliacaoFisicaIdEditarRouteImport.update({
     id: '/editar',
@@ -487,6 +511,7 @@ export interface FileRoutesByFullPath {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -512,13 +537,16 @@ export interface FileRoutesByFullPath {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos/': typeof AppAlunosIndexRoute
   '/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
   '/biblioteca/': typeof AppBibliotecaIndexRoute
   '/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/financeiro/': typeof AppFinanceiroIndexRoute
+  '/forms/': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -555,6 +583,7 @@ export interface FileRoutesByTo {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -580,13 +609,16 @@ export interface FileRoutesByTo {
   '/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/alunos': typeof AppAlunosIndexRoute
   '/avaliacao-fisica': typeof AppAvaliacaoFisicaIndexRoute
   '/biblioteca': typeof AppBibliotecaIndexRoute
   '/configuracoes': typeof AppConfiguracoesIndexRoute
   '/financeiro': typeof AppFinanceiroIndexRoute
+  '/forms': typeof AppFormsIndexRoute
   '/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -629,6 +661,7 @@ export interface FileRoutesById {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -654,13 +687,16 @@ export interface FileRoutesById {
   '/_app/financeiro/resumo': typeof AppFinanceiroResumoRoute
   '/_app/financeiro/transacoes': typeof AppFinanceiroTransacoesRoute
   '/_app/financeiro/vendas': typeof AppFinanceiroVendasRoute
+  '/_app/forms/$id': typeof AppFormsIdRouteWithChildren
   '/formularios/$id/respostas': typeof FormulariosIdRespostasRoute
   '/_app/alunos/': typeof AppAlunosIndexRoute
   '/_app/avaliacao-fisica/': typeof AppAvaliacaoFisicaIndexRoute
   '/_app/biblioteca/': typeof AppBibliotecaIndexRoute
   '/_app/configuracoes/': typeof AppConfiguracoesIndexRoute
   '/_app/financeiro/': typeof AppFinanceiroIndexRoute
+  '/_app/forms/': typeof AppFormsIndexRoute
   '/_app/avaliacao-fisica/$id/editar': typeof AppAvaliacaoFisicaIdEditarRoute
+  '/_app/forms/$id/respostas': typeof AppFormsIdRespostasRoute
   '/api/public/hooks/agenda-ciclos': typeof ApiPublicHooksAgendaCiclosRoute
   '/api/public/hooks/alerta-renovacoes': typeof ApiPublicHooksAlertaRenovacoesRoute
   '/api/public/hooks/boas-vindas-retry': typeof ApiPublicHooksBoasVindasRetryRoute
@@ -703,6 +739,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
@@ -728,13 +765,16 @@ export interface FileRouteTypes {
     | '/financeiro/resumo'
     | '/financeiro/transacoes'
     | '/financeiro/vendas'
+    | '/forms/$id'
     | '/formularios/$id/respostas'
     | '/alunos/'
     | '/avaliacao-fisica/'
     | '/biblioteca/'
     | '/configuracoes/'
     | '/financeiro/'
+    | '/forms/'
     | '/avaliacao-fisica/$id/editar'
+    | '/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -771,6 +811,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno'
     | '/.lovable/oauth/consent'
@@ -796,13 +837,16 @@ export interface FileRouteTypes {
     | '/financeiro/resumo'
     | '/financeiro/transacoes'
     | '/financeiro/vendas'
+    | '/forms/$id'
     | '/formularios/$id/respostas'
     | '/alunos'
     | '/avaliacao-fisica'
     | '/biblioteca'
     | '/configuracoes'
     | '/financeiro'
+    | '/forms'
     | '/avaliacao-fisica/$id/editar'
+    | '/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -844,6 +888,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
@@ -869,13 +914,16 @@ export interface FileRouteTypes {
     | '/_app/financeiro/resumo'
     | '/_app/financeiro/transacoes'
     | '/_app/financeiro/vendas'
+    | '/_app/forms/$id'
     | '/formularios/$id/respostas'
     | '/_app/alunos/'
     | '/_app/avaliacao-fisica/'
     | '/_app/biblioteca/'
     | '/_app/configuracoes/'
     | '/_app/financeiro/'
+    | '/_app/forms/'
     | '/_app/avaliacao-fisica/$id/editar'
+    | '/_app/forms/$id/respostas'
     | '/api/public/hooks/agenda-ciclos'
     | '/api/public/hooks/alerta-renovacoes'
     | '/api/public/hooks/boas-vindas-retry'
@@ -902,6 +950,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  FSlugRoute: typeof FSlugRoute
   FormulariosTokenRoute: typeof FormulariosTokenRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -997,6 +1046,13 @@ declare module '@tanstack/react-router' {
       path: '/formularios/$token'
       fullPath: '/formularios/$token'
       preLoaderRoute: typeof FormulariosTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/f/$slug': {
+      id: '/f/$slug'
+      path: '/f/$slug'
+      fullPath: '/f/$slug'
+      preLoaderRoute: typeof FSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aluno/trocas': {
@@ -1125,6 +1181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/forms/': {
+      id: '/_app/forms/'
+      path: '/forms'
+      fullPath: '/forms/'
+      preLoaderRoute: typeof AppFormsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/financeiro/': {
       id: '/_app/financeiro/'
       path: '/'
@@ -1166,6 +1229,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/formularios/$id/respostas'
       preLoaderRoute: typeof FormulariosIdRespostasRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/forms/$id': {
+      id: '/_app/forms/$id'
+      path: '/forms/$id'
+      fullPath: '/forms/$id'
+      preLoaderRoute: typeof AppFormsIdRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/financeiro/vendas': {
       id: '/_app/financeiro/vendas'
@@ -1412,6 +1482,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksAgendaCiclosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/forms/$id/respostas': {
+      id: '/_app/forms/$id/respostas'
+      path: '/respostas'
+      fullPath: '/forms/$id/respostas'
+      preLoaderRoute: typeof AppFormsIdRespostasRouteImport
+      parentRoute: typeof AppFormsIdRoute
+    }
     '/_app/avaliacao-fisica/$id/editar': {
       id: '/_app/avaliacao-fisica/$id/editar'
       path: '/editar'
@@ -1504,6 +1581,18 @@ const AppAvaliacaoFisicaIdRouteChildren: AppAvaliacaoFisicaIdRouteChildren = {
 const AppAvaliacaoFisicaIdRouteWithChildren =
   AppAvaliacaoFisicaIdRoute._addFileChildren(AppAvaliacaoFisicaIdRouteChildren)
 
+interface AppFormsIdRouteChildren {
+  AppFormsIdRespostasRoute: typeof AppFormsIdRespostasRoute
+}
+
+const AppFormsIdRouteChildren: AppFormsIdRouteChildren = {
+  AppFormsIdRespostasRoute: AppFormsIdRespostasRoute,
+}
+
+const AppFormsIdRouteWithChildren = AppFormsIdRoute._addFileChildren(
+  AppFormsIdRouteChildren,
+)
+
 interface AppRouteChildren {
   AppBibliotecaRoute: typeof AppBibliotecaRouteWithChildren
   AppCaixaSaidaRoute: typeof AppCaixaSaidaRoute
@@ -1516,8 +1605,10 @@ interface AppRouteChildren {
   AppAlunosIdRoute: typeof AppAlunosIdRoute
   AppAvaliacaoFisicaIdRoute: typeof AppAvaliacaoFisicaIdRouteWithChildren
   AppAvaliacaoFisicaNovaRoute: typeof AppAvaliacaoFisicaNovaRoute
+  AppFormsIdRoute: typeof AppFormsIdRouteWithChildren
   AppAlunosIndexRoute: typeof AppAlunosIndexRoute
   AppAvaliacaoFisicaIndexRoute: typeof AppAvaliacaoFisicaIndexRoute
+  AppFormsIndexRoute: typeof AppFormsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1532,8 +1623,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppAlunosIdRoute: AppAlunosIdRoute,
   AppAvaliacaoFisicaIdRoute: AppAvaliacaoFisicaIdRouteWithChildren,
   AppAvaliacaoFisicaNovaRoute: AppAvaliacaoFisicaNovaRoute,
+  AppFormsIdRoute: AppFormsIdRouteWithChildren,
   AppAlunosIndexRoute: AppAlunosIndexRoute,
   AppAvaliacaoFisicaIndexRoute: AppAvaliacaoFisicaIndexRoute,
+  AppFormsIndexRoute: AppFormsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -1577,6 +1670,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  FSlugRoute: FSlugRoute,
   FormulariosTokenRoute: FormulariosTokenRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
