@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { primeiroNome } from "@/lib/nome";
+import { lerCredencial } from "./credenciais.server";
 
 export const gerarMensagemPontoContato = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((data: { pontoId: string; alunoId?: string | null }) => {
@@ -9,7 +10,7 @@ export const gerarMensagemPontoContato = createServerFn({ method: "POST" }).midd
     return data;
   })
   .handler(async ({ data }) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) return { mensagem: null as string | null, error: "OPENAI_API_KEY não configurado" };
 
     const { data: ponto, error: pErr } = await supabaseAdmin
@@ -113,7 +114,7 @@ export const enviarPontoContatoZapi = createServerFn({ method: "POST" }).middlew
 
     let mensagem = (data.mensagem || "").trim();
     if (!mensagem) {
-      const apiKey = process.env.OPENAI_API_KEY;
+      const apiKey = (await lerCredencial("OPENAI_API_KEY"));
       if (!apiKey) return { ok: false, error: "OPENAI_API_KEY não configurado" };
 
       const { data: promptRow } = await supabaseAdmin

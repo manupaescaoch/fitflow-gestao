@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { resolverDestinoRoteamento, lerBloqueioEnviosAlunos } from "./roteamento-grupos.server";
+import { lerCredenciaisZapi } from "./credenciais.server";
 
 function digits(s: string | null | undefined): string {
   return (s ?? "").replace(/\D/g, "");
@@ -17,9 +18,10 @@ export async function enviarWhatsAppTeste(input: {
   tipoJob: string;
   mensagem: string;
 }): Promise<{ ok: boolean; error: string | null }> {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
 
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Z-API não configurada" };
@@ -117,9 +119,10 @@ export async function enviarTextoZapiDireto(input: {
   tipoJob: string;
   alunoId?: string | null;
 }): Promise<{ ok: boolean; error: string | null; messageId?: string | null }> {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Z-API não configurada" };
   }
@@ -175,9 +178,10 @@ export async function enviarDocumentoZapi(input: {
   tipoJob: string;
   alunoId?: string | null;
 }): Promise<{ ok: boolean; error: string | null }> {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Z-API não configurada" };
   }
@@ -232,9 +236,10 @@ export async function enviarMidiaZapi(input: {
   tipoJob: string;
   alunoId?: string | null;
 }): Promise<{ ok: boolean; error: string | null }> {
-  const instance = process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE;
-  const token = process.env.ZAPI_TOKEN;
-  const clientToken = process.env.ZAPI_CLIENT_TOKEN;
+  const creds = await lerCredenciaisZapi();
+  const instance = creds?.instance;
+  const token = creds?.token;
+  const clientToken = creds?.clientToken;
   if (!instance || !token || !clientToken) {
     return { ok: false, error: "Z-API não configurada" };
   }

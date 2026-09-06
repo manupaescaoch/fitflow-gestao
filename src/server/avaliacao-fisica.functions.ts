@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { lerCredencial } from "./credenciais.server";
 
 interface FeedbackInput {
   alunoNome: string;
@@ -30,7 +31,7 @@ interface FeedbackInput {
 export const gerarFeedbackAvaliacao = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((input: FeedbackInput) => input)
   .handler(async ({ data }) => {
-    const key = process.env.OPENAI_API_KEY;
+    const key = (await lerCredencial("OPENAI_API_KEY"));
     if (!key) {
       return { ok: false as const, error: "OPENAI_API_KEY não configurada." };
     }

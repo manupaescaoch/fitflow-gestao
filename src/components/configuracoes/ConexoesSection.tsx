@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getZapiStatus, testZapiConnection, listZapiGroups, connectZapi, disconnectZapi, type ZapiGroup } from "@/server/zapi.functions";
 import { getOpenAIStatus, testOpenAIConnection } from "@/server/openai.functions";
+import { getCredenciais, saveCredencial } from "@/server/credenciais.functions";
 import { getFormUrls, saveFormUrls } from "@/server/forms.functions";
 import {
   getResumoDiarioConfig, saveResumoDiarioConfig,
@@ -37,6 +38,28 @@ export function ConexoesSection() {
   const persistResumo = useServerFn(saveResumoDiarioConfig);
   const testResumo = useServerFn(testarEnvioResumoDiario);
   const previewResumo = useServerFn(previewResumoDiario);
+  const fetchCreds = useServerFn(getCredenciais);
+  const persistCred = useServerFn(saveCredencial);
+  type CredKey = "ZAPI_INSTANCE_ID" | "ZAPI_TOKEN" | "ZAPI_CLIENT_TOKEN" | "OPENAI_API_KEY";
+  const [creds, setCreds] = useState<Record<CredKey, { configured: boolean; preview: string | null }> | null>(null);
+  const [credDraft, setCredDraft] = useState<Record<string, string>>({});
+  const [credSaving, setCredSaving] = useState<string | null>(null);
+  const loadCreds = async () => {
+    try { setCreds((await fetchCreds()) as any); } catch { /* ignore */ }
+  };
+  useEffect(() => { void loadCreds(); }, []);
+  const salvarCred = async (chave: CredKey) => {
+    setCredSaving(chave);
+    try {
+      await persistCred({ data: { chave, valor: (credDraft[chave] ?? "").trim() } });
+      toast.success("Credencial salva");
+      setCredDraft((d) => ({ ...d, [chave]: "" }));
+      await loadCreds();
+      if (chave === "OPENAI_API_KEY") await loadOpenAI(); else await load();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao salvar");
+    } finally { setCredSaving(null); }
+  };
   const [status, setStatus] = useState<StatusData | null>(null);
   const [loading, setLoading] = useState(true);
   const [testing, setTesting] = useState(false);
@@ -336,9 +359,9 @@ export function ConexoesSection() {
             </div>
           ) : status ? (
             <>
-              <SecretRow label="ZAPI_INSTANCE_ID" desc="Instance ID da Z-API" item={status.instance} />
-              <SecretRow label="ZAPI_TOKEN" desc="Token da instância" item={status.token} />
-              <SecretRow label="ZAPI_CLIENT_TOKEN" desc="Client-Token de segurança da conta" item={status.clientToken} />
+              <CredRow chave="ZAPI_INSTANCE_ID" label="Instance ID" desc="Identificador da instância na Z-API" item={creds?.ZAPI_INSTANCE_ID ?? status.instance} draft={credDraft.ZAPI_INSTANCE_ID ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_INSTANCE_ID: v }))} onSave={() => salvarCred("ZAPI_INSTANCE_ID")} saving={credSaving === "ZAPI_INSTANCE_ID"} />
+              <CredRow chave="ZAPI_TOKEN" label="Token da instância" desc="Token gerado pela Z-API" item={creds?.ZAPI_TOKEN ?? status.token} draft={credDraft.ZAPI_TOKEN ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_TOKEN: v }))} onSave={() => salvarCred("ZAPI_TOKEN")} saving={credSaving === "ZAPI_TOKEN"} />
+              <CredRow chave="ZAPI_CLIENT_TOKEN" label="Client-Token" desc="Token de segurança da conta Z-API" item={creds?.ZAPI_CLIENT_TOKEN ?? status.clientToken} draft={credDraft.ZAPI_CLIENT_TOKEN ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_CLIENT_TOKEN: v }))} onSave={() => salvarCred("ZAPI_CLIENT_TOKEN")} saving={credSaving === "ZAPI_CLIENT_TOKEN"} />
             </>
           ) : (
             <div className="px-5 py-8 text-center text-sm text-muted-foreground">
@@ -433,7 +456,7 @@ export function ConexoesSection() {
               <Loader2 className="h-4 w-4 animate-spin" /> Carregando...
             </div>
           ) : openAIStatus ? (
-            <SecretRow label="OPENAI_API_KEY" desc="Chave de API da OpenAI" item={openAIStatus.apiKey} />
+            <CredRow chave="OPENAI_API_KEY" label="Chave da API" desc="Chave secreta da OpenAI (sk-...)" item={creds?.OPENAI_API_KEY ?? openAIStatus.apiKey} draft={credDraft.OPENAI_API_KEY ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, OPENAI_API_KEY: v }))} onSave={() => salvarCred("OPENAI_API_KEY")} saving={credSaving === "OPENAI_API_KEY"} />
           ) : (
             <div className="px-5 py-8 text-center text-sm text-muted-foreground">
               <ShieldAlert className="h-6 w-6 mx-auto mb-2" />
@@ -568,6 +591,53 @@ function UrlRow({ chave, label, value, placeholder, onCopy, onChange }: {
           className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-muted disabled:opacity-50"
         >
           <Copy className="h-3.5 w-3.5" /> Copiar link
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CredRow({ chave, label, desc, item, draft, onChange, onSave, saving }: {
+  chave: string; label: string; desc: string;
+  item: { configured: boolean; preview: string | null };
+  draft: string; onChange: (v: string) => void; onSave: () => void; saving: boolean;
+}) {
+  return (
+    <div className="px-5 py-4 space-y-2">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-sm font-medium text-foreground">{label}</div>
+          <div className="text-xs text-muted-foreground font-mono">{chave}</div>
+          <div className="text-xs text-muted-foreground">{desc}</div>
+        </div>
+        <div className="flex items-center gap-3">
+          {item.preview && <code className="text-xs text-muted-foreground">{item.preview}</code>}
+          {item.configured ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-500">
+              <CheckCircle2 className="h-3 w-3" /> Preenchido
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <XCircle className="h-3 w-3" /> A preencher
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <input
+          value={draft}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={item.configured ? "Digite para substituir o valor atual" : "Cole o valor aqui"}
+          autoComplete="off"
+          className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <button
+          onClick={onSave}
+          disabled={saving || !draft.trim()}
+          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+          {saving ? "Salvando..." : "Salvar"}
         </button>
       </div>
     </div>

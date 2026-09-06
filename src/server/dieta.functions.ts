@@ -3,6 +3,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { primeiroNome } from "@/lib/nome";
+import { lerCredencial } from "./credenciais.server";
 
 const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = "gpt-4o";
@@ -97,7 +98,7 @@ async function callOpenAI(opts: {
   user: string;
   toolName?: string;
 }): Promise<{ data: unknown; error: string | null }> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = (await lerCredencial("OPENAI_API_KEY"));
   if (!apiKey) return { data: null, error: "OPENAI_API_KEY não configurado" };
   try {
     const body: Record<string, unknown> = {
@@ -285,7 +286,7 @@ export const gerarMensagemNutricao = createServerFn({ method: "POST" }).middlewa
     const LOG = "[gerarMensagemNutricao]";
     console.log(`${LOG} entrada`, { nomeAluno: data.nomeAluno, tamResumo: data.resumoAjusteNutricional.length });
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = (await lerCredencial("OPENAI_API_KEY"));
     if (!apiKey) {
       return {
         mensagem: null as string | null,
