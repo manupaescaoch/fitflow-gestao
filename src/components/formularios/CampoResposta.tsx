@@ -3,7 +3,9 @@ import { Star, Upload, Eraser, Loader2, Paperclip } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase as supabaseClient } from "@/integrations/supabase/client";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = supabaseClient as any;
 import { TIPOS_OPCOES, type Pergunta } from "@/lib/formularios";
 
 interface Props {
