@@ -157,7 +157,7 @@ export function PersonalizarSection() {
               )}
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
-              PNG, JPG, SVG ou WebP quadrado, de até 300 KB.
+              PNG, JPG, SVG ou WebP, de até 10 MB. A imagem é ajustada automaticamente.
             </p>
           </div>
         </div>
