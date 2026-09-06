@@ -20,6 +20,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlunoIndexRouteImport } from './routes/aluno.index'
 import { Route as FormulariosTokenRouteImport } from './routes/formularios.$token'
+import { Route as FSlugRouteImport } from './routes/f.$slug'
 import { Route as AlunoTrocasRouteImport } from './routes/aluno.trocas'
 import { Route as AlunoTrocarSenhaRouteImport } from './routes/aluno.trocar-senha'
 import { Route as AlunoRankingRouteImport } from './routes/aluno.ranking'
@@ -135,6 +136,11 @@ const AlunoIndexRoute = AlunoIndexRouteImport.update({
 const FormulariosTokenRoute = FormulariosTokenRouteImport.update({
   id: '/formularios/$token',
   path: '/formularios/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FSlugRoute = FSlugRouteImport.update({
+  id: '/f/$slug',
+  path: '/f/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AlunoTrocasRoute = AlunoTrocasRouteImport.update({
@@ -499,6 +505,7 @@ export interface FileRoutesByFullPath {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -645,6 +653,7 @@ export interface FileRoutesById {
   '/aluno/ranking': typeof AlunoRankingRoute
   '/aluno/trocar-senha': typeof AlunoTrocarSenhaRoute
   '/aluno/trocas': typeof AlunoTrocasRoute
+  '/f/$slug': typeof FSlugRoute
   '/formularios/$token': typeof FormulariosTokenRoute
   '/aluno/': typeof AlunoIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -721,6 +730,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno'
     | '/.lovable/oauth/consent'
@@ -866,6 +877,7 @@ export interface FileRouteTypes {
     | '/aluno/ranking'
     | '/aluno/trocar-senha'
     | '/aluno/trocas'
+    | '/f/$slug'
     | '/formularios/$token'
     | '/aluno/'
     | '/.lovable/oauth/consent'
@@ -926,6 +938,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  FSlugRoute: typeof FSlugRoute
   FormulariosTokenRoute: typeof FormulariosTokenRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1021,6 +1034,13 @@ declare module '@tanstack/react-router' {
       path: '/formularios/$token'
       fullPath: '/formularios/$token'
       preLoaderRoute: typeof FormulariosTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/f/$slug': {
+      id: '/f/$slug'
+      path: '/f/$slug'
+      fullPath: '/f/$slug'
+      preLoaderRoute: typeof FSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aluno/trocas': {
@@ -1619,6 +1639,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  FSlugRoute: FSlugRoute,
   FormulariosTokenRoute: FormulariosTokenRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
