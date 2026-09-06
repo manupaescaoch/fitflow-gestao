@@ -221,17 +221,9 @@ export function PerfilDashboard({
 
   return (
     <div className="space-y-5">
-      {/* Top grid: Aluno card + Visão geral */}
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.4fr)]">
-        <AlunoHeroCard aluno={aluno} dr={dr} onWhatsApp={onWhatsApp} onEditar={onEditar} />
-        <VisaoGeralCard kpis={kpis} />
-      </div>
+      <AlunoHeroCard aluno={aluno} dr={dr} onWhatsApp={onWhatsApp} onEditar={onEditar} />
 
-      {/* Insights + Evolução */}
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)]">
-        <InsightsIACard />
-        <EvolucaoCard />
-      </div>
+      <EvolucaoCard />
 
       {/* Timeline + Alertas + Check-ins */}
       <div className="grid gap-5 xl:grid-cols-3">
@@ -240,14 +232,12 @@ export function PerfilDashboard({
         <CheckinsCard checkins={checkins} />
       </div>
 
-      {/* Saúde do aluno (faixa) */}
-      <SaudeFaixa kpis={kpis} />
-
       {/* Footer ações */}
       <RodapeAcoes onEditar={onEditar} onEnviarMensagem={onEnviarMensagem} />
     </div>
   );
 }
+
 
 /* ============== Aluno Hero Card ============== */
 function AlunoHeroCard({
