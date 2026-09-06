@@ -63,7 +63,22 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Paleta de marca: as antigas classes "rose-*" agora seguem a cor principal
+     escolhida em Configurações > Personalizar. */
+  --color-rose-50: color-mix(in oklch, var(--primary) 8%, white);
+  --color-rose-100: color-mix(in oklch, var(--primary) 16%, white);
+  --color-rose-200: color-mix(in oklch, var(--primary) 28%, white);
+  --color-rose-300: color-mix(in oklch, var(--primary) 44%, white);
+  --color-rose-400: color-mix(in oklch, var(--primary) 70%, white);
+  --color-rose-500: var(--primary);
+  --color-rose-600: var(--primary);
+  --color-rose-700: color-mix(in oklch, var(--primary) 85%, black);
+  --color-rose-800: color-mix(in oklch, var(--primary) 70%, black);
+  --color-rose-900: color-mix(in oklch, var(--primary) 55%, black);
+  --color-rose-950: color-mix(in oklch, var(--primary) 40%, black);
 }
+
 
 :root {
   /* Paleta clara estilo iOS: fundo cinza claro, cartões brancos,
