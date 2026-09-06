@@ -65,11 +65,9 @@ type AlunoMin = { id: string; nome: string };
 const TABS: { key: TabKey; label: string }[] = [
   { key: "respondidos", label: "Respondidos" },
   { key: "enviados", label: "Enviados" },
-  { key: "agendamentos", label: "Agendamentos" },
-  { key: "pontos_contato", label: "Pontos de Contato" },
-  { key: "formularios", label: "Formulários" },
-  { key: "prompts", label: "Prompts IA" },
+  { key: "agendamentos", label: "Agendados" },
 ];
+
 
 function FeedbacksPage() {
   const { isAdmin } = useAuth();
