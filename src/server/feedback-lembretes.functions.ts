@@ -502,3 +502,70 @@ export const listFeedbacksAguardandoDevolutiva = createServerFn({ method: "GET" 
 
     return { itens };
   });
+
+/**
+ * Histórico de envios de feedback de um aluno: qual feedback foi enviado,
+ * quando, por qual canal e se já foi respondido.
+ */
+export type HistoricoEnvioFeedback = {
+  id: string;
+  tipo: string;
+  origem: "formulario" | "mensagem";
+  enviado_em: string;
+  respondido_em: string | null;
+  status: string | null;
+  link: string | null;
+};
+
+export const listHistoricoFeedbacksAluno = createServerFn({ method: "GET" })
+  .middleware([requireAuthOrCron])
+  .inputValidator((d: { alunoId: string }) => ({ alunoId: String(d.alunoId) }))
+  .handler(async ({ data }) => {
+    const [{ data: forms }, { data: logs }] = await Promise.all([
+      supabaseAdmin
+        .from("formularios")
+        .select("id, tipo, recebido_em, respondido, respondido_em, link_publico")
+        .eq("aluno_id", data.alunoId)
+        .order("recebido_em", { ascending: false })
+        .limit(50),
+      supabaseAdmin
+        .from("mensagens_log")
+        .select("id, tipo_job, enviado_em, status_envio")
+        .eq("aluno_id", data.alunoId)
+        .order("enviado_em", { ascending: false })
+        .limit(50),
+    ]);
+
+    const itens: HistoricoEnvioFeedback[] = [];
+
+    for (const f of forms ?? []) {
+      if (!f.recebido_em) continue;
+      itens.push({
+        id: `f_${f.id}`,
+        tipo: f.tipo,
+        origem: "formulario",
+        enviado_em: f.recebido_em,
+        respondido_em: f.respondido ? (f.respondido_em ?? null) : null,
+        status: f.respondido ? "respondido" : "aguardando",
+        link: f.link_publico ?? null,
+      });
+    }
+
+    for (const l of logs ?? []) {
+      const tipo = String(l.tipo_job ?? "");
+      if (!tipo.includes("feedback") && !tipo.includes("followup")) continue;
+      if (!l.enviado_em) continue;
+      itens.push({
+        id: `m_${l.id}`,
+        tipo,
+        origem: "mensagem",
+        enviado_em: l.enviado_em,
+        respondido_em: null,
+        status: l.status_envio ?? null,
+        link: null,
+      });
+    }
+
+    itens.sort((a, b) => new Date(b.enviado_em).getTime() - new Date(a.enviado_em).getTime());
+    return { itens: itens.slice(0, 40) };
+  });
