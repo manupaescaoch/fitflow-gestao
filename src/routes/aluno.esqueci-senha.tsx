@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowLeft, KeyRound, Send } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { solicitarResetSenhaAluno } from "@/server/aluno-auth.functions";
-import mpTeamLogo from "@/assets/mp-team-logo.png";
 
 export const Route = createFileRoute("/aluno/esqueci-senha")({
   head: () => ({ meta: [{ title: "Recuperar senha — MPTEAM" }] }),
