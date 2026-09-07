@@ -108,13 +108,22 @@ function FormularioPublico() {
       novos[p.id] = err;
       if (err) ok = false;
     }
-    if (form?.config.exigir_identificacao && idx === 0) {
-      if (form.config.coletar_nome !== false && !identificacao.nome.trim()) { novos["__nome"] = "Informe seu nome."; ok = false; }
-    }
+    const idOk = validarIdentificacao(novos);
+    if (!idOk) ok = false;
     setErros((e) => ({ ...e, ...novos }));
-    if (!ok) window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!ok) { setIdx(idOk ? idx : 0); window.scrollTo({ top: 0, behavior: "smooth" }); }
     return ok;
   }
+
+  function validarIdentificacao(novos: Record<string, string | null>): boolean {
+    let ok = true;
+    if (!identificacao.nome.trim()) { novos["__nome"] = "Informe seu nome completo."; ok = false; }
+    else novos["__nome"] = null;
+    if (!telefoneValido(identificacao.telefone)) { novos["__telefone"] = "Informe um telefone válido com DDD."; ok = false; }
+    else novos["__telefone"] = null;
+    return ok;
+  }
+
 
   function proximaSecaoIndex(): number | "fim" {
     const s = secaoAtual;
