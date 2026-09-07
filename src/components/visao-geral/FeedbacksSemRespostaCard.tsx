@@ -369,29 +369,27 @@ export function FeedbacksSemRespostaCard() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="rounded-lg border border-border bg-card p-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Carregando central de acompanhamento...
-        </div>
-      </div>
-    );
-  }
-
-  if (itens.length === 0 && devolutivas.length === 0 && aguardando.length === 0) {
+  if (loading || (itens.length === 0 && devolutivas.length === 0 && aguardando.length === 0)) {
     return (
       <div className="rounded-lg border border-border bg-card px-4 py-3 flex items-center gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
           <MessageSquare className="h-5 w-5" />
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="font-semibold text-sm sm:text-base">Central de acompanhamento</div>
-          <div className="text-xs text-muted-foreground">Nenhum follow-up ou feedback pendente agora.</div>
+          {loading ? (
+            <div className="mt-1 space-y-1">
+              <div className="h-2.5 w-40 rounded bg-muted animate-pulse" />
+              <div className="h-2.5 w-28 rounded bg-muted animate-pulse" />
+            </div>
+          ) : (
+            <div className="text-xs text-muted-foreground">Nenhum follow-up ou feedback pendente agora.</div>
+          )}
         </div>
       </div>
     );
   }
+
   const total = itens.length + devolutivas.length + aguardando.length;
 
   async function dispararTodos() {
