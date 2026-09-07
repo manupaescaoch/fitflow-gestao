@@ -5,7 +5,12 @@ export const CHAVES_CREDENCIAIS = [
   "ZAPI_TOKEN",
   "ZAPI_CLIENT_TOKEN",
   "OPENAI_API_KEY",
+  "DAPI_BASE_URL",
+  "DAPI_SESSION_ID",
+  "DAPI_API_KEY",
 ] as const;
+
+export const DAPI_BASE_URL_PADRAO = "https://api.d-api.cloud";
 
 export type ChaveCredencial = (typeof CHAVES_CREDENCIAIS)[number];
 
