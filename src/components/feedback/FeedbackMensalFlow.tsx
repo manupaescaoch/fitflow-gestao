@@ -381,7 +381,7 @@ export function FeedbackMensalFlow({ formId, alunoId, token, onSubmitted }: Prop
         </div>
 
         {submitError && (
-          <div className="mt-6 p-3 rounded text-sm" style={{ backgroundColor: "#fee", color: RED, border: `1px solid ${RED}` }}>
+          <div className="mt-6 p-3 rounded text-sm" style={{ backgroundColor: "color-mix(in oklab, var(--primary) 10%, white)", color: RED, border: `1px solid ${RED}` }}>
             Erro ao enviar: {submitError}
           </div>
         )}
@@ -453,7 +453,7 @@ function Logo({ big = false }: { big?: boolean }) {
 }
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider" style={{ backgroundColor: "#fee2e2", color: RED }}>
+    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider" style={{ backgroundColor: "color-mix(in oklab, var(--primary) 12%, white)", color: RED }}>
       {children}
     </span>
   );
