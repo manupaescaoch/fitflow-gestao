@@ -24,11 +24,11 @@ type TestResult = Awaited<ReturnType<typeof testDapiConnection>>;
 
 
 export function ConexoesSection() {
-  const fetchStatus = useServerFn(getZapiStatus);
-  const runTest = useServerFn(testZapiConnection);
-  const fetchGroups = useServerFn(listZapiGroups);
-  const runConnect = useServerFn(connectZapi);
-  const runDisconnect = useServerFn(disconnectZapi);
+  const fetchStatus = useServerFn(getDapiStatus);
+  const runTest = useServerFn(testDapiConnection);
+  const runConnect = useServerFn(connectDapi);
+  const runDisconnect = useServerFn(disconnectDapi);
+
   const fetchOpenAI = useServerFn(getOpenAIStatus);
   const runOpenAITest = useServerFn(testOpenAIConnection);
   const fetchUrls = useServerFn(getFormUrls);
