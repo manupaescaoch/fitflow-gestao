@@ -5,7 +5,12 @@ export const CHAVES_CREDENCIAIS = [
   "ZAPI_TOKEN",
   "ZAPI_CLIENT_TOKEN",
   "OPENAI_API_KEY",
+  "DAPI_BASE_URL",
+  "DAPI_SESSION_ID",
+  "DAPI_API_KEY",
 ] as const;
+
+export const DAPI_BASE_URL_PADRAO = "https://api.d-api.cloud";
 
 export type ChaveCredencial = (typeof CHAVES_CREDENCIAIS)[number];
 
@@ -36,6 +41,9 @@ export async function lerCredencial(chave: ChaveCredencial): Promise<string | nu
   if (db) return db;
   if (chave === "ZAPI_INSTANCE_ID") {
     return process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE || null;
+  }
+  if (chave === "DAPI_BASE_URL") {
+    return process.env.DAPI_BASE_URL || DAPI_BASE_URL_PADRAO;
   }
   return process.env[chave] || null;
 }

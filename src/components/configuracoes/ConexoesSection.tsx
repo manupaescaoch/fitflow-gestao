@@ -40,12 +40,19 @@ export function ConexoesSection() {
   const previewResumo = useServerFn(previewResumoDiario);
   const fetchCreds = useServerFn(getCredenciais);
   const persistCred = useServerFn(saveCredencial);
-  type CredKey = "ZAPI_INSTANCE_ID" | "ZAPI_TOKEN" | "ZAPI_CLIENT_TOKEN" | "OPENAI_API_KEY";
+  type CredKey = "ZAPI_INSTANCE_ID" | "ZAPI_TOKEN" | "ZAPI_CLIENT_TOKEN" | "OPENAI_API_KEY" | "DAPI_BASE_URL" | "DAPI_SESSION_ID" | "DAPI_API_KEY";
   const [creds, setCreds] = useState<Record<CredKey, { configured: boolean; preview: string | null }> | null>(null);
   const [credDraft, setCredDraft] = useState<Record<string, string>>({});
   const [credSaving, setCredSaving] = useState<string | null>(null);
   const loadCreds = async () => {
-    try { setCreds((await fetchCreds()) as any); } catch { /* ignore */ }
+    try {
+      const r = (await fetchCreds()) as any;
+      setCreds(r);
+      setCredDraft((d) => ({
+        ...d,
+        DAPI_BASE_URL: d.DAPI_BASE_URL || r?.DAPI_BASE_URL?.preview || "https://api.d-api.cloud",
+      }));
+    } catch { /* ignore */ }
   };
   useEffect(() => { void loadCreds(); }, []);
   const salvarCred = async (chave: CredKey) => {
@@ -412,6 +419,40 @@ export function ConexoesSection() {
               )}
             </div>
           )}
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-border bg-card">
+        <div className="px-5 py-4 border-b border-border flex items-center gap-2">
+          <Plug className="h-4 w-4 text-primary" />
+          <div>
+            <h2 className="font-semibold">D-API</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Base URL já preenchida. Informe a Session ID e a API Key quando for ativar.
+            </p>
+          </div>
+        </div>
+        <div className="divide-y divide-border">
+          <CredRow chave="DAPI_BASE_URL" label="Base URL" desc="Endereço da API (padrão: https://api.d-api.cloud)"
+            item={creds?.DAPI_BASE_URL ?? { configured: false, preview: null }}
+            draft={credDraft.DAPI_BASE_URL ?? ""}
+            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_BASE_URL: v }))}
+            onSave={() => salvarCred("DAPI_BASE_URL")} saving={credSaving === "DAPI_BASE_URL"} />
+          <CredRow chave="DAPI_SESSION_ID" label="Session ID" desc="Identificador da sessão na D-API"
+            item={creds?.DAPI_SESSION_ID ?? { configured: false, preview: null }}
+            draft={credDraft.DAPI_SESSION_ID ?? ""}
+            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_SESSION_ID: v }))}
+            onSave={() => salvarCred("DAPI_SESSION_ID")} saving={credSaving === "DAPI_SESSION_ID"} />
+          <CredRow chave="DAPI_API_KEY" label="API Key" desc="Chave de acesso da D-API"
+            item={creds?.DAPI_API_KEY ?? { configured: false, preview: null }}
+            draft={credDraft.DAPI_API_KEY ?? ""}
+            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_API_KEY: v }))}
+            onSave={() => salvarCred("DAPI_API_KEY")} saving={credSaving === "DAPI_API_KEY"} />
+        </div>
+        <div className="px-5 py-3 border-t border-border bg-muted/20">
+          <p className="text-xs text-muted-foreground">
+            Os valores ficam guardados no banco do sistema e só aparecem mascarados nesta tela. Nenhuma conexão é iniciada ao salvar.
+          </p>
         </div>
       </div>
 
