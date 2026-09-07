@@ -431,7 +431,7 @@ export function ConexoesSection() {
             <p className="text-xs text-muted-foreground mb-3">
               Abra o WhatsApp no celular → Aparelhos conectados → Conectar aparelho e aponte para o QR abaixo.
             </p>
-            <img src={qrDataUrl} alt="QR Code Z-API" className="w-full rounded-md bg-white p-2" />
+            <img src={qrDataUrl} alt="QR Code D-API" className="w-full rounded-md bg-white p-2" />
             <button onClick={async () => { setQrDataUrl(null); await load(); await handleTest(); }}
               className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
               <RefreshCw className="h-4 w-4" /> Já escaneei — verificar
