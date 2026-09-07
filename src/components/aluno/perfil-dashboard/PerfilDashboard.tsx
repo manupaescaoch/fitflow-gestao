@@ -294,7 +294,7 @@ function AlunoHeroCard({
       <div className="mt-4 flex items-center gap-2 flex-wrap">
         <button
           onClick={onWhatsApp}
-          className="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-[13px] font-semibold shadow-[0_8px_22px_-8px_rgba(244,63,94,0.55)] transition active:scale-[0.98]"
+          className="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-[13px] font-semibold shadow-[0_8px_22px_-8px_color-mix(in_oklab,var(--primary)_55%,transparent)] transition active:scale-[0.98]"
         >
           <MessageCircle className="h-4 w-4" /> WhatsApp
         </button>
