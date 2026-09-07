@@ -6,6 +6,9 @@ import { supabase as supabaseClient } from "@/integrations/supabase/client";
 const supabase = supabaseClient as any;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhoneDdiInput } from "@/components/publico/PhoneDdiInput";
+import { ConfirmarTelefoneModal } from "@/components/publico/ConfirmarTelefoneModal";
+import { telefoneValido } from "@/lib/telefone";
 import { CampoResposta } from "@/components/formularios/CampoResposta";
 import {
   Formulario, Pergunta, Secao, TIPOS_ESTATICOS, mapFormulario, mapPergunta,
@@ -43,6 +46,7 @@ function FormularioPublico() {
   const [identificacao, setIdentificacao] = useState({ nome: "", email: "", telefone: "" });
   const [motivoFechado, setMotivoFechado] = useState("Este formulário não está recebendo respostas no momento.");
   const [inicio] = useState(() => Date.now());
+  const [confirmando, setConfirmando] = useState(false);
 
   const chaveRascunho = `form-rascunho-${slug}`;
 
@@ -237,32 +241,34 @@ function FormularioPublico() {
           </div>
         )}
 
-        {idx === 0 && (form?.config.exigir_identificacao || form?.config.coletar_nome || form?.config.coletar_email || form?.config.coletar_telefone) && (
+        {idx === 0 && (
           <div className="mt-3 space-y-3 rounded-xl border border-border bg-card p-5">
             <h2 className="text-sm font-semibold">Identificação</h2>
-            {(form.config.coletar_nome ?? form.config.exigir_identificacao) && (
-              <div>
-                <label className="text-sm font-medium">Nome {form.config.exigir_identificacao && <span style={{ color: cor }}>*</span>}</label>
-                <Input className="mt-1" value={identificacao.nome} onChange={(e) => setIdentificacao((v) => ({ ...v, nome: e.target.value }))} />
-                {erros["__nome"] && <p className="mt-1 text-xs font-medium text-destructive">{erros["__nome"]}</p>}
-              </div>
-            )}
-            {form.config.coletar_email && (
+            <div>
+              <label className="text-sm font-medium">Nome completo <span style={{ color: cor }}>*</span></label>
+              <Input className="mt-1" autoComplete="name" value={identificacao.nome}
+                onChange={(e) => { setIdentificacao((v) => ({ ...v, nome: e.target.value })); setErros((x) => ({ ...x, __nome: null })); }} />
+              {erros["__nome"] && <p className="mt-1 text-xs font-medium text-destructive">{erros["__nome"]}</p>}
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                WhatsApp com DDD <span style={{ color: cor }}>*</span>
+              </label>
+              <PhoneDdiInput
+                value={identificacao.telefone}
+                onChange={(full) => { setIdentificacao((v) => ({ ...v, telefone: full })); setErros((x) => ({ ...x, __telefone: null })); }}
+                error={erros["__telefone"] ?? undefined}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                É por esse número que identificamos seu cadastro. Confira antes de enviar.
+              </p>
+            </div>
+            {form?.config.coletar_email && (
               <div>
                 <label className="text-sm font-medium">E-mail</label>
                 <Input className="mt-1" type="email" inputMode="email" value={identificacao.email}
                   onChange={(e) => setIdentificacao((v) => ({ ...v, email: e.target.value }))} />
               </div>
-            )}
-            {form.config.coletar_telefone && (
-              <div>
-                <label className="text-sm font-medium">Telefone</label>
-                <Input className="mt-1" type="tel" inputMode="tel" value={identificacao.telefone}
-                  onChange={(e) => setIdentificacao((v) => ({ ...v, telefone: e.target.value }))} />
-              </div>
-            )}
-            {form.config.permitir_anonimo && !form.config.exigir_identificacao && (
-              <p className="text-xs text-muted-foreground">Você pode responder sem se identificar.</p>
             )}
           </div>
         )}
@@ -295,7 +301,8 @@ function FormularioPublico() {
             </Button>
           )}
           {proxima === "fim" ? (
-            <Button className="ml-auto" disabled={enviando} onClick={() => void enviar()} style={{ backgroundColor: cor }}>
+            <Button className="ml-auto" disabled={enviando}
+              onClick={() => { if (validarSecao()) setConfirmando(true); }} style={{ backgroundColor: cor }}>
               {enviando ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />} Enviar
             </Button>
           ) : (
@@ -306,6 +313,13 @@ function FormularioPublico() {
           )}
         </div>
       </div>
+      <ConfirmarTelefoneModal
+        open={confirmando}
+        telefone={identificacao.telefone}
+        enviando={enviando}
+        onConfirmar={() => void enviar()}
+        onEditar={() => { setConfirmando(false); setIdx(0); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+      />
     </div>
   );
 }
