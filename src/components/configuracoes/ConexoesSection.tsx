@@ -40,7 +40,7 @@ export function ConexoesSection() {
   const previewResumo = useServerFn(previewResumoDiario);
   const fetchCreds = useServerFn(getCredenciais);
   const persistCred = useServerFn(saveCredencial);
-  type CredKey = "ZAPI_INSTANCE_ID" | "ZAPI_TOKEN" | "ZAPI_CLIENT_TOKEN" | "OPENAI_API_KEY";
+  type CredKey = "ZAPI_INSTANCE_ID" | "ZAPI_TOKEN" | "ZAPI_CLIENT_TOKEN" | "OPENAI_API_KEY" | "DAPI_BASE_URL" | "DAPI_SESSION_ID" | "DAPI_API_KEY";
   const [creds, setCreds] = useState<Record<CredKey, { configured: boolean; preview: string | null }> | null>(null);
   const [credDraft, setCredDraft] = useState<Record<string, string>>({});
   const [credSaving, setCredSaving] = useState<string | null>(null);
