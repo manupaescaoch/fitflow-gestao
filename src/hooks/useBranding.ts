@@ -61,11 +61,18 @@ export function useBranding() {
   useEffect(() => {
     listeners.add(setBranding);
     if (!cache) {
+      const local = lerCacheLocal();
+      if (local) {
+        cache = local;
+        setBranding(local);
+        aplicarCorSistema(local.cor_primaria);
+      }
       pendente = pendente ?? fetchBranding();
       void pendente.then(setBranding).catch(() => undefined);
     }
     return () => { listeners.delete(setBranding); };
   }, []);
+
 
   return { ...branding, logo: branding.logo_url || LOGO_PADRAO };
 }
