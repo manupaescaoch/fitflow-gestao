@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox } from "lucide-react";
+import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox, CheckCheck, Settings2, Zap, HandMetal } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listFeedbacksSemResposta,
@@ -21,6 +21,7 @@ import {
 } from "@/server/feedback-lembretes.functions";
 
 import { dispararJobsAgora } from "@/server/motor.functions";
+import { getDapiStatus } from "@/server/dapi.functions";
 import { previewMensagemJob } from "@/server/motor-preview.functions";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -104,6 +105,8 @@ export function FeedbacksSemRespostaCard() {
   const [busyEnviarTodos, setBusyEnviarTodos] = useState(false);
   const [busyGrupo, setBusyGrupo] = useState(false);
   const [busyGrupoDev, setBusyGrupoDev] = useState(false);
+  const [automatico, setAutomatico] = useState(false);
+  const [busyManualId, setBusyManualId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
   const listFn = useServerFn(listFeedbacksSemResposta);
@@ -117,6 +120,7 @@ export function FeedbacksSemRespostaCard() {
   const marcarManualFn = useServerFn(marcarJobsEnviadosManualmente);
   const marcarDevManualFn = useServerFn(marcarDevolutivaEnviadaManualmente);
   const previewFn = useServerFn(previewMensagemJob);
+  const dapiStatusFn = useServerFn(getDapiStatus);
   const enviarDevDiretoFn = useServerFn(enviarDevolutivaDireto);
   const [busyPreviewId, setBusyPreviewId] = useState<string | null>(null);
   const [busyDevPreviewId, setBusyDevPreviewId] = useState<string | null>(null);
@@ -270,6 +274,28 @@ export function FeedbacksSemRespostaCard() {
     }
   }
 
+  async function marcarEnvioManual(j: FeedbackAguardandoEnvio) {
+    setBusyManualId(j.job_id);
+    try {
+      await marcarManualFn({ data: { ids: [j.job_id] } });
+      setAguardando((curr) => curr.filter((x) => x.job_id !== j.job_id));
+      toast.success("Marcado como enviado manualmente");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao marcar");
+    } finally { setBusyManualId(null); }
+  }
+
+  async function marcarDevolutivaManual(d: FeedbackAguardandoDevolutiva) {
+    setBusyManualId(d.formulario_id);
+    try {
+      await marcarDevManualFn({ data: { formularioId: d.formulario_id, alunoId: d.aluno_id, tipo: d.tipo, mensagem: d.mensagem_pronta || "Devolutiva enviada manualmente" } });
+      setDevolutivas((curr) => curr.filter((x) => x.formulario_id !== d.formulario_id));
+      toast.success("Devolutiva marcada como enviada");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao marcar");
+    } finally { setBusyManualId(null); }
+  }
+
   async function carregar() {
     setLoading(true);
     try {
@@ -277,6 +303,12 @@ export function FeedbacksSemRespostaCard() {
       setItens(r.itens);
       setDevolutivas(d.itens);
       setAguardando(e.itens);
+      try {
+        const st = await dapiStatusFn();
+        setAutomatico(!!st.allConfigured);
+      } catch {
+        setAutomatico(false);
+      }
     } catch (e) {
       console.error(e);
     } finally {
