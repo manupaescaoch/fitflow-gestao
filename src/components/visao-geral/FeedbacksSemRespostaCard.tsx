@@ -186,6 +186,30 @@ export function FeedbacksSemRespostaCard() {
       .catch((err) => console.error("Falha ao marcar job como enviado manualmente", err));
   }
 
+  function abrirWhatsAppLembrete(it: FeedbackPendente) {
+    if (!it.whatsapp) {
+      toast.error("Aluno sem WhatsApp cadastrado");
+      return;
+    }
+    const janelaWhatsApp = abrirJanelaPreparandoWhatsApp();
+    toast("Preparando mensagem para o WhatsApp...");
+    setBusyPreviewId(it.formulario_id);
+    previewFn({ data: { alunoId: it.aluno_id, tipo: "feedback_link_lembrete", formularioId: it.formulario_id } })
+      .then((r) => {
+        if (r.mensagem) {
+          abrirUrlExterna(whatsappHrefComTexto(it.whatsapp, r.mensagem), janelaWhatsApp);
+        } else {
+          fecharJanelaPreparando(janelaWhatsApp);
+          mensagemIndisponivel("mensagem", r.error || "Mensagem vazia");
+        }
+      })
+      .catch((e) => {
+        fecharJanelaPreparando(janelaWhatsApp);
+        mensagemIndisponivel("mensagem", e instanceof Error ? e.message : null);
+      })
+      .finally(() => setBusyPreviewId(null));
+  }
+
   function abrirDevolutivaWhatsApp(d: FeedbackAguardandoDevolutiva) {
     if (!d.whatsapp) {
       toast.error("Aluno sem WhatsApp cadastrado");
@@ -317,13 +341,25 @@ export function FeedbacksSemRespostaCard() {
     return (
       <div className="rounded-lg border border-border bg-card p-4">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Carregando feedbacks pendentes...
+          <Loader2 className="h-4 w-4 animate-spin" /> Carregando central de acompanhamento...
         </div>
       </div>
     );
   }
 
-  if (itens.length === 0 && devolutivas.length === 0 && aguardando.length === 0) return null;
+  if (itens.length === 0 && devolutivas.length === 0 && aguardando.length === 0) {
+    return (
+      <div className="rounded-lg border border-border bg-card px-4 py-3 flex items-center gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <MessageSquare className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <div className="font-semibold text-sm sm:text-base">Central de acompanhamento</div>
+          <div className="text-xs text-muted-foreground">Nenhum follow-up ou feedback pendente agora.</div>
+        </div>
+      </div>
+    );
+  }
   const total = itens.length + devolutivas.length + aguardando.length;
 
   async function dispararTodos() {
@@ -352,7 +388,7 @@ export function FeedbacksSemRespostaCard() {
             <MessageSquare className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <div className="font-semibold text-sm sm:text-base">Feedbacks pendentes</div>
+            <div className="font-semibold text-sm sm:text-base">Central de acompanhamento</div>
             <div className="text-xs text-muted-foreground flex items-center gap-3 flex-wrap">
               <span>Total: <strong className="text-amber-700">{total}</strong></span>
               {aguardando.length > 0 && (
@@ -593,6 +629,18 @@ export function FeedbacksSemRespostaCard() {
                     >
                       {busyId === it.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                       <span className="hidden sm:inline">{lembreteEnviado ? "Reenviar" : "Lembrete"}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => abrirWhatsAppLembrete(it)}
+                      disabled={busyPreviewId === it.formulario_id || !it.whatsapp}
+                      title="Abrir WhatsApp do aluno com a mensagem fixa"
+                      className="inline-flex items-center gap-1 rounded-md bg-emerald-600 text-white px-2.5 py-1.5 text-xs font-medium hover:opacity-90 disabled:opacity-50"
+                    >
+                      {busyPreviewId === it.formulario_id
+                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <MessageCircle className="h-3.5 w-3.5" />}
+                      <span className="hidden sm:inline">WhatsApp</span>
                     </button>
                     <button
                       onClick={() => alternarHistorico(it.aluno_id)}
