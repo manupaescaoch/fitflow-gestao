@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox } from "lucide-react";
+import { MessageSquare, Send, MessageCircle, ExternalLink, Loader2, ChevronDown, ChevronUp, Check, Clock, History, FileCheck2, Users, Inbox, CheckCheck, Settings2, Zap, HandMetal } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listFeedbacksSemResposta,
@@ -21,6 +21,7 @@ import {
 } from "@/server/feedback-lembretes.functions";
 
 import { dispararJobsAgora } from "@/server/motor.functions";
+import { getDapiStatus } from "@/server/dapi.functions";
 import { previewMensagemJob } from "@/server/motor-preview.functions";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -104,6 +105,8 @@ export function FeedbacksSemRespostaCard() {
   const [busyEnviarTodos, setBusyEnviarTodos] = useState(false);
   const [busyGrupo, setBusyGrupo] = useState(false);
   const [busyGrupoDev, setBusyGrupoDev] = useState(false);
+  const [automatico, setAutomatico] = useState(false);
+  const [busyManualId, setBusyManualId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
   const listFn = useServerFn(listFeedbacksSemResposta);
@@ -117,6 +120,7 @@ export function FeedbacksSemRespostaCard() {
   const marcarManualFn = useServerFn(marcarJobsEnviadosManualmente);
   const marcarDevManualFn = useServerFn(marcarDevolutivaEnviadaManualmente);
   const previewFn = useServerFn(previewMensagemJob);
+  const dapiStatusFn = useServerFn(getDapiStatus);
   const enviarDevDiretoFn = useServerFn(enviarDevolutivaDireto);
   const [busyPreviewId, setBusyPreviewId] = useState<string | null>(null);
   const [busyDevPreviewId, setBusyDevPreviewId] = useState<string | null>(null);
@@ -270,6 +274,28 @@ export function FeedbacksSemRespostaCard() {
     }
   }
 
+  async function marcarEnvioManual(j: FeedbackAguardandoEnvio) {
+    setBusyManualId(j.job_id);
+    try {
+      await marcarManualFn({ data: { ids: [j.job_id] } });
+      setAguardando((curr) => curr.filter((x) => x.job_id !== j.job_id));
+      toast.success("Marcado como enviado manualmente");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao marcar");
+    } finally { setBusyManualId(null); }
+  }
+
+  async function marcarDevolutivaManual(d: FeedbackAguardandoDevolutiva) {
+    setBusyManualId(d.formulario_id);
+    try {
+      await marcarDevManualFn({ data: { formularioId: d.formulario_id, alunoId: d.aluno_id, tipo: d.tipo, mensagem: d.mensagem_pronta || "Devolutiva enviada manualmente" } });
+      setDevolutivas((curr) => curr.filter((x) => x.formulario_id !== d.formulario_id));
+      toast.success("Devolutiva marcada como enviada");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao marcar");
+    } finally { setBusyManualId(null); }
+  }
+
   async function carregar() {
     setLoading(true);
     try {
@@ -277,6 +303,12 @@ export function FeedbacksSemRespostaCard() {
       setItens(r.itens);
       setDevolutivas(d.itens);
       setAguardando(e.itens);
+      try {
+        const st = await dapiStatusFn();
+        setAutomatico(!!st.allConfigured);
+      } catch {
+        setAutomatico(false);
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -410,6 +442,10 @@ export function FeedbacksSemRespostaCard() {
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
+          <span className={`hidden sm:inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${automatico ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+            {automatico ? <Zap className="h-3 w-3" /> : <HandMetal className="h-3 w-3" />}
+            {automatico ? "Envio automático" : "Modo manual"}
+          </span>
           <span className="hidden sm:inline text-xs text-muted-foreground">{open ? "Fechar" : "Ver alunos"}</span>
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </div>
@@ -417,6 +453,19 @@ export function FeedbacksSemRespostaCard() {
 
       {open && (
         <div className="border-t border-amber-300/50 bg-card divide-y divide-border max-h-96 overflow-y-auto">
+          {!automatico && (
+            <div className="px-3 py-2 flex items-center justify-between gap-2 bg-muted/50">
+              <span className="text-[11px] text-muted-foreground">
+                WhatsApp não conectado — cobranças seguem o ciclo do Motor de Automações e são feitas manualmente.
+              </span>
+              <Link
+                to="/configuracoes/motor"
+                className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] font-medium hover:bg-muted shrink-0"
+              >
+                <Settings2 className="h-3 w-3" /> Motor
+              </Link>
+            </div>
+          )}
           {aguardando.length > 0 && (
             <div className="px-3 py-2 bg-blue-50/70 flex items-center justify-between gap-2">
               <span className="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
@@ -424,8 +473,8 @@ export function FeedbacksSemRespostaCard() {
               </span>
               <button
                 onClick={dispararTodos}
-                disabled={busyEnviarTodos || !isAdmin}
-                title={isAdmin ? "Enviar todos ao grupo de Feedbacks & Follow-ups" : "Apenas administradores"}
+                disabled={busyEnviarTodos || !isAdmin || !automatico}
+                title={!automatico ? "Disponível apenas com o WhatsApp conectado" : isAdmin ? "Enviar todos ao grupo de Feedbacks & Follow-ups" : "Apenas administradores"}
                 className="inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2.5 py-1 text-[11px] font-medium hover:opacity-90 disabled:opacity-50"
               >
                 {busyEnviarTodos ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Users className="h-3.5 w-3.5" />}
@@ -480,6 +529,15 @@ export function FeedbacksSemRespostaCard() {
                       : <MessageCircle className="h-3.5 w-3.5" />}
                     <span className="hidden sm:inline">WhatsApp</span>
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => marcarEnvioManual(j)}
+                    disabled={busyManualId === j.job_id}
+                    title="Marcar como enviado manualmente"
+                    className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-border hover:bg-muted text-muted-foreground disabled:opacity-50"
+                  >
+                    {busyManualId === j.job_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCheck className="h-3.5 w-3.5" />}
+                  </button>
                   <Link to="/alunos/$id" params={{ id: j.aluno_id }} title="Abrir ficha do aluno" className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-border hover:bg-muted">
                     <ExternalLink className="h-3.5 w-3.5" />
                   </Link>
@@ -494,7 +552,7 @@ export function FeedbacksSemRespostaCard() {
               </span>
               <button
                 onClick={enviarResumoGrupoDev}
-                disabled={busyGrupoDev || !isAdmin}
+                disabled={busyGrupoDev || !isAdmin || !automatico}
                 title={isAdmin ? "Enviar devolutivas pendentes ao grupo configurado" : "Apenas administradores"}
                 className="inline-flex items-center gap-1 rounded-md bg-emerald-600 text-white px-2.5 py-1 text-[11px] font-medium hover:opacity-90 disabled:opacity-50"
               >
@@ -536,7 +594,7 @@ export function FeedbacksSemRespostaCard() {
                   <button
                     type="button"
                     onClick={() => enviarDevolutivaZapi(d)}
-                    disabled={busyDevDiretoId === d.formulario_id || !d.whatsapp}
+                    disabled={busyDevDiretoId === d.formulario_id || !d.whatsapp || !automatico}
                     title="Enviar devolutiva direto no WhatsApp do aluno via Z-API"
                     className="inline-flex items-center gap-1 rounded-md bg-emerald-600 text-white px-2.5 py-1.5 text-xs font-medium hover:opacity-90 disabled:opacity-50"
                   >
@@ -555,6 +613,15 @@ export function FeedbacksSemRespostaCard() {
                     {busyDevPreviewId === d.formulario_id
                       ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
                       : <MessageCircle className="h-3.5 w-3.5" />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => marcarDevolutivaManual(d)}
+                    disabled={busyManualId === d.formulario_id}
+                    title="Marcar devolutiva como enviada manualmente"
+                    className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-border hover:bg-muted text-muted-foreground disabled:opacity-50"
+                  >
+                    {busyManualId === d.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCheck className="h-3.5 w-3.5" />}
                   </button>
                   <Link
                     to="/alunos/$id"
@@ -575,7 +642,7 @@ export function FeedbacksSemRespostaCard() {
               </span>
               <button
                 onClick={enviarResumoGrupo}
-                disabled={busyGrupo || !isAdmin}
+                disabled={busyGrupo || !isAdmin || !automatico}
                 title={isAdmin ? "Enviar resumo de pendentes ao grupo configurado" : "Apenas administradores"}
                 className="inline-flex items-center gap-1 rounded-md bg-amber-600 text-white px-2.5 py-1 text-[11px] font-medium hover:opacity-90 disabled:opacity-50"
               >
@@ -623,8 +690,9 @@ export function FeedbacksSemRespostaCard() {
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => reenviar(it)}
-                      disabled={busyId === it.formulario_id || !it.whatsapp}
-                      title={lembreteEnviado ? "Reenviar lembrete" : "Enviar lembrete"}
+                      disabled={busyId === it.formulario_id || !it.whatsapp || !automatico}
+                      title={!automatico ? "Disponível apenas com o WhatsApp conectado — use o botão WhatsApp" : lembreteEnviado ? "Reenviar lembrete" : "Enviar lembrete"}
+
                       className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-2.5 py-1.5 text-xs font-medium hover:opacity-90 disabled:opacity-50"
                     >
                       {busyId === it.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
