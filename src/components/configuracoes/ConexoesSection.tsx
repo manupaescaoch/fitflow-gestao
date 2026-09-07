@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getZapiStatus, testZapiConnection, listZapiGroups, connectZapi, disconnectZapi, type ZapiGroup } from "@/server/zapi.functions";
+import { getDapiStatus, testDapiConnection, connectDapi, disconnectDapi } from "@/server/dapi.functions";
 import { getOpenAIStatus, testOpenAIConnection } from "@/server/openai.functions";
 import { getCredenciais, saveCredencial } from "@/server/credenciais.functions";
 import { getFormUrls, saveFormUrls } from "@/server/forms.functions";
@@ -15,21 +15,20 @@ import {
 import { toast } from "sonner";
 import {
   Plug, PlugZap, Power, ShieldAlert, CheckCircle2, XCircle, Loader2, RefreshCw,
-  Save, X, Sparkles, Link2, Copy, MessageCircle, Bell, Send, Eye, Users,
+  Save, X, Sparkles, Link2, Copy,
 } from "lucide-react";
-import { RoteamentoGrupoCard } from "./RoteamentoGrupoCard";
 import { getBloqueioEnviosAlunos, setBloqueioEnviosAlunos } from "@/server/roteamento-grupos.functions";
-import { ShieldOff } from "lucide-react";
 
-type StatusData = Awaited<ReturnType<typeof getZapiStatus>>;
-type TestResult = Awaited<ReturnType<typeof testZapiConnection>>;
+type StatusData = Awaited<ReturnType<typeof getDapiStatus>>;
+type TestResult = Awaited<ReturnType<typeof testDapiConnection>>;
+
 
 export function ConexoesSection() {
-  const fetchStatus = useServerFn(getZapiStatus);
-  const runTest = useServerFn(testZapiConnection);
-  const fetchGroups = useServerFn(listZapiGroups);
-  const runConnect = useServerFn(connectZapi);
-  const runDisconnect = useServerFn(disconnectZapi);
+  const fetchStatus = useServerFn(getDapiStatus);
+  const runTest = useServerFn(testDapiConnection);
+  const runConnect = useServerFn(connectDapi);
+  const runDisconnect = useServerFn(disconnectDapi);
+
   const fetchOpenAI = useServerFn(getOpenAIStatus);
   const runOpenAITest = useServerFn(testOpenAIConnection);
   const fetchUrls = useServerFn(getFormUrls);
@@ -102,9 +101,6 @@ export function ConexoesSection() {
   const [fbPreviewing, setFbPreviewing] = useState(false);
   const [fbSending24h, setFbSending24h] = useState(false);
   const [fbPreview, setFbPreview] = useState<{ total: number; mensagem: string | null } | null>(null);
-  const [groups, setGroups] = useState<ZapiGroup[] | null>(null);
-  const [groupsLoading, setGroupsLoading] = useState(false);
-  const [groupsError, setGroupsError] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
@@ -122,7 +118,7 @@ export function ConexoesSection() {
   };
 
   const handleDisconnect = async () => {
-    if (!confirm("Desconectar o WhatsApp da Z-API? Os envios automáticos param até reconectar.")) return;
+    if (!confirm("Desconectar o WhatsApp da D-API? Os envios automáticos param até reconectar.")) return;
     setDisconnecting(true);
     try {
       const r = await runDisconnect();
@@ -133,23 +129,6 @@ export function ConexoesSection() {
     } finally { setDisconnecting(false); }
   };
 
-  const handleLoadGroups = async () => {
-    setGroupsLoading(true);
-    setGroupsError(null);
-    try {
-      const r = await fetchGroups();
-      if (r.ok) {
-        setGroups(r.groups);
-        if (r.groups.length === 0) setGroupsError("Nenhum grupo encontrado nesta conta.");
-      } else {
-        setGroupsError(r.error);
-      }
-    } catch (e) {
-      setGroupsError(e instanceof Error ? e.message : "Falha ao buscar grupos");
-    } finally {
-      setGroupsLoading(false);
-    }
-  };
 
   const load = async () => {
     setLoading(true);
@@ -346,12 +325,14 @@ export function ConexoesSection() {
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-border bg-card">
-        <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-border flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <MessageCircle className="h-4 w-4 text-primary" />
+            <Plug className="h-4 w-4 text-primary" />
             <div>
-              <h2 className="font-semibold">Z-API — WhatsApp</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Configurações de envio de mensagens automáticas via WhatsApp.</p>
+              <h2 className="font-semibold">D-API — WhatsApp</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Base URL já preenchida. Informe a Session ID e a API Key e conecte lendo o QR code.
+              </p>
             </div>
           </div>
           <button onClick={load} disabled={loading}
@@ -366,9 +347,21 @@ export function ConexoesSection() {
             </div>
           ) : status ? (
             <>
-              <CredRow chave="ZAPI_INSTANCE_ID" label="Instance ID" desc="Identificador da instância na Z-API" item={creds?.ZAPI_INSTANCE_ID ?? status.instance} draft={credDraft.ZAPI_INSTANCE_ID ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_INSTANCE_ID: v }))} onSave={() => salvarCred("ZAPI_INSTANCE_ID")} saving={credSaving === "ZAPI_INSTANCE_ID"} />
-              <CredRow chave="ZAPI_TOKEN" label="Token da instância" desc="Token gerado pela Z-API" item={creds?.ZAPI_TOKEN ?? status.token} draft={credDraft.ZAPI_TOKEN ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_TOKEN: v }))} onSave={() => salvarCred("ZAPI_TOKEN")} saving={credSaving === "ZAPI_TOKEN"} />
-              <CredRow chave="ZAPI_CLIENT_TOKEN" label="Client-Token" desc="Token de segurança da conta Z-API" item={creds?.ZAPI_CLIENT_TOKEN ?? status.clientToken} draft={credDraft.ZAPI_CLIENT_TOKEN ?? ""} onChange={(v) => setCredDraft((d) => ({ ...d, ZAPI_CLIENT_TOKEN: v }))} onSave={() => salvarCred("ZAPI_CLIENT_TOKEN")} saving={credSaving === "ZAPI_CLIENT_TOKEN"} />
+              <CredRow chave="DAPI_BASE_URL" label="Base URL" desc="Endereço da API (padrão: https://api.d-api.cloud)"
+                item={creds?.DAPI_BASE_URL ?? status.baseUrl}
+                draft={credDraft.DAPI_BASE_URL ?? ""}
+                onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_BASE_URL: v }))}
+                onSave={() => salvarCred("DAPI_BASE_URL")} saving={credSaving === "DAPI_BASE_URL"} />
+              <CredRow chave="DAPI_SESSION_ID" label="Session ID" desc="Identificador da sessão na D-API"
+                item={creds?.DAPI_SESSION_ID ?? status.sessionId}
+                draft={credDraft.DAPI_SESSION_ID ?? ""}
+                onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_SESSION_ID: v }))}
+                onSave={() => salvarCred("DAPI_SESSION_ID")} saving={credSaving === "DAPI_SESSION_ID"} />
+              <CredRow chave="DAPI_API_KEY" label="API Key" desc="Chave de acesso da D-API"
+                item={creds?.DAPI_API_KEY ?? status.apiKey}
+                draft={credDraft.DAPI_API_KEY ?? ""}
+                onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_API_KEY: v }))}
+                onSave={() => salvarCred("DAPI_API_KEY")} saving={credSaving === "DAPI_API_KEY"} />
             </>
           ) : (
             <div className="px-5 py-8 text-center text-sm text-muted-foreground">
@@ -379,15 +372,15 @@ export function ConexoesSection() {
         </div>
         <div className="px-5 py-4 border-t border-border bg-muted/20 space-y-3">
           <div className="flex flex-wrap gap-2">
-            <button onClick={handleTest} disabled={testing || !status?.allConfigured}
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
-              {testing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plug className="h-4 w-4" />}
-              {testing ? "Testando..." : "Testar conexão Z-API"}
-            </button>
             <button onClick={handleConnect} disabled={connecting || !status?.allConfigured}
-              className="inline-flex items-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-500 hover:bg-emerald-500/20 disabled:opacity-50">
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
               {connecting ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlugZap className="h-4 w-4" />}
-              {connecting ? "Gerando QR..." : "Conectar WhatsApp"}
+              {connecting ? "Gerando QR..." : "Conectar WhatsApp (QR code)"}
+            </button>
+            <button onClick={handleTest} disabled={testing || !status?.allConfigured}
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted disabled:opacity-50">
+              {testing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plug className="h-4 w-4" />}
+              {testing ? "Testando..." : "Testar conexão"}
             </button>
             <button onClick={handleDisconnect} disabled={disconnecting || !status?.allConfigured}
               className="inline-flex items-center gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/20 disabled:opacity-50">
@@ -396,7 +389,7 @@ export function ConexoesSection() {
             </button>
           </div>
           {!status?.allConfigured && (
-            <p className="text-xs text-amber-500">Configure todas as credenciais antes de testar.</p>
+            <p className="text-xs text-amber-500">Preencha Session ID e API Key para conectar.</p>
           )}
           {testResult && (
             <div className={`rounded-md border p-3 text-sm ${testResult.ok ? "border-emerald-500/30 bg-emerald-500/5" : "border-destructive/30 bg-destructive/5"}`}>
@@ -404,7 +397,7 @@ export function ConexoesSection() {
                 {testResult.ok ? (
                   <>
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    {testResult.connected ? "Conectado ao WhatsApp" : "Z-API respondeu, mas instância desconectada"}
+                    {testResult.connected ? "Conectado ao WhatsApp" : "D-API respondeu, mas a sessão está desconectada"}
                   </>
                 ) : (
                   <>
@@ -419,42 +412,12 @@ export function ConexoesSection() {
               )}
             </div>
           )}
-        </div>
-      </div>
-
-      <div className="rounded-lg border border-border bg-card">
-        <div className="px-5 py-4 border-b border-border flex items-center gap-2">
-          <Plug className="h-4 w-4 text-primary" />
-          <div>
-            <h2 className="font-semibold">D-API</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Base URL já preenchida. Informe a Session ID e a API Key quando for ativar.
-            </p>
-          </div>
-        </div>
-        <div className="divide-y divide-border">
-          <CredRow chave="DAPI_BASE_URL" label="Base URL" desc="Endereço da API (padrão: https://api.d-api.cloud)"
-            item={creds?.DAPI_BASE_URL ?? { configured: false, preview: null }}
-            draft={credDraft.DAPI_BASE_URL ?? ""}
-            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_BASE_URL: v }))}
-            onSave={() => salvarCred("DAPI_BASE_URL")} saving={credSaving === "DAPI_BASE_URL"} />
-          <CredRow chave="DAPI_SESSION_ID" label="Session ID" desc="Identificador da sessão na D-API"
-            item={creds?.DAPI_SESSION_ID ?? { configured: false, preview: null }}
-            draft={credDraft.DAPI_SESSION_ID ?? ""}
-            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_SESSION_ID: v }))}
-            onSave={() => salvarCred("DAPI_SESSION_ID")} saving={credSaving === "DAPI_SESSION_ID"} />
-          <CredRow chave="DAPI_API_KEY" label="API Key" desc="Chave de acesso da D-API"
-            item={creds?.DAPI_API_KEY ?? { configured: false, preview: null }}
-            draft={credDraft.DAPI_API_KEY ?? ""}
-            onChange={(v) => setCredDraft((d) => ({ ...d, DAPI_API_KEY: v }))}
-            onSave={() => salvarCred("DAPI_API_KEY")} saving={credSaving === "DAPI_API_KEY"} />
-        </div>
-        <div className="px-5 py-3 border-t border-border bg-muted/20">
           <p className="text-xs text-muted-foreground">
-            Os valores ficam guardados no banco do sistema e só aparecem mascarados nesta tela. Nenhuma conexão é iniciada ao salvar.
+            Os valores ficam guardados no banco do sistema e só aparecem mascarados nesta tela. Nada é conectado ao salvar.
           </p>
         </div>
       </div>
+
 
       {qrDataUrl && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setQrDataUrl(null)}>
@@ -468,7 +431,7 @@ export function ConexoesSection() {
             <p className="text-xs text-muted-foreground mb-3">
               Abra o WhatsApp no celular → Aparelhos conectados → Conectar aparelho e aponte para o QR abaixo.
             </p>
-            <img src={qrDataUrl} alt="QR Code Z-API" className="w-full rounded-md bg-white p-2" />
+            <img src={qrDataUrl} alt="QR Code D-API" className="w-full rounded-md bg-white p-2" />
             <button onClick={async () => { setQrDataUrl(null); await load(); await handleTest(); }}
               className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
               <RefreshCw className="h-4 w-4" /> Já escaneei — verificar
