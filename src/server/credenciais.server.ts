@@ -42,6 +42,9 @@ export async function lerCredencial(chave: ChaveCredencial): Promise<string | nu
   if (chave === "ZAPI_INSTANCE_ID") {
     return process.env.ZAPI_INSTANCE_ID || process.env.ZAPI_INSTANCE || null;
   }
+  if (chave === "DAPI_BASE_URL") {
+    return process.env.DAPI_BASE_URL || DAPI_BASE_URL_PADRAO;
+  }
   return process.env[chave] || null;
 }
 
