@@ -31,7 +31,7 @@ export const Route = createFileRoute("/aluno/")({
   component: AlunoInicio,
 });
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 
 function Ring({ pct, color }: { pct: number; color: string }) {
   const r = 18;
@@ -237,14 +237,14 @@ function AlunoInicio() {
           <p className="mt-0.5 text-[11px] text-black/50">Foco. Disciplina. Evolução.</p>
         </div>
         <Link to="/aluno/perfil" className="relative shrink-0" aria-label="Perfil">
-          <div className="h-9 w-9 rounded-full bg-[#F70906]/10 overflow-hidden ring-1 ring-black/5 flex items-center justify-center">
+          <div className="h-9 w-9 rounded-full bg-primary/10 overflow-hidden ring-1 ring-black/5 flex items-center justify-center">
             {session?.avatarUrl ? (
               <img src={session.avatarUrl} alt="" className="h-full w-full object-cover" />
             ) : (
-              <span className="text-[13px] font-extrabold text-[#F70906]">{inicial}</span>
+              <span className="text-[13px] font-extrabold text-primary">{inicial}</span>
             )}
           </div>
-          <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#F70906] ring-2 ring-[#FAFAFA] flex items-center justify-center">
+          <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-primary ring-2 ring-[#FAFAFA] flex items-center justify-center">
             <Bell className="h-2 w-2 text-white" strokeWidth={3} />
           </span>
         </Link>
@@ -259,14 +259,14 @@ function AlunoInicio() {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-[#F70906]/10 flex items-center justify-center">
-              <Zap className="h-3.5 w-3.5 text-[#F70906]" fill={RED} />
+            <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Zap className="h-3.5 w-3.5 text-primary" fill={RED} />
             </div>
             <div className="text-[10px] font-extrabold tracking-[0.18em] text-black">
               SCORE DE HOJE
             </div>
           </div>
-          <div className="text-[#F70906] font-extrabold text-sm tabular-nums">
+          <div className="text-primary font-extrabold text-sm tabular-nums">
             {xpSemana} na semana
           </div>
         </div>
@@ -276,12 +276,12 @@ function AlunoInicio() {
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}
             transition={{ duration: 0.9, ease: "easeOut" }}
-            className="h-full rounded-full bg-[#F70906]"
+            className="h-full rounded-full bg-primary"
           />
         </div>
 
         <div className="mt-1.5 flex items-center justify-between text-[10px]">
-          <span className="text-[#F70906] font-semibold tabular-nums">
+          <span className="text-primary font-semibold tabular-nums">
             {xpHoje} / {xpMetaDia} pts
           </span>
           <span className="text-black/45">
@@ -297,11 +297,11 @@ function AlunoInicio() {
         transition={{ duration: 0.4, delay: 0.08 }}
         className="rounded-2xl bg-white p-2 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.18)] ring-1 ring-black/5 flex items-center gap-2.5"
       >
-        <div className="h-9 w-9 rounded-full bg-[#F70906]/10 flex items-center justify-center shrink-0">
-          <Flame className="h-5 w-5 text-[#F70906]" fill={RED} />
+        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <Flame className="h-5 w-5 text-primary" fill={RED} />
         </div>
         <div className="flex items-baseline gap-1.5 shrink-0">
-          <span className="text-2xl font-extrabold leading-none text-[#F70906] tabular-nums">
+          <span className="text-2xl font-extrabold leading-none text-primary tabular-nums">
             {sequencia}
           </span>
           <span className="text-[9px] font-extrabold tracking-widest leading-tight text-black">
@@ -314,7 +314,7 @@ function AlunoInicio() {
             ? "Faça seu check-in de hoje pra começar a contagem."
             : "Tu sobe aqui fazendo o básico todo dia."}
         </p>
-        <ChevronRight className="h-3.5 w-3.5 text-[#F70906] shrink-0" />
+        <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0" />
       </motion.section>
 
       {/* Hoje */}
@@ -322,7 +322,7 @@ function AlunoInicio() {
         <div className="flex items-center justify-between mb-2 px-1">
           <h2 className="text-[11px] font-extrabold tracking-[0.2em] text-black">HOJE</h2>
           <Link to="/aluno/perfil" className="text-[11px] font-semibold text-black/60 inline-flex items-center gap-0.5">
-            Ver tudo <ChevronRight className="h-3.5 w-3.5 text-[#F70906]" />
+            Ver tudo <ChevronRight className="h-3.5 w-3.5 text-primary" />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-2">
@@ -331,7 +331,7 @@ function AlunoInicio() {
             label="Calorias"
             icon={Flame}
             color={RED}
-            bg="bg-[#F70906]/10"
+            bg="bg-primary/10"
             value={kcalLabel}
             subtitle={kcalSubtitle}
             ringPct={dietaPct}
@@ -419,7 +419,7 @@ function AlunoInicio() {
             label="Cardio"
             icon={Heart}
             color={RED}
-            bg="bg-[#F70906]/10"
+            bg="bg-primary/10"
             valueLabel="Registre seu cardio"
             buttonLabel="Marcar cardio"
             done={cardioDone}
@@ -479,7 +479,7 @@ function AlunoInicio() {
               {focos.map((f, i) => (
                 <div
                   key={i}
-                  className={`h-1.5 flex-1 rounded-full ${f.done ? "bg-[#F70906]" : "bg-black/8"}`}
+                  className={`h-1.5 flex-1 rounded-full ${f.done ? "bg-primary" : "bg-black/8"}`}
                 />
               ))}
             </div>
@@ -497,7 +497,7 @@ function AlunoInicio() {
                     <span className="text-[12px] font-semibold text-black">{f.label}</span>
                   </div>
                   {f.done ? (
-                    <span className="h-4 w-4 rounded-full bg-[#F70906] flex items-center justify-center">
+                    <span className="h-4 w-4 rounded-full bg-primary flex items-center justify-center">
                       <Check className="h-2.5 w-2.5 text-white" strokeWidth={3.5} />
                     </span>
                   ) : (

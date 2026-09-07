@@ -139,7 +139,7 @@ interface AlunoAtivoRow {
 }
 
 const EVENT_COLORS = {
-  entrega: "#f50000",
+  entrega: "var(--primary)",
   d0: "#22c55e",
   feedback: "#3b82f6",
   checkshape: "#f59e0b",
@@ -1144,10 +1144,10 @@ function EntregaRow({
   const ambos = dietaChecked && treinoChecked;
   return (
     <div className="relative rounded-xl border border-border bg-card pl-3.5 pr-3 py-2.5 overflow-hidden shadow-sm">
-      <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-[#f50000]" />
+      <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-primary" />
       <div className="flex items-center gap-2.5 sm:gap-3">
-        <div className="shrink-0 h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-[#f50000]/10 flex items-center justify-center">
-          <ClipboardList className="h-4 w-4 text-[#f50000]" strokeWidth={2} />
+        <div className="shrink-0 h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+          <ClipboardList className="h-4 w-4 text-primary" strokeWidth={2} />
         </div>
         <div className="flex-1 min-w-0">
           {aluno?.id ? (
@@ -1180,7 +1180,7 @@ function EntregaRow({
             )}
             <span className="text-[11px] text-muted-foreground">Entregar protocolo</span>
             {atrasada && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#f50000]">
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary">
                 <AlertCircle className="h-2.5 w-2.5" />
                 {diasAtraso ?? 0} {(diasAtraso ?? 0) === 1 ? "dia" : "dias"} em atraso
               </span>
@@ -1231,7 +1231,7 @@ function PillCheck({
       aria-label={`${label} ${checked ? "entregue" : "pendente"}`}
       className={`inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11px] font-medium transition-all ${
         checked
-          ? "bg-[#f50000] text-white border border-[#f50000] hover:bg-[#d40000]"
+          ? "bg-primary text-white border border-primary hover:bg-primary"
           : "bg-card border border-border text-muted-foreground hover:border-foreground hover:text-foreground"
       } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
     >
@@ -1247,7 +1247,7 @@ function TaskRow({
   title: string; meta?: string; checked: boolean; disabled: boolean;
   onClick: () => void; atrasada?: boolean;
 }) {
-  const barColor = atrasada ? "bg-[#f50000]" : "bg-[#f50000]/70";
+  const barColor = atrasada ? "bg-primary" : "bg-primary/70";
   return (
     <div className="relative flex items-center gap-3 rounded-2xl border border-border bg-card pl-4 pr-3 py-3 overflow-hidden">
       <span className={`absolute left-0 top-0 bottom-0 w-1 ${barColor}`} />
@@ -1263,7 +1263,7 @@ function TaskRow({
         aria-label={checked ? "Desmarcar" : "Marcar como concluído"}
         className={`shrink-0 h-9 w-9 rounded-full flex items-center justify-center transition-all ${
           checked
-            ? "bg-[#f50000] text-white hover:bg-[#d40000]"
+            ? "bg-primary text-white hover:bg-primary"
             : "border border-muted-foreground/40 text-muted-foreground hover:border-foreground hover:text-foreground"
         } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
       >
@@ -1311,7 +1311,7 @@ function statusClasses(s: AtividadeStatus): string {
     case "agendado":
       return "bg-blue-50 text-blue-600 border border-blue-200";
     case "atrasado":
-      return "bg-[#f50000]/10 text-[#f50000] border border-[#f50000]/30";
+      return "bg-primary/10 text-primary border border-primary/30";
     case "pendente":
     default:
       return "bg-orange-50 text-orange-500 border border-orange-200";
@@ -1390,7 +1390,7 @@ function AtividadesDoDiaBlock({
             onClick={() => setFiltro(f.id)}
             className={`h-9 px-4 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
               filtro === f.id
-                ? "bg-[#f50000] text-white"
+                ? "bg-primary text-white"
                 : "bg-muted/60 text-muted-foreground hover:bg-accent hover:text-foreground"
             }`}
           >
@@ -1755,7 +1755,7 @@ function ProximasAtualizacoesBlock({
         <div className="mt-4 flex justify-center">
           <button
             onClick={() => setDiasMostrados((d) => Math.min(d + 7, 30))}
-            className="text-xs font-semibold text-[#f50000] hover:opacity-80"
+            className="text-xs font-semibold text-primary hover:opacity-80"
           >
             Carregar mais dias
           </button>
@@ -2191,9 +2191,9 @@ function AtrasadasBlock({
       <div className="flex items-start justify-between gap-3 mb-5 flex-wrap">
         <div className="flex items-center gap-3">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Atrasadas</h2>
-          <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2.5 rounded-full bg-[#f50000] text-white text-xs font-bold">{atrasadas.length}</span>
+          <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2.5 rounded-full bg-primary text-white text-xs font-bold">{atrasadas.length}</span>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#f50000]/30 bg-[#f50000]/5 px-3 py-1.5 text-xs text-[#f50000] shrink-0">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs text-primary shrink-0">
           <AlertCircle className="h-3.5 w-3.5" />
           <span className="font-medium">requer atenção</span>
         </div>

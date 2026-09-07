@@ -62,7 +62,7 @@ const STEP_LABELS = [
 ];
 const TOTAL = STEP_LABELS.length;
 
-const RED = "#f50000";
+const RED = "var(--primary)";
 const INK = "#0a0a0a";
 const BORDER = "#e5e5e5";
 const SURFACE = "#ffffff";

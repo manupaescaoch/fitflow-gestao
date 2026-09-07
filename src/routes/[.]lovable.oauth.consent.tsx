@@ -74,7 +74,7 @@ function Consent() {
           Isso permite que {nome} acesse o CRM em seu nome, com as suas permissões.
         </p>
         {error && (
-          <div className="mt-4 text-[13px] text-[#F70906] bg-[#F70906]/5 border border-[#F70906]/20 rounded-xl px-4 py-3">
+          <div className="mt-4 text-[13px] text-primary bg-primary/5 border border-primary/20 rounded-xl px-4 py-3">
             {error}
           </div>
         )}
@@ -82,7 +82,7 @@ function Consent() {
           <button
             disabled={busy}
             onClick={() => decide(true)}
-            className="w-full h-[52px] rounded-2xl bg-[#F70906] text-white font-bold disabled:opacity-50"
+            className="w-full h-[52px] rounded-2xl bg-primary text-white font-bold disabled:opacity-50"
           >
             Aprovar
           </button>

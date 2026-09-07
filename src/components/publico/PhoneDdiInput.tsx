@@ -43,7 +43,7 @@ export const COUNTRIES: { name: string; code: string; flag: string }[] = [
 const DEFAULT_DDI = "55";
 const KNOWN_DDIS = Array.from(new Set(COUNTRIES.map((c) => c.code))).sort((a, b) => b.length - a.length);
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 const INK = "#0a0a0a";
 const BORDER = "#e5e5e5";
 const SURFACE = "#ffffff";

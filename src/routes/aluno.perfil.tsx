@@ -59,7 +59,7 @@ export const Route = createFileRoute("/aluno/perfil")({
   component: AlunoPerfil,
 });
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 
 function fmtDate(d?: string | null) {
   if (!d) return "—";
@@ -300,7 +300,7 @@ function AlunoPerfil() {
   if (loading && !data) {
     return (
       <div className="bg-[#F7F7F8] min-h-screen flex items-center justify-center">
-        <Loader2 className="h-6 w-6 text-[#F70906] animate-spin" />
+        <Loader2 className="h-6 w-6 text-primary animate-spin" />
       </div>
     );
   }
@@ -308,7 +308,7 @@ function AlunoPerfil() {
     return (
       <div className="bg-[#F7F7F8] min-h-screen flex items-center justify-center px-6 text-center">
         <div>
-          <AlertCircle className="h-8 w-8 text-[#F70906] mx-auto" />
+          <AlertCircle className="h-8 w-8 text-primary mx-auto" />
           <p className="mt-2 text-sm text-zinc-600">Não foi possível carregar seu perfil.</p>
           <p className="text-xs text-zinc-400 mt-1">{error}</p>
         </div>
@@ -369,7 +369,7 @@ function AlunoPerfil() {
                 aria-label="Trocar foto"
               >
                 {enviando ? (
-                  <span className="h-3 w-3 rounded-full border-2 border-zinc-300 border-t-[#F70906] animate-spin" />
+                  <span className="h-3 w-3 rounded-full border-2 border-zinc-300 border-t-primary animate-spin" />
                 ) : (
                   <Camera className="h-3.5 w-3.5 text-zinc-600" />
                 )}
@@ -379,7 +379,7 @@ function AlunoPerfil() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <h2 className="text-[17px] font-extrabold truncate">{nome}</h2>
-                <BadgeCheck className="h-4 w-4 text-[#F70906] fill-[#F70906]/15 shrink-0" />
+                <BadgeCheck className="h-4 w-4 text-primary fill-primary/15 shrink-0" />
               </div>
               <div className="mt-1 flex items-center gap-1.5">
                 {editandoUser ? (
@@ -398,7 +398,7 @@ function AlunoPerfil() {
                     <button
                       onClick={handleSalvarUsername}
                       disabled={salvandoUser}
-                      className="h-7 w-7 rounded-lg bg-[#F70906] text-white flex items-center justify-center disabled:opacity-60"
+                      className="h-7 w-7 rounded-lg bg-primary text-white flex items-center justify-center disabled:opacity-60"
                     >
                       {salvandoUser ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                     </button>
@@ -409,7 +409,7 @@ function AlunoPerfil() {
                       setUsernameVal(username ?? "");
                       setEditandoUser(true);
                     }}
-                    className="inline-flex items-center gap-1 text-[12px] text-black/55 font-medium hover:text-[#F70906]"
+                    className="inline-flex items-center gap-1 text-[12px] text-black/55 font-medium hover:text-primary"
                   >
                     <AtSign className="h-3 w-3" />
                     {username || "definir username"}
@@ -419,7 +419,7 @@ function AlunoPerfil() {
               </div>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {aluno?.plano && (
-                  <span className="inline-flex items-center rounded-full bg-[#F70906]/10 text-[#F70906] text-[10px] font-bold px-2 py-0.5 uppercase">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 uppercase">
                     {aluno.plano}
                   </span>
                 )}
@@ -468,10 +468,10 @@ function AlunoPerfil() {
               <span className="text-[12px] text-zinc-500 mb-1">/ {scoreMeta.toLocaleString("pt-BR")}</span>
             </div>
             <div className="mt-2 h-1.5 w-full rounded-full bg-zinc-200 overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-[#F70906] to-[#ff5e5c]" style={{ width: `${scorePerc}%` }} />
+              <div className="h-full rounded-full bg-gradient-to-r from-primary to-[#ff5e5c]" style={{ width: `${scorePerc}%` }} />
             </div>
             <div className="mt-2 flex items-center justify-between text-[11px]">
-              <span className="font-bold text-[#F70906]">+{scoreHoje} hoje</span>
+              <span className="font-bold text-primary">+{scoreHoje} hoje</span>
               <span className="text-zinc-500">Faltam {faltam} para a meta</span>
             </div>
           </div>
@@ -519,7 +519,7 @@ function AlunoPerfil() {
               <button
                 key={t}
                 onClick={() => setTabEvol(t)}
-                className={`px-2.5 py-1 rounded-lg transition ${tabEvol === t ? "bg-white text-[#F70906] shadow-sm" : "text-zinc-500"}`}
+                className={`px-2.5 py-1 rounded-lg transition ${tabEvol === t ? "bg-white text-primary shadow-sm" : "text-zinc-500"}`}
               >
                 {t === "peso" && "Peso"}
                 {t === "medidas" && "Medidas"}
@@ -548,7 +548,7 @@ function AlunoPerfil() {
                 </AreaChart>
               </ResponsiveContainer>
               {pesoAtual != null && (
-                <div className="absolute top-2 right-2 rounded-xl bg-[#F70906] text-white text-[10px] font-bold px-2 py-1 shadow-lg leading-tight">
+                <div className="absolute top-2 right-2 rounded-xl bg-primary text-white text-[10px] font-bold px-2 py-1 shadow-lg leading-tight">
                   <div>{pesoAtual} kg</div>
                   {delta && <div className="opacity-80 font-semibold">{Number(delta) > 0 ? "+" : ""}{delta} kg</div>}
                 </div>
@@ -587,7 +587,7 @@ function AlunoPerfil() {
                   <it.icon className="h-3.5 w-3.5" style={{ color: it.color }} />
                 </div>
                 <p className="flex-1 text-[12px] leading-snug text-zinc-700">{it.txt}</p>
-                {it.dir === "down" ? <TrendingDown className="h-4 w-4 text-[#F70906]" /> : <TrendingUp className="h-4 w-4 text-emerald-500" />}
+                {it.dir === "down" ? <TrendingDown className="h-4 w-4 text-primary" /> : <TrendingUp className="h-4 w-4 text-emerald-500" />}
               </li>
             ))}
           </ul>

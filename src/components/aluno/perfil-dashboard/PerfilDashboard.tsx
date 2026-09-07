@@ -23,7 +23,7 @@ import { AlunoAvatar } from "@/components/aluno/AlunoAvatar";
    Inspired by: Linear, Stripe, Attio, Notion, Apple Health.
    ============================================================ */
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 
 function initials(nome: string) {
   const parts = nome.trim().split(/\s+/);

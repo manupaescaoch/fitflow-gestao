@@ -100,7 +100,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
         const logo = await loadImage("/mp-logo.png");
         ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
       } catch {
-        ctx.fillStyle = "#F70906";
+        ctx.fillStyle = "var(--primary)";
         ctx.fillRect(logoX, logoY, logoSize, logoSize);
       }
 
@@ -110,7 +110,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
       ctx.font = "bold 56px system-ui, -apple-system, sans-serif";
       ctx.fillText("MINHA EVOLUÇÃO", W / 2, logoY + logoSize + 70);
 
-      ctx.fillStyle = "#F70906";
+      ctx.fillStyle = "var(--primary)";
       ctx.font = "bold 28px system-ui, -apple-system, sans-serif";
       ctx.fillText("MPTEAM • TRANSFORMAÇÃO REAL", W / 2, logoY + logoSize + 110);
 
@@ -177,7 +177,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
           const chipH = 36;
           const chipX = it.x + 12;
           const chipY = yPhoto + 12;
-          ctx.fillStyle = it.chip === "ANTES" ? "rgba(255,255,255,0.95)" : "#F70906";
+          ctx.fillStyle = it.chip === "ANTES" ? "rgba(255,255,255,0.95)" : "var(--primary)";
           ctx.fillRect(chipX, chipY, chipW, chipH);
           ctx.fillStyle = it.chip === "ANTES" ? "#0a0a0a" : "#ffffff";
           ctx.textBaseline = "middle";
@@ -197,7 +197,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
 
       // Footer
       ctx.textAlign = "center";
-      ctx.fillStyle = "#F70906";
+      ctx.fillStyle = "var(--primary)";
       ctx.font = "bold 32px system-ui";
       ctx.fillText("@mpteambr", W / 2, H - 90);
       ctx.fillStyle = "rgba(255,255,255,0.5)";
@@ -284,7 +284,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
                 </div>
                 <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-zinc-100 ring-1 ring-black/5">
                   {d ? <img src={d} alt="agora" className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center text-[10px] text-zinc-400">—</div>}
-                  <span className="absolute top-2 left-2 rounded-md bg-[#F70906] text-[9px] font-bold px-1.5 py-0.5 text-white">AGORA</span>
+                  <span className="absolute top-2 left-2 rounded-md bg-primary text-[9px] font-bold px-1.5 py-0.5 text-white">AGORA</span>
                   <span className="absolute bottom-2 right-2 rounded-md bg-black/65 text-[9px] font-semibold px-1.5 py-0.5 text-white">{fmt(depois!.data)}</span>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export function FotosEvolucaoCard({ alunoId, alunoNome }: { alunoId: string; alu
       <button
         onClick={exportarPNG}
         disabled={exporting}
-        className="w-full h-11 rounded-xl bg-[#F70906] text-white text-[13px] font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition disabled:opacity-60 shadow-[0_6px_20px_-8px_rgba(247,9,6,0.55)]"
+        className="w-full h-11 rounded-xl bg-primary text-white text-[13px] font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition disabled:opacity-60 shadow-[0_6px_20px_-8px_color-mix(in_oklab,var(--primary)_55%,transparent)]"
       >
         {exporting ? (
           <><Loader2 className="h-4 w-4 animate-spin" /> Gerando imagem…</>

@@ -50,7 +50,7 @@ function AlunoLayout() {
   if (!hydrated || !session) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="h-10 w-10 rounded-full border-2 border-[#F70906]/20 border-t-[#F70906] animate-spin" />
+        <div className="h-10 w-10 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
       </div>
     );
   }
@@ -84,7 +84,7 @@ function AlunoLayout() {
         <div className="flex items-center gap-10 max-w-5xl w-full">
           {/* Aviso lateral */}
           <div className="hidden lg:flex flex-col flex-1 max-w-sm">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#F70906]/10 text-[#F70906] px-3 py-1.5 text-xs font-semibold w-fit">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-semibold w-fit">
               <Smartphone className="h-3.5 w-3.5" />
               Experiência mobile
             </div>

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Macros } from "@/lib/dieta";
 
 const COLORS = {
-  ptn: "#E11D48",
+  ptn: "var(--primary)",
   cho: "#7C3AED",
   lip: "#F59E0B",
   empty: "#F1F5F9",

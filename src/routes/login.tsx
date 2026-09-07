@@ -89,13 +89,13 @@ function LoginPage() {
           Bem-vindo
         </h1>
         <p className="mt-3 text-[15px] text-black/55 text-center">
-          Seu <span className="text-[#F70906] font-semibold">shape</span> entrega o que sua rotina esconde.
+          Seu <span className="text-primary font-semibold">shape</span> entrega o que sua rotina esconde.
         </p>
 
         {/* Formulário */}
         <form onSubmit={onSubmit} className="w-full mt-10 space-y-4">
           <div className="relative">
-            <Mail className="h-5 w-5 text-[#F70906] absolute left-5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
+            <Mail className="h-5 w-5 text-primary absolute left-5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
             <input
               type="text"
               inputMode="email"
@@ -104,12 +104,12 @@ function LoginPage() {
               required
               autoComplete="username"
               placeholder="E-mail ou WhatsApp"
-              className="w-full h-[60px] rounded-2xl bg-white border-0 pl-14 pr-5 text-[16px] placeholder:text-black/40 text-black shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] focus:outline-none focus:ring-2 focus:ring-[#F70906]/30 transition"
+              className="w-full h-[60px] rounded-2xl bg-white border-0 pl-14 pr-5 text-[16px] placeholder:text-black/40 text-black shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
             />
           </div>
 
           <div className="relative">
-            <Lock className="h-5 w-5 text-[#F70906] absolute left-5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
+            <Lock className="h-5 w-5 text-primary absolute left-5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
             <input
               type={showPwd ? "text" : "password"}
               value={password}
@@ -118,7 +118,7 @@ function LoginPage() {
               minLength={4}
               autoComplete="current-password"
               placeholder="Senha"
-              className="w-full h-[60px] rounded-2xl bg-white border-0 pl-14 pr-14 text-[16px] placeholder:text-black/40 text-black shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] focus:outline-none focus:ring-2 focus:ring-[#F70906]/30 transition"
+              className="w-full h-[60px] rounded-2xl bg-white border-0 pl-14 pr-14 text-[16px] placeholder:text-black/40 text-black shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
             />
             <button
               type="button"
@@ -133,14 +133,14 @@ function LoginPage() {
           <div className="flex justify-end pt-1">
             <Link
               to="/aluno/esqueci-senha"
-              className="text-[14px] font-semibold text-[#F70906] hover:underline"
+              className="text-[14px] font-semibold text-primary hover:underline"
             >
               Esqueci minha senha
             </Link>
           </div>
 
           {err && (
-            <div className="text-[13px] text-[#F70906] bg-[#F70906]/5 border border-[#F70906]/20 rounded-xl px-4 py-3">
+            <div className="text-[13px] text-primary bg-primary/5 border border-primary/20 rounded-xl px-4 py-3">
               {err}
             </div>
           )}
@@ -148,7 +148,7 @@ function LoginPage() {
           <button
             type="submit"
             disabled={busy || !ready}
-            className="w-full h-[60px] mt-2 rounded-2xl bg-[#F70906] text-white text-[17px] font-bold shadow-[0_18px_40px_-12px_rgba(247,9,6,0.55)] hover:bg-[#F70906]/95 active:scale-[0.99] disabled:opacity-50 transition-all"
+            className="w-full h-[60px] mt-2 rounded-2xl bg-primary text-white text-[17px] font-bold shadow-[0_18px_40px_-12px_color-mix(in_oklab,var(--primary)_55%,transparent)] hover:bg-primary/95 active:scale-[0.99] disabled:opacity-50 transition-all"
           >
             {busy ? "Entrando..." : !ready ? "Carregando..." : "Entrar"}
           </button>

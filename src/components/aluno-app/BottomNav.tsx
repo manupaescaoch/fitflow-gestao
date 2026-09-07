@@ -34,19 +34,19 @@ export function BottomNav() {
               {active && (
                 <motion.div
                   layoutId="bottomNavBubble"
-                  className="absolute inset-x-1.5 inset-y-1 bg-[#F70906]/10 rounded-2xl"
+                  className="absolute inset-x-1.5 inset-y-1 bg-primary/10 rounded-2xl"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
               <Icon
                 className={`relative h-[22px] w-[22px] transition-colors ${
-                  active ? "text-[#F70906]" : "text-black/55"
+                  active ? "text-primary" : "text-black/55"
                 }`}
                 strokeWidth={active ? 2.6 : 2}
               />
               <span
                 className={`relative text-[10px] font-semibold tracking-tight transition-colors ${
-                  active ? "text-[#F70906]" : "text-black/55"
+                  active ? "text-primary" : "text-black/55"
                 }`}
               >
                 {it.label}
