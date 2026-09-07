@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getZapiStatus, testZapiConnection, listZapiGroups, connectZapi, disconnectZapi, type ZapiGroup } from "@/server/zapi.functions";
+import { getDapiStatus, testDapiConnection, connectDapi, disconnectDapi } from "@/server/dapi.functions";
 import { getOpenAIStatus, testOpenAIConnection } from "@/server/openai.functions";
 import { getCredenciais, saveCredencial } from "@/server/credenciais.functions";
 import { getFormUrls, saveFormUrls } from "@/server/forms.functions";
@@ -15,14 +15,13 @@ import {
 import { toast } from "sonner";
 import {
   Plug, PlugZap, Power, ShieldAlert, CheckCircle2, XCircle, Loader2, RefreshCw,
-  Save, X, Sparkles, Link2, Copy, MessageCircle, Bell, Send, Eye, Users,
+  Save, X, Sparkles, Link2, Copy,
 } from "lucide-react";
-import { RoteamentoGrupoCard } from "./RoteamentoGrupoCard";
 import { getBloqueioEnviosAlunos, setBloqueioEnviosAlunos } from "@/server/roteamento-grupos.functions";
-import { ShieldOff } from "lucide-react";
 
-type StatusData = Awaited<ReturnType<typeof getZapiStatus>>;
-type TestResult = Awaited<ReturnType<typeof testZapiConnection>>;
+type StatusData = Awaited<ReturnType<typeof getDapiStatus>>;
+type TestResult = Awaited<ReturnType<typeof testDapiConnection>>;
+
 
 export function ConexoesSection() {
   const fetchStatus = useServerFn(getZapiStatus);
