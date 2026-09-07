@@ -52,7 +52,7 @@ function formatFieldValue(fk: string, v: any): React.ReactNode {
   if (isEstrelas && typeof v === "number" && v >= 1 && v <= 5) {
     return (
       <span className="text-sm">
-        <span style={{ color: "#f50000" }}>{"★".repeat(v)}</span>
+        <span style={{ color: "var(--primary)" }}>{"★".repeat(v)}</span>
         <span className="text-muted-foreground">{"★".repeat(5 - v)}</span>
         <span className="ml-1.5 text-xs text-muted-foreground">({v}/5)</span>
       </span>

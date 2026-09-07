@@ -28,7 +28,7 @@ function storageKey(tipo: Tipo) {
   return `publico_form:${tipo}`;
 }
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 const INK = "#0a0a0a";
 const BORDER = "#e5e5e5";
 const MUTED = "#737373";

@@ -179,8 +179,8 @@ function MacroCard({
 }) {
   return (
     <div className="rounded-2xl bg-white ring-1 ring-black/5 shadow-[0_2px_10px_-6px_rgba(0,0,0,0.08)] p-3 flex flex-col items-start">
-      <div className="h-7 w-7 rounded-lg bg-[#F70906]/8 flex items-center justify-center">
-        <Icon className="h-3.5 w-3.5 text-[#F70906]" strokeWidth={2.4} />
+      <div className="h-7 w-7 rounded-lg bg-primary/8 flex items-center justify-center">
+        <Icon className="h-3.5 w-3.5 text-primary" strokeWidth={2.4} />
       </div>
       <div className="mt-2 text-[20px] leading-none font-extrabold tracking-tight text-black tabular-nums">
         {value}
@@ -237,8 +237,8 @@ function RefeicaoCard({
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center gap-3 p-3.5 text-left active:bg-black/[0.015] transition-colors"
       >
-        <div className="h-10 w-10 rounded-xl bg-[#F70906]/8 flex items-center justify-center shrink-0">
-          <Icon className="h-[18px] w-[18px] text-[#F70906]" strokeWidth={2.2} />
+        <div className="h-10 w-10 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
+          <Icon className="h-[18px] w-[18px] text-primary" strokeWidth={2.2} />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[14px] font-bold text-black leading-tight">{r.nome}</h3>
@@ -295,7 +295,7 @@ function RefeicaoCard({
               ) : (
                 <div className="rounded-xl bg-[#FAFAFA] ring-1 ring-black/[0.04] p-3">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="h-4 w-4 rounded-full bg-[#F70906] text-white text-[9px] font-extrabold flex items-center justify-center">
+                    <span className="h-4 w-4 rounded-full bg-primary text-white text-[9px] font-extrabold flex items-center justify-center">
                       1
                     </span>
                     <span className="text-[11px] font-extrabold tracking-[0.14em] text-black/70 uppercase">
@@ -337,8 +337,8 @@ function RefeicaoCard({
                 if (!cleaned) return null;
                 return (
                   <div className="rounded-xl bg-[#FAFAFA] ring-1 ring-black/[0.04] p-3 flex items-start gap-2.5">
-                    <div className="h-6 w-6 rounded-lg bg-[#F70906]/10 flex items-center justify-center shrink-0">
-                      <Droplets className="h-3.5 w-3.5 text-[#F70906]" strokeWidth={2.4} />
+                    <div className="h-6 w-6 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Droplets className="h-3.5 w-3.5 text-primary" strokeWidth={2.4} />
                     </div>
                     <div
                       className="text-[12px] text-black/65 leading-snug pt-0.5 [&_strong]:font-extrabold"
@@ -365,8 +365,8 @@ function RefeicaoCard({
                       setSaving(false);
                     }
                   }}
-                  className={`w-full h-11 rounded-xl text-[13px] font-bold flex items-center justify-center gap-1.5 shadow-[0_6px_20px_-8px_rgba(247,9,6,0.55)] active:scale-[0.98] transition ${
-                    done ? "bg-black text-white" : "bg-[#F70906] text-white"
+                  className={`w-full h-11 rounded-xl text-[13px] font-bold flex items-center justify-center gap-1.5 shadow-[0_6px_20px_-8px_color-mix(in_oklab,var(--primary)_55%,transparent)] active:scale-[0.98] transition ${
+                    done ? "bg-black text-white" : "bg-primary text-white"
                   }`}
                 >
                   {done ? (
@@ -405,8 +405,8 @@ function SkeletonRow() {
 function EmptyDieta() {
   return (
     <div className="rounded-3xl bg-white ring-1 ring-black/5 p-8 text-center shadow-[0_4px_18px_-12px_rgba(0,0,0,0.08)]">
-      <div className="mx-auto h-14 w-14 rounded-2xl bg-[#F70906]/8 flex items-center justify-center mb-4">
-        <Utensils className="h-6 w-6 text-[#F70906]" strokeWidth={2} />
+      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/8 flex items-center justify-center mb-4">
+        <Utensils className="h-6 w-6 text-primary" strokeWidth={2} />
       </div>
       <h3 className="text-[16px] font-extrabold text-black tracking-tight">
         Nenhuma dieta ativa
@@ -513,7 +513,7 @@ function AlunoDieta() {
                 {plano.meta_kcal && (
                   <span className="text-[11px] font-semibold text-black/40 inline-flex items-center gap-0.5">
                     Meta {fmtNum(plano.meta_kcal).toLocaleString("pt-BR")} kcal
-                    <ChevronRight className="h-3 w-3 text-[#F70906]" strokeWidth={2.6} />
+                    <ChevronRight className="h-3 w-3 text-primary" strokeWidth={2.6} />
                   </span>
                 )}
               </div>

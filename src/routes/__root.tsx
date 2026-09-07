@@ -35,7 +35,7 @@ export const Route = createRootRoute({
       { title: "MPTEAM APP" },
       { name: "description", content: "MPTEAM — plataforma de consultoria fitness e nutricional. Acompanhamento de alunos, dietas, treinos, evolução e ranking em um só lugar." },
       { name: "author", content: "Lovable" },
-      { name: "theme-color", content: "#F70906" },
+      { name: "theme-color", content: "#2563EB" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "MPTEAM" },

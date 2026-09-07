@@ -10,7 +10,7 @@ import {
 } from "@/server/checkin-diario.functions";
 
 const STORAGE_KEY = "mpteam:checkin-diario";
-const RED = "#F70906";
+const RED = "var(--primary)";
 
 const sonoLabels = ["Péssimo", "Ruim", "Ok", "Bom", "Excelente"];
 const energiaLabels = ["Muito baixa", "Baixa", "Normal", "Alta", "Muito alta"];
@@ -160,10 +160,10 @@ export function CheckinDiarioModal() {
                     step={1}
                     value={horas}
                     onChange={(e) => setHoras(Number(e.target.value))}
-                    className="mt-2 w-full appearance-none h-1.5 rounded-full bg-black/8 accent-[#F70906]
+                    className="mt-2 w-full appearance-none h-1.5 rounded-full bg-black/8 accent-primary
                       [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4
                       [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white
-                      [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#F70906]
+                      [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary
                       [&::-webkit-slider-thumb]:shadow"
                     style={{
                       background: `linear-gradient(to right, ${RED} 0%, ${RED} ${((horas - 3) / 6) * 100}%, rgba(0,0,0,0.08) ${((horas - 3) / 6) * 100}%, rgba(0,0,0,0.08) 100%)`,
@@ -209,7 +209,7 @@ export function CheckinDiarioModal() {
                           onClick={() => setHumor(i)}
                           className={`h-10 w-10 rounded-full flex items-center justify-center text-[19px] transition-all active:scale-95 ${
                             active
-                              ? "bg-white ring-2 ring-[#F70906] shadow-[0_0_0_4px_rgba(247,9,6,0.08)]"
+                              ? "bg-white ring-2 ring-primary shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_8%,transparent)]"
                               : "bg-black/[0.04]"
                           }`}
                           aria-pressed={active}
@@ -222,7 +222,7 @@ export function CheckinDiarioModal() {
                 </section>
 
                 {erro && (
-                  <p className="text-[11px] text-[#F70906] font-semibold text-center">
+                  <p className="text-[11px] text-primary font-semibold text-center">
                     {erro}
                   </p>
                 )}
@@ -240,7 +240,7 @@ export function CheckinDiarioModal() {
                 <button
                   onClick={handleSalvar}
                   disabled={saving}
-                  className="flex-1 h-11 rounded-2xl bg-[#F70906] text-white text-[13px] font-bold shadow-[0_8px_22px_-8px_rgba(247,9,6,0.6)] active:scale-[0.98] transition disabled:opacity-60"
+                  className="flex-1 h-11 rounded-2xl bg-primary text-white text-[13px] font-bold shadow-[0_8px_22px_-8px_color-mix(in_oklab,var(--primary)_60%,transparent)] active:scale-[0.98] transition disabled:opacity-60"
                 >
                   {saving ? "Salvando..." : "Salvar"}
                 </button>
@@ -312,7 +312,7 @@ function ScalePicker({
               <span
                 className={`h-9 w-9 rounded-full flex items-center justify-center text-[12.5px] font-extrabold transition-all ${
                   active
-                    ? "bg-[#F70906] text-white shadow-[0_8px_18px_-6px_rgba(247,9,6,0.55)]"
+                    ? "bg-primary text-white shadow-[0_8px_18px_-6px_color-mix(in_oklab,var(--primary)_55%,transparent)]"
                     : "bg-black/[0.04] text-black/70"
                 }`}
               >
@@ -320,7 +320,7 @@ function ScalePicker({
               </span>
               <span
                 className={`text-[9.5px] font-semibold ${
-                  active ? "text-[#F70906]" : "text-black/45"
+                  active ? "text-primary" : "text-black/45"
                 }`}
               >
                 {label}

@@ -11,7 +11,7 @@ const SIZE_PX: Record<Size, string> = {
   title: "22px",
 };
 
-const COLORS = ["#000000", "#F70906", "#16a34a", "#0EA5E9", "#7B5BFF", "#F59E0B", "#EC4899", "#64748b"];
+const COLORS = ["#000000", "var(--primary)", "#16a34a", "#0EA5E9", "#7B5BFF", "#F59E0B", "#EC4899", "#64748b"];
 const HIGHLIGHTS = ["#FEF08A", "#BBF7D0", "#BFDBFE", "#FBCFE8", "#FED7AA", "#E9D5FF", "transparent"];
 
 export function RichTextEditor({

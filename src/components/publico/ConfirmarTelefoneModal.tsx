@@ -1,7 +1,7 @@
 import { Loader2, Phone } from "lucide-react";
 import { splitPhone } from "./PhoneDdiInput";
 
-const RED = "#F70906";
+const RED = "var(--primary)";
 const INK = "#0a0a0a";
 const BORDER = "#e5e5e5";
 const SURFACE = "#ffffff";

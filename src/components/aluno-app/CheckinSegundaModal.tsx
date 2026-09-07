@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Sparkles, ArrowRight } from "lucide-react";
 
 const STORAGE_KEY = "mpteam:checkin-segunda";
-const RED = "#F70906";
+const RED = "var(--primary)";
 
 const alimentacaoOpts = ["Excelente", "Boa", "Saí um pouco", "Chutei o balde"];
 const exageroOpts = ["Não", "Um pouco", "Sim"];
@@ -110,7 +110,7 @@ export function CheckinSegundaModal() {
               {/* Header */}
               <div className="px-5 pt-5 pb-3 flex items-start justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#F70906]/10 text-[#F70906] px-2.5 py-1 text-[10px] font-extrabold tracking-[0.16em] uppercase">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-2.5 py-1 text-[10px] font-extrabold tracking-[0.16em] uppercase">
                     Check-in semanal
                   </div>
                   <h2 className="mt-2 text-[24px] leading-tight font-extrabold tracking-tight text-black">
@@ -193,7 +193,7 @@ export function CheckinSegundaModal() {
                         className="mt-3 w-full appearance-none h-1.5 rounded-full bg-black/8
                           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5
                           [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white
-                          [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#F70906]
+                          [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary
                           [&::-webkit-slider-thumb]:shadow"
                         style={{
                           background: `linear-gradient(to right, ${RED} 0%, ${RED} ${((energia - 1) / 4) * 100}%, rgba(0,0,0,0.08) ${((energia - 1) / 4) * 100}%, rgba(0,0,0,0.08) 100%)`,
@@ -214,7 +214,7 @@ export function CheckinSegundaModal() {
                         value={foco}
                         onChange={(e) => setFoco(e.target.value)}
                         placeholder="O que você quer fazer melhor essa semana?"
-                        className="w-full h-11 px-3.5 rounded-xl bg-black/[0.03] ring-1 ring-black/5 text-[13px] text-black placeholder:text-black/35 font-medium focus:outline-none focus:ring-2 focus:ring-[#F70906]/40 transition"
+                        className="w-full h-11 px-3.5 rounded-xl bg-black/[0.03] ring-1 ring-black/5 text-[13px] text-black placeholder:text-black/35 font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
                       />
                     </section>
                   </motion.div>
@@ -228,8 +228,8 @@ export function CheckinSegundaModal() {
                     className="px-5 pb-5"
                   >
                     <div className="rounded-3xl bg-[#FAFAFA] ring-1 ring-black/[0.05] p-5">
-                      <div className="h-10 w-10 rounded-2xl bg-[#F70906]/10 flex items-center justify-center mb-3">
-                        <Sparkles className="h-5 w-5 text-[#F70906]" strokeWidth={2.4} />
+                      <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+                        <Sparkles className="h-5 w-5 text-primary" strokeWidth={2.4} />
                       </div>
                       <h3 className="text-[18px] font-extrabold text-black tracking-tight leading-tight">
                         {resposta?.titulo}
@@ -265,7 +265,7 @@ export function CheckinSegundaModal() {
                     <button
                       onClick={salvar}
                       disabled={!podeSalvar}
-                      className="flex-1 h-12 rounded-2xl bg-[#F70906] text-white text-[14px] font-bold shadow-[0_8px_22px_-8px_rgba(247,9,6,0.6)] active:scale-[0.98] transition disabled:opacity-40 disabled:shadow-none"
+                      className="flex-1 h-12 rounded-2xl bg-primary text-white text-[14px] font-bold shadow-[0_8px_22px_-8px_color-mix(in_oklab,var(--primary)_60%,transparent)] active:scale-[0.98] transition disabled:opacity-40 disabled:shadow-none"
                     >
                       Salvar
                     </button>
@@ -273,7 +273,7 @@ export function CheckinSegundaModal() {
                 ) : (
                   <button
                     onClick={() => close(true)}
-                    className="flex-1 h-12 rounded-2xl bg-[#F70906] text-white text-[14px] font-bold shadow-[0_8px_22px_-8px_rgba(247,9,6,0.6)] active:scale-[0.98] transition inline-flex items-center justify-center gap-2"
+                    className="flex-1 h-12 rounded-2xl bg-primary text-white text-[14px] font-bold shadow-[0_8px_22px_-8px_color-mix(in_oklab,var(--primary)_60%,transparent)] active:scale-[0.98] transition inline-flex items-center justify-center gap-2"
                   >
                     Começar a semana
                     <ArrowRight className="h-4 w-4" strokeWidth={2.8} />
@@ -341,7 +341,7 @@ function PillGroup({
               onClick={() => onChange(i)}
               className={`px-3.5 h-9 rounded-full text-[12.5px] font-bold transition active:scale-[0.97] ${
                 active
-                  ? "bg-[#F70906] text-white shadow-[0_6px_16px_-6px_rgba(247,9,6,0.55)]"
+                  ? "bg-primary text-white shadow-[0_6px_16px_-6px_color-mix(in_oklab,var(--primary)_55%,transparent)]"
                   : "bg-black/[0.04] text-black/70 ring-1 ring-black/[0.04]"
               }`}
               aria-pressed={active}

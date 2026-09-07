@@ -26,7 +26,7 @@ export function ProfileAvatar() {
           </span>
         )}
       </div>
-      <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#F70906] ring-2 ring-[#FAFAFA] flex items-center justify-center">
+      <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-primary ring-2 ring-[#FAFAFA] flex items-center justify-center">
         <Bell className="h-2 w-2 text-white" strokeWidth={3} />
       </span>
     </Link>

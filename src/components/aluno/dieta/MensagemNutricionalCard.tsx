@@ -142,7 +142,7 @@ export function MensagemNutricionalCard({ alunoId, nomeAluno, whatsapp }: { alun
                 <MessageCircle className="h-3 w-3" /> WhatsApp
               </button>
             </div>
-            <p className="text-[11px] uppercase tracking-wider font-semibold mb-2" style={{ color: "#f50000" }}>
+            <p className="text-[11px] uppercase tracking-wider font-semibold mb-2" style={{ color: "var(--primary)" }}>
               Mensagem gerada
             </p>
             <p className="text-white whitespace-pre-wrap pr-32" style={{ fontSize: 14, lineHeight: 1.7 }}>

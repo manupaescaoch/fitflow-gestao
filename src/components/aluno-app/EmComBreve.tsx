@@ -17,7 +17,7 @@ export function EmBreve({
         animate={{ opacity: 1, y: 0 }}
         className="rounded-3xl bg-white border border-black/5 p-8 text-center shadow-[0_4px_24px_-12px_rgba(0,0,0,0.08)]"
       >
-        <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-[#F70906] to-[#c40503] text-white flex items-center justify-center shadow-[0_14px_30px_-12px_rgba(247,9,6,0.6)]">
+        <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-primary text-white flex items-center justify-center shadow-[0_14px_30px_-12px_color-mix(in_oklab,var(--primary)_60%,transparent)]">
           <Icon className="h-7 w-7" />
         </div>
         <h1 className="mt-5 text-xl font-extrabold tracking-tight">{titulo}</h1>
