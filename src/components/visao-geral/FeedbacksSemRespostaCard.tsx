@@ -690,8 +690,9 @@ export function FeedbacksSemRespostaCard() {
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => reenviar(it)}
-                      disabled={busyId === it.formulario_id || !it.whatsapp}
-                      title={lembreteEnviado ? "Reenviar lembrete" : "Enviar lembrete"}
+                      disabled={busyId === it.formulario_id || !it.whatsapp || !automatico}
+                      title={!automatico ? "Disponível apenas com o WhatsApp conectado — use o botão WhatsApp" : lembreteEnviado ? "Reenviar lembrete" : "Enviar lembrete"}
+
                       className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-2.5 py-1.5 text-xs font-medium hover:opacity-90 disabled:opacity-50"
                     >
                       {busyId === it.formulario_id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
