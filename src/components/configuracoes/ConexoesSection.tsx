@@ -101,9 +101,6 @@ export function ConexoesSection() {
   const [fbPreviewing, setFbPreviewing] = useState(false);
   const [fbSending24h, setFbSending24h] = useState(false);
   const [fbPreview, setFbPreview] = useState<{ total: number; mensagem: string | null } | null>(null);
-  const [groups, setGroups] = useState<ZapiGroup[] | null>(null);
-  const [groupsLoading, setGroupsLoading] = useState(false);
-  const [groupsError, setGroupsError] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
@@ -121,7 +118,7 @@ export function ConexoesSection() {
   };
 
   const handleDisconnect = async () => {
-    if (!confirm("Desconectar o WhatsApp da Z-API? Os envios automáticos param até reconectar.")) return;
+    if (!confirm("Desconectar o WhatsApp da D-API? Os envios automáticos param até reconectar.")) return;
     setDisconnecting(true);
     try {
       const r = await runDisconnect();
@@ -132,23 +129,6 @@ export function ConexoesSection() {
     } finally { setDisconnecting(false); }
   };
 
-  const handleLoadGroups = async () => {
-    setGroupsLoading(true);
-    setGroupsError(null);
-    try {
-      const r = await fetchGroups();
-      if (r.ok) {
-        setGroups(r.groups);
-        if (r.groups.length === 0) setGroupsError("Nenhum grupo encontrado nesta conta.");
-      } else {
-        setGroupsError(r.error);
-      }
-    } catch (e) {
-      setGroupsError(e instanceof Error ? e.message : "Falha ao buscar grupos");
-    } finally {
-      setGroupsLoading(false);
-    }
-  };
 
   const load = async () => {
     setLoading(true);
