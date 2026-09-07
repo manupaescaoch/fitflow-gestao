@@ -45,7 +45,14 @@ export function ConexoesSection() {
   const [credDraft, setCredDraft] = useState<Record<string, string>>({});
   const [credSaving, setCredSaving] = useState<string | null>(null);
   const loadCreds = async () => {
-    try { setCreds((await fetchCreds()) as any); } catch { /* ignore */ }
+    try {
+      const r = (await fetchCreds()) as any;
+      setCreds(r);
+      setCredDraft((d) => ({
+        ...d,
+        DAPI_BASE_URL: d.DAPI_BASE_URL || r?.DAPI_BASE_URL?.preview || "https://api.d-api.cloud",
+      }));
+    } catch { /* ignore */ }
   };
   useEffect(() => { void loadCreds(); }, []);
   const salvarCred = async (chave: CredKey) => {
