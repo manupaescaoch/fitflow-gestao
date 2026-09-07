@@ -23,7 +23,7 @@ export const getCredenciais = createServerFn({ method: "GET" })
       const valor = (await lerCredencial(chave)) ?? "";
       out[chave] = {
         configured: !!valor,
-        preview: valor ? mask(valor) : null,
+        preview: valor ? (chave === "DAPI_BASE_URL" ? valor : mask(valor)) : null,
         editavel: !!salvos.get(chave) || true,
       };
     }
