@@ -7,12 +7,18 @@ não exige o editor nem a hospedagem do Lovable.
 
 ## Estado da portabilidade
 
-O repositório **não contém o esquema completo do banco atual**. As migrações
-versionadas começam depois da criação de tabelas fundamentais (`alunos`,
-`usuarios_crm`, `formularios`, etc.). As funções RPC, políticas de acesso,
-triggers, buckets e configuração inicial também precisam ser exportados da
-instância original. Portanto, ainda não é possível instalar o aplicativo do
-zero com todas as funcionalidades, mesmo que o build passe.
+As migrações `20260101*` reconstroem uma primeira versão das tabelas, funções,
+políticas e buckets a partir do código. **Ainda não foram executadas em uma
+instância Supabase vazia.** Não representam o esquema original e faltam RPCs,
+rotinas e regras de acesso para garantir todas as funcionalidades. Veja
+[`BANCO_RECONSTRUCAO.md`](BANCO_RECONSTRUCAO.md).
+
+Para uma instância nova, aplique as migrações **na ordem do nome** e crie o
+primeiro usuário no Supabase Auth. Depois, vincule o UUID desse usuário ao CRM
+com `INSERT INTO public.usuarios_crm (id, nome, email, perfil, ativo)
+VALUES ('UUID_DO_AUTH', 'Administrador', 'email@exemplo.com', 'admin', true);`.
+Use apenas dados fictícios para a validação inicial. Não rode as migrações
+inferidas no banco que já está em produção.
 
 ## Rodar e compilar o código
 

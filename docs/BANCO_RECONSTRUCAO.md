@@ -1,17 +1,19 @@
 # Banco necessário para uma instalação independente
 
 Inventário estático em 27/09/2026. Fonte: `src/integrations/supabase/types.ts`,
-`supabase/migrations` e chamadas RPC do aplicativo. Este arquivo **não é um
-dump SQL** e não contém dados dos alunos.
+migrações originais e chamadas RPC do aplicativo. Este arquivo **não é um dump
+SQL** e não contém dados dos alunos. As migrações `20260101*` são uma
+**reimplementação inferida, ainda sem teste em um PostgreSQL real**.
 
 ## Cobertura atual
 
 | Objeto | Descrito nas tipagens | Criado pelas migrações do repositório |
 | --- | ---: | ---: |
-| Tabelas públicas | 65 | 11 |
-| Funções RPC tipadas | 19 | 0 com o mesmo nome |
+| Tabelas públicas | 65 | 11 originais + 54 inferidas |
+| Funções RPC tipadas | 19 | Parcialmente reimplementadas |
 
-As 54 tabelas ainda sem `CREATE TABLE` versionado são:
+As 54 tabelas sem `CREATE TABLE` nas migrações originais, agora cobertas pelo
+gerador experimental `scripts/gerar-esquema-inicial.mjs`, são:
 
 `agente_config`, `agente_logs`, `agente_respostas`, `alimento_favoritos`,
 `alimentos`, `aluno_agua_log`, `aluno_atividades_dia`,
@@ -30,11 +32,17 @@ As 54 tabelas ainda sem `CREATE TABLE` versionado são:
 `skinfold_measurements`, `source_reference`, `system_logs`,
 `transacoes`, `usuarios_crm`, `workflow_config` e `zapi_webhook_eventos`.
 
-As funções RPC tipadas sem definição nas migrações atuais incluem
+As funções RPC tipadas sem definição nas migrações originais incluem
 `buscar_aluno_por_telefone`, `get_aluno_dashboard`, `is_admin`,
 `is_crm_user`, `is_equipe_or_admin`, `agendar_jobs_apos_entrega`,
 `agendar_ciclos_alunos_ativos`, `recalcular_score_dia` e as funções
 administrativas de cron. Consulte o arquivo de tipagens para a lista completa.
+
+As migrações novas cobrem as funções básicas de identidade, busca por telefone,
+painel do aluno, calendário e agendamento após D0. **As quatro funções
+administrativas de cron (`admin_*_cron_job*`) ainda precisam de um adaptador
+para o agendador escolhido.** Elas não podem ser reconstruídas só pelas
+assinaturas: a instalação antiga pode ter usado `pg_cron` ou outro serviço.
 
 ## O que a tipagem não permite recuperar com fidelidade
 

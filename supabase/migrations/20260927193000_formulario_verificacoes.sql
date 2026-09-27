@@ -16,3 +16,5 @@ CREATE INDEX formulario_verificacoes_limite_idx
   ON public.formulario_verificacoes (aluno_id, criado_em DESC);
 
 ALTER TABLE public.formulario_verificacoes ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.formulario_verificacoes FROM anon, authenticated;
+GRANT ALL ON public.formulario_verificacoes TO service_role;

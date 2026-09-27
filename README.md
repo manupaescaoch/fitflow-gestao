@@ -1,9 +1,9 @@
 # CRM CONSULTORIA
 
 > **Estado da distribuição (setembro de 2026): ainda não é uma instalação independente.**
-> As migrações versionadas não contêm o esquema completo do banco de produção.
-> Aplicá-las a um Supabase vazio não cria tabelas essenciais como `alunos` e
-> `usuarios_crm`. Não aponte uma cópia para o projeto Supabase original.
+> As migrações `20260101*` reconstroem um banco novo por inferência do código,
+> mas ainda não foram executadas em um Supabase vazio nem reproduzem todas as
+> regras do banco de produção. Não aponte uma cópia para o projeto original.
 
 ## Para desenvolver
 
@@ -13,8 +13,8 @@ para rodar sem o editor e sem o gateway de IA do Lovable.
 1. Use Node.js 24, rode `npm ci` e depois `npm run dev`.
 2. Crie seu próprio projeto Supabase. Consulte `.env.example` para as variáveis;
    configure as chaves privadas apenas no ambiente do servidor.
-3. O esquema SQL completo, políticas RLS, funções RPC, buckets e usuário admin
-   inicial ainda precisam ser exportados e versionados antes de um deploy limpo.
+3. Revise `docs/BANCO_RECONSTRUCAO.md`: a base SQL inferida ainda precisa ser
+   aplicada e testada em uma instância vazia antes do deploy.
 4. Para checagens locais: `npx tsc --noEmit`, `npx vitest run`, `npm run build`.
 
 O feedback público por telefone usa código enviado pela Z-API. Antes de ativá-lo,
