@@ -7,6 +7,9 @@
 
 ## Para desenvolver
 
+Veja o [guia de instalação independente](docs/INSTALACAO_INDEPENDENTE.md)
+para rodar sem o editor e sem o gateway de IA do Lovable.
+
 1. Use Node.js 24, rode `npm ci` e depois `npm run dev`.
 2. Crie seu próprio projeto Supabase. Consulte `.env.example` para as variáveis;
    configure as chaves privadas apenas no ambiente do servidor.

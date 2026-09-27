@@ -1,3 +1,4 @@
+import { getAiConfig } from "./ai-provider.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { primeiroNome } from "@/lib/nome";
 import { MSG_CHECKIN_QUINZENAL_PADRAO } from "./mensagens-fixas";
@@ -71,8 +72,8 @@ async function sendZapi(phone: string, message: string): Promise<{ ok: boolean; 
 }
 
 async function gerarTextoIA(promptTipo: string, nomeAluno: string): Promise<{ mensagem: string | null; error: string | null }> {
-  const apiKey = process.env.LOVABLE_API_KEY;
-  if (!apiKey) return { mensagem: null, error: "LOVABLE_API_KEY ausente" };
+  const ai = getAiConfig();
+  if (!ai) return { mensagem: null, error: "Configure AI_API_KEY e AI_MODEL" };
   const { data: promptRow } = await supabaseAdmin
     .from("prompts_ia")
     .select("prompt_sistema")
@@ -85,11 +86,11 @@ async function gerarTextoIA(promptTipo: string, nomeAluno: string): Promise<{ me
   const sys = rawPrompt.replace(/\{\{\s*(\w+)\s*\}\}/g, (_m, k) => vars[k] ?? `{{${k}}}`)
     + "\n\nIMPORTANTE: Escreva a mensagem final pronta para envio. NÃO use placeholders entre chaves ou colchetes. Se faltar dado, reescreva a frase de forma genérica.";
   try {
-    const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const r = await fetch(ai.url, {
       method: "POST",
-      headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk", "Content-Type": "application/json" },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: ai.model,
         messages: [
           { role: "system", content: sys },
           { role: "user", content: `Gere a mensagem de WhatsApp para ${nomeCurto}.` },
@@ -115,8 +116,8 @@ export async function gerarRespostaFeedbackIA(
   tipoForm: "feedback_quinzenal" | "feedback_mensal",
   formularioId?: string | null,
 ): Promise<{ mensagem: string | null; error: string | null }> {
-  const apiKey = process.env.LOVABLE_API_KEY;
-  if (!apiKey) return { mensagem: null, error: "LOVABLE_API_KEY ausente" };
+  const ai = getAiConfig();
+  if (!ai) return { mensagem: null, error: "Configure AI_API_KEY e AI_MODEL" };
   let form: { id: string; dados_resposta: any } | null = null;
   if (formularioId) {
     const { data } = await supabaseAdmin
@@ -154,11 +155,11 @@ export async function gerarRespostaFeedbackIA(
   const sys = raw.replace(/\{\{\s*(\w+)\s*\}\}/g, (_m, k) => vars[k] ?? `{{${k}}}`)
     + "\n\nIMPORTANTE: Mensagem final pronta para WhatsApp. Não use placeholders.";
   try {
-    const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const r = await fetch(ai.url, {
       method: "POST",
-      headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk", "Content-Type": "application/json" },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: ai.model,
         messages: [
           { role: "system", content: sys },
           { role: "user", content: `Nome do aluno: ${nomeCurto}\n\nRespostas:\n${respostas}` },

@@ -1,3 +1,4 @@
+import { getAiConfig } from "./ai-provider.server";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAlunoAuth } from "./aluno-middleware";
@@ -76,9 +77,9 @@ export const gerarTrocasIA = createServerFn({ method: "POST" })
       return { error: "Envie um alimento, refeição ou foto do prato.", data: null, resposta: "" };
     }
 
-    const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-    if (!LOVABLE_API_KEY) {
-      console.error("trocas-ia: LOVABLE_API_KEY não configurada");
+    const ai = getAiConfig();
+    if (!ai) {
+      console.error("trocas-ia: AI_API_KEY não configurada");
       return { error: "IA indisponível no momento.", data: null, resposta: "" };
     }
 
@@ -96,14 +97,11 @@ export const gerarTrocasIA = createServerFn({ method: "POST" })
       partes.push({ type: "text", text: `Pedido: ${pedido}${filtroTxt}` });
     }
 
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetch(ai.url, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: ai.model,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: partes },

@@ -470,7 +470,8 @@ export async function gerarPdfPrescricao(
   y2 += 14;
 
   // QR Code
-  const url = `https://mpteam-crm.lovable.app/alunos/${aluno.id}`;
+  const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
+  const url = `${baseUrl.replace(/\/$/, "")}/alunos/${aluno.id}`;
   try {
     const dataUrl = await QRCode.toDataURL(url, { margin: 1, width: 400 });
     const qrSize = 55;

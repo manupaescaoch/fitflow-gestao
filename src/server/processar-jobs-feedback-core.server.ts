@@ -1,3 +1,4 @@
+import { getAiConfig } from "./ai-provider.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { enviarWhatsAppTeste } from "./zapi-send.server";
 import { MSG_PRAZO_3_DIAS_UTEIS } from "./mensagens-fixas";
@@ -35,8 +36,8 @@ export async function gerarMensagemIA(
   promptTipo: "feedback_quinzenal" | "feedback_mensal",
   alunoId: string,
 ): Promise<{ mensagem: string | null; error: string | null }> {
-  const apiKey = process.env.LOVABLE_API_KEY;
-  if (!apiKey) return { mensagem: null, error: "LOVABLE_API_KEY ausente" };
+  const ai = getAiConfig();
+  if (!ai) return { mensagem: null, error: "Configure AI_API_KEY e AI_MODEL" };
 
   const { data: form } = await supabaseAdmin
     .from("formularios")
@@ -65,11 +66,11 @@ export async function gerarMensagemIA(
   const userContent = `Nome do aluno: ${nomeCurto}\n\nRespostas:\n${respostasFmt}`;
 
   try {
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetch(ai.url, {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: ai.model,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userContent },

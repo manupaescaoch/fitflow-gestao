@@ -1,3 +1,4 @@
+import { getAiConfig } from "./ai-provider.server";
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { primeiroNome } from "@/lib/nome";
@@ -149,14 +150,14 @@ export const gerarCheckShapeMensal = createServerFn({ method: "POST" }).middlewa
     }
 
     try {
-      const apiKey = process.env.LOVABLE_API_KEY;
-      if (!apiKey) return { mensagem: null, error: "IA indisponível no momento." };
+      const ai = getAiConfig();
+      if (!ai) return { mensagem: null, error: "IA indisponível no momento." };
 
-      const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const resp = await fetch(ai.url, {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: ai.headers,
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
+          model: ai.model,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content },
