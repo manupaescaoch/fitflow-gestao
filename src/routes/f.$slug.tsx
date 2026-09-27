@@ -19,10 +19,10 @@ import {
 export const Route = createFileRoute("/f/$slug")({
   head: () => ({
     meta: [
-      { title: "Formulário — MPTEAM" },
-      { name: "description", content: "Responda o formulário da MPTEAM. Leva poucos minutos e suas respostas são confidenciais." },
-      { property: "og:title", content: "Formulário — MPTEAM" },
-      { property: "og:description", content: "Responda o formulário da MPTEAM em poucos minutos." },
+       { title: "Formulário — FITFLOW" },
+       { name: "description", content: "Responda o formulário da FITFLOW. Suas respostas são confidenciais." },
+       { property: "og:title", content: "Formulário — FITFLOW" },
+       { property: "og:description", content: "Responda o formulário da FITFLOW." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

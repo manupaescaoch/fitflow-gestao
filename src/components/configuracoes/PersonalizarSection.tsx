@@ -125,7 +125,7 @@ export function PersonalizarSection() {
               value={nome}
               maxLength={40}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="MPTEAM"
+               placeholder="FITFLOW"
               className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
           </div>
@@ -220,7 +220,7 @@ export function PersonalizarSection() {
               <img src={logo || LOGO_PADRAO} alt="Logo" className="h-8 w-8 rounded object-contain" />
               <div>
                 <div className="text-[15px] font-black leading-none tracking-tight text-foreground">
-                  {nome || "MPTEAM"}
+                   {nome || "FITFLOW"}
                 </div>
                 <div className="mt-1 text-[9px] font-medium tracking-[0.3em] text-muted-foreground">
                   {subtitulo || ""}

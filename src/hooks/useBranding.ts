@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import mpLogo from "@/assets/mp-logo.png";
+import fitflowLogo from "@/assets/fitflow-logo.png.asset.json";
 import { aplicarCorSistema, COR_PADRAO } from "@/lib/tema";
 
 export type Branding = { nome: string; subtitulo: string; logo_url: string | null; cor_primaria: string };
 
-export const BRANDING_PADRAO: Branding = { nome: "MPTEAM", subtitulo: "CRM", logo_url: null, cor_primaria: COR_PADRAO };
-export const LOGO_PADRAO = mpLogo;
+export const BRANDING_PADRAO: Branding = { nome: "FITFLOW", subtitulo: "CRM", logo_url: null, cor_primaria: COR_PADRAO };
+export const LOGO_PADRAO = fitflowLogo.url;
 
 const CHAVE_CACHE = "mpteam_branding";
 
@@ -17,7 +17,12 @@ function lerCacheLocal(): Branding | null {
     if (!bruto) return null;
     const b = JSON.parse(bruto) as Branding;
     if (!b || typeof b.nome !== "string") return null;
-    return { ...BRANDING_PADRAO, ...b };
+    return {
+      ...BRANDING_PADRAO,
+      ...b,
+      nome: b.nome === "MPTEAM" ? "FITFLOW" : b.nome,
+      logo_url: b.logo_url?.startsWith("data:image/") ? fitflowLogo.url : b.logo_url,
+    };
   } catch {
     return null;
   }
