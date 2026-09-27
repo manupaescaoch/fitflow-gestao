@@ -4,6 +4,7 @@ import { z } from "zod";
 import { enviarWhatsAppTeste } from "./zapi-send.server";
 import { MSG_ANAMNESE_RECEBIDA } from "./mensagens-fixas";
 import { normalizarTelefoneBR, telefoneValido } from "@/lib/telefone";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * Server fns para o fluxo de formulários públicos (anamnese, feedback
@@ -257,7 +258,30 @@ export const submeterFormularioPublico = createServerFn({ method: "POST" })
     if (form.respondido) return { ok: false as const, error: "Formulário já respondido" };
 
     const now = new Date().toISOString();
-    const alunoId = (data.alunoId ?? form.aluno_id) || null;
+    // O token autoriza somente o formulário ao qual foi emitido. O cliente
+    // não pode trocar o aluno associado e acionar jobs/status de outra pessoa.
+    if (form.aluno_id && data.alunoId && data.alunoId !== form.aluno_id) {
+      return { ok: false as const, error: "Aluno não corresponde ao formulário" };
+    }
+    let alunoId = form.aluno_id || null;
+    if (!alunoId && data.alunoId) {
+      // Formulários abertos vinculam pelo telefone preenchido, conferido no
+      // servidor. Nunca confie somente no UUID fornecido pelo navegador.
+      const dadosPessoais = data.dados.dados_pessoais as Record<string, unknown> | undefined;
+      const telefone = dadosPessoais?.telefone ?? data.dados.telefone;
+      const canonico = normalizarTelefoneBR(String(telefone ?? ""));
+      if (!telefoneValido(canonico)) {
+        return { ok: false as const, error: "Telefone inválido" };
+      }
+      const { data: alunoMatch } = await supabaseAdmin.rpc("buscar_aluno_por_telefone", {
+        _telefone: canonico,
+      });
+      const aluno = Array.isArray(alunoMatch) ? alunoMatch[0] : alunoMatch;
+      if (aluno?.id !== data.alunoId) {
+        return { ok: false as const, error: "Aluno não corresponde ao telefone informado" };
+      }
+      alunoId = aluno.id;
+    }
 
     const update: Record<string, unknown> = {
       respondido: true,
@@ -344,6 +368,7 @@ export const submeterFormularioPublico = createServerFn({ method: "POST" })
 
 /** Vincula um aluno_id a um formulário (após criar/encontrar o aluno). */
 export const vincularAlunoFormulario = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z.object({
       formId: z.string().uuid(),
@@ -351,7 +376,11 @@ export const vincularAlunoFormulario = createServerFn({ method: "POST" })
       alunoId: z.string().uuid(),
     }).parse(input),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { data: permitido } = await supabaseAdmin.rpc("is_equipe_or_admin", {
+      _user_id: context.userId,
+    });
+    if (!permitido) return { ok: false as const, error: "Sem permissão" };
     const { error } = await supabaseAdmin
       .from("formularios")
       .update({ aluno_id: data.alunoId })
