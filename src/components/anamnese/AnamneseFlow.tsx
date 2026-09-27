@@ -4,7 +4,7 @@ import { logarFalhaPublica } from "@/lib/aluno-publico";
 import { useServerFn } from "@tanstack/react-start";
 import { criarAlunoPublico } from "@/server/aluno-publico.functions";
 import { submeterFormularioPublico } from "@/server/formulario-publico-flow.functions";
-import mpLogo from "@/assets/mp-logo.png";
+import fitflowLogo from "@/assets/fitflow-logo.png.asset.json";
 import { TimePicker } from "@/components/ui/time-picker";
 import { PhoneDdiInput, splitPhone } from "@/components/publico/PhoneDdiInput";
 import { ConfirmarTelefoneModal } from "@/components/publico/ConfirmarTelefoneModal";
@@ -336,7 +336,7 @@ export function AnamneseFlow({ formId, alunoId, token, onSubmitted }: Props) {
         <Card>
           <div className="text-center py-8 md:py-12">
             <Logo big />
-            <h1 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: INK }}>Bem-vindo(a) ao MPTEAM.</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: INK }}>Bem-vindo(a) ao FITFLOW.</h1>
             <div className="text-base md:text-lg leading-relaxed mb-8 whitespace-pre-line" style={{ color: INK }}>
               {"Treino e dieta personalizados para quem quer resultado de verdade, sem viver no achismo.\n\nAqui você tem estratégia, acompanhamento e ajustes constantes para evoluir com clareza.\n\nResultado vem de direção, constância e responsabilidade."}
             </div>
@@ -456,8 +456,8 @@ function Logo({ big = false }: { big?: boolean }) {
   return (
     <div className={`flex justify-center ${big ? "mb-8" : ""}`}>
       <img
-        src={mpLogo}
-        alt="MP TEAM Consultoria"
+        src={fitflowLogo.url}
+        alt="FITFLOW"
         className={big ? "h-20 md:h-24 w-auto" : "h-10 w-auto"}
         loading="eager"
       />

@@ -8,9 +8,18 @@ import {
 import { AnamneseFlow } from "@/components/anamnese/AnamneseFlow";
 import { FeedbackQuinzenalFlow } from "@/components/feedback/FeedbackQuinzenalFlow";
 import { FeedbackMensalFlow } from "@/components/feedback/FeedbackMensalFlow";
+import { useBranding } from "@/hooks/useBranding";
 
 export const Route = createFileRoute("/formularios/$token")({
   component: PublicForm,
+  head: () => ({ meta: [
+    { title: "Formulário — FITFLOW" },
+    { name: "description", content: "Responda seu formulário de acompanhamento na FITFLOW." },
+    { property: "og:title", content: "Formulário — FITFLOW" },
+    { property: "og:description", content: "Formulário de acompanhamento FITFLOW." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 type Tipo = "anamnese" | "feedback_quinzenal" | "feedback_mensal" | "check_shape";
@@ -131,12 +140,12 @@ function PublicForm() {
 }
 
 function PublicShell({ children }: { children: React.ReactNode }) {
+  const branding = useBranding();
   return (
     <div className="min-h-screen px-4 py-10">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <div className="text-2xl font-black text-primary tracking-tight">MPTEAM</div>
-          <div className="text-[10px] font-semibold text-muted-foreground tracking-[0.4em]">CRM</div>
+          <img src={branding.logo} alt="FITFLOW" className="mx-auto h-16 w-16 object-contain" />
         </div>
         <div className="rounded-lg border border-border bg-card p-6 md:p-8">{children}</div>
       </div>

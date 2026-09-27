@@ -65,8 +65,8 @@ export function mostrarAviso(titulo: string, corpo?: string | null, url?: string
   try {
     const n = new Notification(titulo, {
       body: corpo ?? undefined,
-      icon: "/mp-logo.png",
-      badge: "/mp-logo.png",
+      icon: "/favicon.png",
+      badge: "/favicon.png",
       tag: `mpteam-crm-${titulo}`,
     });
     n.onclick = () => {
