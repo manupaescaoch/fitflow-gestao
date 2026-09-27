@@ -1,8 +1,8 @@
-# MPTEAM
+# FITFLOW
 
 > Plataforma de consultoria fitness e nutricional online: dietas, treinos, acompanhamento de evolução e ranking dos alunos.
 
-MPTEAM é o sistema usado pela equipe e pelos alunos da consultoria MPTEAM. A área pública contém apenas o login e os formulários enviados aos alunos (anamnese, feedbacks). As demais áreas exigem autenticação.
+FITFLOW é o sistema usado pela equipe e pelos alunos da consultoria. A área pública contém apenas o login e os formulários enviados aos alunos (anamnese, feedbacks). As demais áreas exigem autenticação.
 
 ## Pages
 

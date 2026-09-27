@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { setAlunoSession, getAlunoSession } from "@/lib/aluno-session";
 import { useServerFn } from "@tanstack/react-start";
 import { loginAlunoPorEmail } from "@/server/aluno-auth.functions";
+import { useBranding } from "@/hooks/useBranding";
 
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>): { next?: string } => ({
@@ -12,14 +13,19 @@ export const Route = createFileRoute("/login")({
   }),
   head: () => ({
     meta: [
-      { title: "Entrar — MPTEAM" },
-      { name: "description", content: "Acesse sua conta MPTEAM. Login único para equipe e alunos da consultoria fitness e nutricional." },
+       { title: "Entrar — FITFLOW" },
+       { name: "description", content: "Acesse sua conta FITFLOW. Login para equipe e alunos da consultoria fitness e nutricional." },
+       { property: "og:title", content: "Entrar — FITFLOW" },
+       { property: "og:description", content: "Acesse a plataforma FITFLOW para equipe e alunos." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: LoginPage,
 });
 
 function LoginPage() {
+  const branding = useBranding();
   const { signIn, session, loading } = useAuth();
   const nav = useNavigate();
   const { next } = Route.useSearch();
@@ -84,6 +90,7 @@ function LoginPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center px-6 pt-16 pb-10">
       <div className="w-full max-w-sm flex flex-col items-center">
+        <img src={branding.logo} alt="Logo FITFLOW" className="mb-6 h-20 w-20 object-contain" />
         {/* Título */}
         <h1 className="text-[42px] leading-none font-extrabold tracking-tight text-black">
           Bem-vindo

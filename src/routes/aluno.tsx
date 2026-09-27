@@ -92,7 +92,7 @@ function AlunoLayout() {
               O app do aluno foi desenhado pro celular.
             </h2>
             <p className="mt-3 text-sm text-zinc-600 leading-relaxed">
-              Pra melhor experiência, abra no seu smartphone. Você pode também instalar o MPTEAM
+               Pra melhor experiência, abra no seu smartphone. Você pode também instalar o FITFLOW
               como app na sua tela inicial.
             </p>
             <ul className="mt-6 space-y-2 text-sm text-zinc-700">

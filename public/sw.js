@@ -1,4 +1,4 @@
-/* MPTEAM service worker — push notifications */
+/* FITFLOW service worker — push notifications */
 self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
@@ -12,13 +12,13 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch (_e) {
-    data = { title: "MPTEAM", body: event.data ? event.data.text() : "" };
+    data = { title: "FITFLOW", body: event.data ? event.data.text() : "" };
   }
-  const title = data.title || "MPTEAM";
+  const title = data.title || "FITFLOW";
   const options = {
     body: data.body || "",
-    icon: data.icon || "/mp-logo.png",
-    badge: data.badge || "/mp-logo.png",
+    icon: data.icon || "/favicon.png",
+    badge: data.badge || "/favicon.png",
     tag: data.tag || "mpteam-default",
     data: { url: data.url || "/aluno" },
   };

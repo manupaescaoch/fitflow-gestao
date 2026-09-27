@@ -9,6 +9,7 @@ import { AnamneseFlow } from "@/components/anamnese/AnamneseFlow";
 import { FeedbackQuinzenalFlow } from "@/components/feedback/FeedbackQuinzenalFlow";
 import { FeedbackMensalFlow } from "@/components/feedback/FeedbackMensalFlow";
 import { PhoneDdiInput } from "@/components/publico/PhoneDdiInput";
+import { useBranding } from "@/hooks/useBranding";
 
 type Tipo = "anamnese" | "feedback_quinzenal" | "feedback_mensal";
 
@@ -154,6 +155,7 @@ function IdentificacaoTelefone({
   tipo: "feedback_mensal" | "feedback_quinzenal";
   onIdentificar: (telefone: string) => Promise<string | null>;
 }) {
+  const branding = useBranding();
   const [telefone, setTelefone] = useState("");
   const [ddi, setDdi] = useState("55");
   const [busy, setBusy] = useState(false);
@@ -185,7 +187,7 @@ function IdentificacaoTelefone({
     <div className="min-h-screen flex items-center justify-center px-4 bg-[#f7f7f7]">
       <div className="w-full max-w-md bg-white rounded-lg p-6 md:p-8" style={{ border: `1px solid ${BORDER}` }}>
         <div className="text-center mb-6">
-          <div className="text-2xl font-black tracking-tight" style={{ color: RED }}>MPTEAM</div>
+          <img src={branding.logo} alt="FITFLOW" className="mx-auto h-16 w-16 object-contain" />
           <div className="text-[10px] font-semibold tracking-[0.4em]" style={{ color: MUTED }}>CRM</div>
         </div>
         <h1 className="text-xl md:text-2xl font-bold mb-2" style={{ color: INK }}>{titulo}</h1>

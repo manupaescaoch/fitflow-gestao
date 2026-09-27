@@ -13,4 +13,4 @@ Disallow: /avaliacao-fisica
 Disallow: /formularios
 Disallow: /api/
 
-Sitemap: https://mpteam-app.com/sitemap.xml
+Sitemap: https://fitflow-gestao.lovable.app/sitemap.xml

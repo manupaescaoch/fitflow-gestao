@@ -379,7 +379,7 @@ function MoreLink({ to, icon: Icon, label, indent }: { to: string; icon: typeof 
 
 export function ModalidadeTag({ m }: { m: Database_Modalidade }) {
   const labels: Record<string, string> = {
-    mpteam: "MPTEAM", mp_elite: "MP Elite", mp_presencial: "MP Presencial",
+     mpteam: "FITFLOW", mp_elite: "MP Elite", mp_presencial: "MP Presencial",
   };
   if (!m) return <span className="text-muted-foreground text-xs">—</span>;
   const colors: Record<string, string> = {
