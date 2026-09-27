@@ -14,6 +14,10 @@
    inicial ainda precisam ser exportados e versionados antes de um deploy limpo.
 4. Para checagens locais: `npx tsc --noEmit`, `npx vitest run`, `npm run build`.
 
+O feedback público por telefone usa código enviado pela Z-API. Antes de ativá-lo,
+aplique `supabase/migrations/20260927193000_formulario_verificacoes.sql` na
+instância que já possui a tabela `alunos` e configure a Z-API da instalação.
+
 As integrações Z-API, automações, links externos e templates de mensagem exigem
 credenciais e destinos próprios. Revise o conteúdo MPTEAM abaixo: é um briefing
 histórico de criação, não uma receita de instalação da versão atual.

@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
-import { enviarWhatsAppTeste } from "./zapi-send.server";
+import { enviarWhatsAppTeste, enviarTextoZapiDireto } from "./zapi-send.server";
+import { createHash, randomInt, randomUUID } from "node:crypto";
 import { MSG_ANAMNESE_RECEBIDA } from "./mensagens-fixas";
 import { normalizarTelefoneBR, telefoneValido } from "@/lib/telefone";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -51,107 +52,87 @@ export const iniciarFormularioPublico = createServerFn({ method: "POST" })
     }
   });
 
-/**
- * Recupera (ou cria) um formulário público de feedback vinculado ao aluno
- * identificado pelo telefone. Usado em links públicos compartilhados (ex:
- * /feedback-mensal) onde o aluno se identifica digitando o WhatsApp.
- *
- * Se já existir um formulário pendente do mesmo tipo para o aluno, devolve
- * o token existente (autosave persiste). Se não existir, cria um novo já
- * vinculado. Se o telefone não corresponder a nenhum aluno cadastrado,
- * retorna ok=false com motivo, sem criar nada.
- */
+/** Solicita um código ao WhatsApp cadastrado antes de liberar um feedback. */
 export const iniciarFormularioPorTelefone = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
-    z.object({
-      tipo: TipoFeedbackSchema,
-      telefone: z.string().min(8).max(32),
-    }).parse(input),
+    z.object({ tipo: TipoFeedbackSchema, telefone: z.string().min(8).max(32) }).parse(input),
   )
   .handler(async ({ data }) => {
-    const canonico = normalizarTelefoneBR(data.telefone);
-    if (!telefoneValido(canonico)) {
-      return {
-        ok: false as const,
-        error:
-          "Confira o telefone digitado. Precisa ter DDD + número (ex: 81 91234-5678).",
-      };
+    const telefone = normalizarTelefoneBR(data.telefone);
+    if (!telefoneValido(telefone)) return { ok: false as const, error: "Telefone inválido" };
+    const { data: match } = await supabaseAdmin.rpc("buscar_aluno_por_telefone", { _telefone: telefone });
+    const aluno = Array.isArray(match) ? match[0] : match;
+    // Não revele se o número está cadastrado.
+    if (!aluno?.id) return { ok: true as const, challengeId: randomUUID() };
+    const desde = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count, error: countError } = await supabaseAdmin.from("formulario_verificacoes")
+      .select("id", { count: "exact", head: true })
+      .eq("aluno_id", aluno.id).gte("criado_em", desde);
+    if (countError || (count ?? 0) >= 3) {
+      return { ok: false as const, error: "Aguarde antes de solicitar outro código." };
     }
-
-    // 1) Resolve aluno pelo telefone (mesma lógica da função SQL existente).
-    const { data: alunoMatch, error: rpcErr } = await supabaseAdmin.rpc(
-      "buscar_aluno_por_telefone",
-      { _telefone: canonico },
-    );
-    if (rpcErr) {
-      console.error("[iniciarFormularioPorTelefone] rpc error", rpcErr);
-      return {
-        ok: false as const,
-        error:
-          "Não conseguimos consultar seu cadastro agora. Tente de novo em alguns instantes.",
-      };
+    const codigo = String(randomInt(100000, 1000000));
+    const salt = randomUUID();
+    const hash = createHash("sha256").update(`${salt}:${codigo}`).digest("hex");
+    const { data: desafio, error } = await supabaseAdmin.from("formulario_verificacoes")
+      .insert({ aluno_id: aluno.id, tipo: data.tipo, codigo_hash: hash,
+        salt, expira_em: new Date(Date.now() + 10 * 60 * 1000).toISOString() })
+      .select("id").single();
+    if (error || !desafio) return { ok: false as const, error: "Não foi possível enviar o código." };
+    const envio = await enviarTextoZapiDireto({ phone: `55${telefone}`,
+      alunoId: aluno.id, tipoJob: "codigo_formulario",
+      mensagem: `Seu código para acessar o formulário é ${codigo}. Válido por 10 minutos.` });
+    if (!envio.ok) {
+      await supabaseAdmin.from("formulario_verificacoes").delete().eq("id", desafio.id);
+      return { ok: false as const, error: "Não foi possível enviar o código." };
     }
-    const aluno = Array.isArray(alunoMatch) ? alunoMatch[0] : alunoMatch;
-    if (!aluno?.id) {
-      return {
-        ok: false as const,
-        error:
-          "Não encontramos esse WhatsApp no cadastro. Confira se digitou o mesmo número usado na anamnese — ou fale com a equipe MPTEAM.",
-      };
+    return { ok: true as const, challengeId: desafio.id };
+  });
+
+/** Troca um código válido, de uso único, pelo token do formulário. */
+export const confirmarCodigoFormulario = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => z.object({
+    challengeId: z.string().uuid(), codigo: z.string().regex(/^\d{6}$/),
+  }).parse(input))
+  .handler(async ({ data }) => {
+    const { data: desafio } = await supabaseAdmin.from("formulario_verificacoes")
+      .select("id, aluno_id, tipo, codigo_hash, salt, tentativas, expira_em, usado_em")
+      .eq("id", data.challengeId).maybeSingle();
+    if (!desafio || desafio.usado_em || desafio.tentativas >= 5 ||
+        new Date(desafio.expira_em).getTime() < Date.now()) {
+      return { ok: false as const, error: "Código inválido ou expirado." };
     }
-
-    // 2) Reaproveita formulário pendente (mais recente) do mesmo tipo.
-    const { data: pendente } = await supabaseAdmin
-      .from("formularios")
-      .select("id, token")
-      .eq("aluno_id", aluno.id)
-      .eq("tipo", data.tipo)
-      .eq("respondido", false)
-      .order("criado_em", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (pendente?.id && pendente?.token) {
-      return {
-        ok: true as const,
-        id: pendente.id,
-        token: pendente.token,
-        alunoNome: aluno.nome ?? null,
-        alunoId: aluno.id as string,
-        reutilizado: true,
-      };
+    // Reserve uma tentativa de forma atômica antes de conferir o código.
+    const { data: tentativa } = await supabaseAdmin.from("formulario_verificacoes")
+      .update({ tentativas: desafio.tentativas + 1 }).eq("id", desafio.id)
+      .eq("tentativas", desafio.tentativas).is("usado_em", null)
+      .gt("expira_em", new Date().toISOString()).select("id").maybeSingle();
+    if (!tentativa) return { ok: false as const, error: "Código inválido ou expirado." };
+    const hash = createHash("sha256").update(`${desafio.salt}:${data.codigo}`).digest("hex");
+    if (hash !== desafio.codigo_hash) {
+      return { ok: false as const, error: "Código inválido ou expirado." };
     }
-
-    // 3) Cria novo formulário já vinculado.
-    const novoToken =
-      typeof crypto !== "undefined" && (crypto as any).randomUUID
-        ? (crypto as any).randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-
-    const { data: row, error } = await supabaseAdmin
-      .from("formularios")
-      .insert({
-        tipo: data.tipo,
-        token: novoToken,
-        aluno_id: aluno.id,
-        origem: "publico",
-        respondido: false,
-      })
-      .select("id")
-      .single();
-    if (error || !row) {
-      console.error("[iniciarFormularioPorTelefone] insert error", error);
-      return { ok: false as const, error: error?.message || "Falha ao iniciar formulário" };
+    const { data: claimed } = await supabaseAdmin.from("formulario_verificacoes")
+      .update({ usado_em: new Date().toISOString() }).eq("id", desafio.id)
+      .is("usado_em", null).gt("expira_em", new Date().toISOString())
+      .select("id").maybeSingle();
+    if (!claimed) return { ok: false as const, error: "Código inválido ou expirado." };
+    const { data: aluno } = await supabaseAdmin.from("alunos")
+      .select("nome").eq("id", desafio.aluno_id).maybeSingle();
+    let { data: form } = await supabaseAdmin.from("formularios")
+      .select("id, token").eq("aluno_id", desafio.aluno_id)
+      .eq("tipo", desafio.tipo).eq("respondido", false)
+      .order("criado_em", { ascending: false }).limit(1).maybeSingle();
+    if (!form) {
+      const novo = await supabaseAdmin.from("formularios").insert({
+        tipo: desafio.tipo, token: randomUUID(), aluno_id: desafio.aluno_id,
+        origem: "publico", respondido: false,
+      }).select("id, token").single();
+      form = novo.data;
     }
-
-    return {
-      ok: true as const,
-      id: row.id,
-      token: novoToken,
-      alunoNome: aluno.nome ?? null,
-      alunoId: aluno.id as string,
-      reutilizado: false,
-    };
+    if (!form) return { ok: false as const, error: "Não foi possível abrir o formulário." };
+    return { ok: true as const, id: form.id, token: form.token,
+      alunoId: desafio.aluno_id, alunoNome: aluno?.nome ?? null };
   });
 
 /** Lê metadados mínimos do formulário pelo token. Não retorna `dados_resposta`. */
