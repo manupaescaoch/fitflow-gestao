@@ -1797,6 +1797,42 @@ export type Database = {
           },
         ]
       }
+      formulario_verificacoes: {
+        Row: {
+          id: string
+          aluno_id: string
+          tipo: "feedback_mensal" | "feedback_quinzenal"
+          codigo_hash: string
+          salt: string
+          tentativas: number
+          expira_em: string
+          usado_em: string | null
+          criado_em: string
+        }
+        Insert: {
+          id?: string
+          aluno_id: string
+          tipo: "feedback_mensal" | "feedback_quinzenal"
+          codigo_hash: string
+          salt: string
+          tentativas?: number
+          expira_em: string
+          usado_em?: string | null
+          criado_em?: string
+        }
+        Update: {
+          id?: string
+          aluno_id?: string
+          tipo?: "feedback_mensal" | "feedback_quinzenal"
+          codigo_hash?: string
+          salt?: string
+          tentativas?: number
+          expira_em?: string
+          usado_em?: string | null
+          criado_em?: string
+        }
+        Relationships: []
+      }
       formularios: {
         Row: {
           aluno_id: string | null

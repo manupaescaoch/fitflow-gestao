@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+import { randomInt } from "node:crypto";
 import {
   
   requireAlunoAuth,
@@ -12,7 +13,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { decodeAndValidateImage } from "./image-validation.server";
 import {
   digits,
-  senhaInicialFromWhatsapp,
   setAlunoCookie,
   loadDashboard,
 } from "./aluno-auth-helpers.server";
@@ -41,10 +41,10 @@ export const criarAcessoAluno = createServerFn({ method: "POST" })
     if (error || !aluno) {
       return { ok: false as const, error: "Aluno não encontrado" };
     }
-    const senha = senhaInicialFromWhatsapp(aluno.whatsapp);
-    if (senha.length < 10) {
+    if (digits(aluno.whatsapp).length < 10) {
       return { ok: false as const, error: "WhatsApp do aluno inválido" };
     }
+    const senha = Array.from({ length: 12 }, () => randomInt(0, 10)).join("");
     const hash = await bcrypt.hash(senha, 10);
     const { error: upErr } = await supabaseAdmin
       .from("alunos_acesso")
@@ -358,10 +358,21 @@ export const solicitarResetSenhaAluno = createServerFn({ method: "POST" })
       return { ok: true as const };
     }
 
+    const umaHoraAtras = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count, error: limiteErro } = await supabaseAdmin.from("mensagens_log")
+      .select("id", { count: "exact", head: true })
+      .eq("aluno_id", alunoRow.id)
+      .eq("tipo_job", "reset_senha_aluno")
+      .gte("enviado_em", umaHoraAtras);
+    // Em falha na consulta, bloqueie o reset: não contorne o limite.
+    if (limiteErro || (count ?? 0) >= 3) return { ok: true as const };
+
     // Gera senha temporária de 6 dígitos
-    const tempSenha = String(
-      Math.floor(100000 + Math.random() * 900000),
-    );
+    const { data: acesso } = await supabaseAdmin.from("alunos_acesso")
+      .select("senha_hash, deve_trocar_senha")
+      .eq("aluno_id", alunoRow.id)
+      .maybeSingle();
+    const tempSenha = String(randomInt(100000, 1000000));
     const hash = await bcrypt.hash(tempSenha, 10);
     const { error: upErr } = await supabaseAdmin
       .from("alunos_acesso")
@@ -387,11 +398,18 @@ export const solicitarResetSenhaAluno = createServerFn({ method: "POST" })
       `Use ela para entrar e o app vai te pedir pra criar uma nova senha em seguida.\n\n` +
       `Se você não solicitou, ignore esta mensagem.`;
 
-    await enviarWhatsAppTeste({
+    const envio = await enviarWhatsAppTeste({
       alunoId: alunoRow.id,
       tipoJob: "reset_senha_aluno",
       mensagem,
     });
+    if (!envio.ok && acesso?.senha_hash) {
+      // A entrega falhou: não deixe o aluno preso com uma senha que não recebeu.
+      await supabaseAdmin.from("alunos_acesso")
+        .update({ senha_hash: acesso.senha_hash, deve_trocar_senha: acesso.deve_trocar_senha })
+        .eq("aluno_id", alunoRow.id)
+        .eq("senha_hash", hash);
+    }
 
     return { ok: true as const };
   });

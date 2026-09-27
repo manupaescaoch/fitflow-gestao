@@ -1,5 +1,27 @@
 # CRM CONSULTORIA
 
+> **Estado da distribuição (setembro de 2026): ainda não é uma instalação independente.**
+> As migrações versionadas não contêm o esquema completo do banco de produção.
+> Aplicá-las a um Supabase vazio não cria tabelas essenciais como `alunos` e
+> `usuarios_crm`. Não aponte uma cópia para o projeto Supabase original.
+
+## Para desenvolver
+
+1. Use Node.js 24, rode `npm ci` e depois `npm run dev`.
+2. Crie seu próprio projeto Supabase. Consulte `.env.example` para as variáveis;
+   configure as chaves privadas apenas no ambiente do servidor.
+3. O esquema SQL completo, políticas RLS, funções RPC, buckets e usuário admin
+   inicial ainda precisam ser exportados e versionados antes de um deploy limpo.
+4. Para checagens locais: `npx tsc --noEmit`, `npx vitest run`, `npm run build`.
+
+O feedback público por telefone usa código enviado pela Z-API. Antes de ativá-lo,
+aplique `supabase/migrations/20260927193000_formulario_verificacoes.sql` na
+instância que já possui a tabela `alunos` e configure a Z-API da instalação.
+
+As integrações Z-API, automações, links externos e templates de mensagem exigem
+credenciais e destinos próprios. Revise o conteúdo MPTEAM abaixo: é um briefing
+histórico de criação, não uma receita de instalação da versão atual.
+
 # PROMPT FINAL — CRM MPTEAM
 ## Cole este prompt no chat inicial do Lovable
 

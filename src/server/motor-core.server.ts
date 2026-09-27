@@ -204,11 +204,13 @@ async function processarJob(
     .maybeSingle();
   if (!aluno) return { ok: false, error: "Aluno não encontrado" };
 
-  // Notificação ao admin sobre novo aluno: o destino é fixo (Manu),
-  // não depende do whatsapp do aluno. Tratada antes das demais regras.
+  // Destino e URL são específicos de cada instalação.
   if (job.tipo === "novo_aluno_admin") {
-    const adminPhone = "5581971161234";
-    const base = (cfg["APP_BASE_URL"] || "https://mpteam-crm.lovable.app").replace(/\/$/, "");
+    const adminPhone = onlyDigits(cfg["ADMIN_WHATSAPP"] || process.env.ADMIN_WHATSAPP || "");
+    const base = (cfg["APP_BASE_URL"] || process.env.APP_BASE_URL || "").replace(/\/$/, "");
+    if (adminPhone.length < 10 || !base) {
+      return { ok: false, error: "Configure ADMIN_WHATSAPP e APP_BASE_URL", mensagem: "" };
+    }
     const link = `${base}/alunos/${aluno.id}`;
     const mensagemAdmin =
       `🆕 Novo aluno cadastrado: *${aluno.nome}*.\n\n` +

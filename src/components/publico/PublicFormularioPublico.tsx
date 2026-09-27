@@ -4,6 +4,7 @@ import {
   iniciarFormularioPublico,
   checarFormularioPendente,
   iniciarFormularioPorTelefone,
+  confirmarCodigoFormulario,
 } from "@/server/formulario-publico-flow.functions";
 import { AnamneseFlow } from "@/components/anamnese/AnamneseFlow";
 import { FeedbackQuinzenalFlow } from "@/components/feedback/FeedbackQuinzenalFlow";
@@ -37,9 +38,11 @@ export function PublicFormularioPublico({ tipo }: Props) {
   const [sessao, setSessao] = useState<Sessao | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [bootstrapping, setBootstrapping] = useState(true);
+  const [challengeId, setChallengeId] = useState<string | null>(null);
   const iniciarFn = useServerFn(iniciarFormularioPublico);
   const checarFn = useServerFn(checarFormularioPendente);
   const iniciarPorTelFn = useServerFn(iniciarFormularioPorTelefone);
+  const confirmarFn = useServerFn(confirmarCodigoFormulario);
 
   const ehFeedback = tipo === "feedback_mensal" || tipo === "feedback_quinzenal";
 
@@ -101,12 +104,19 @@ export function PublicFormularioPublico({ tipo }: Props) {
   async function handleIdentificar(telefone: string): Promise<string | null> {
     const r = await iniciarPorTelFn({ data: { tipo: tipo as "feedback_mensal" | "feedback_quinzenal", telefone } });
     if (!r.ok) return r.error || "Não foi possível iniciar o formulário.";
+    setChallengeId(r.challengeId);
+    return null;
+  }
+
+  async function handleConfirmar(codigo: string): Promise<string | null> {
+    if (!challengeId) return "Solicite um novo código.";
+    const r = await confirmarFn({ data: { challengeId, codigo } });
+    if (!r.ok) return r.error || "Código inválido.";
     const nova: Sessao = {
       formId: r.id,
       token: r.token,
       alunoNome: r.alunoNome ?? null,
       alunoId: (r as any).alunoId ?? null,
-      telefone,
     };
     try { localStorage.setItem(storageKey(tipo), JSON.stringify(nova)); } catch {}
     setSessao(nova);
@@ -133,7 +143,9 @@ export function PublicFormularioPublico({ tipo }: Props) {
 
   // Feedbacks sem sessão: pedir telefone para identificar o aluno.
   if (!sessao && ehFeedback) {
-    return <IdentificacaoTelefone tipo={tipo} onIdentificar={handleIdentificar} />;
+    return challengeId
+      ? <ConfirmacaoCodigo onConfirmar={handleConfirmar} />
+      : <IdentificacaoTelefone tipo={tipo} onIdentificar={handleIdentificar} />;
   }
 
   if (!sessao) return null;
@@ -145,6 +157,30 @@ export function PublicFormularioPublico({ tipo }: Props) {
     return <FeedbackQuinzenalFlow formId={sessao.formId} alunoId={sessao.alunoId ?? null} token={sessao.token} onSubmitted={handleSubmitted} />;
   }
   return <FeedbackMensalFlow formId={sessao.formId} alunoId={sessao.alunoId ?? null} token={sessao.token} onSubmitted={handleSubmitted} />;
+}
+
+function ConfirmacaoCodigo({ onConfirmar }: {
+  onConfirmar: (codigo: string) => Promise<string | null>;
+}) {
+  const [codigo, setCodigo] = useState("");
+  const [erro, setErro] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  return <div className="min-h-screen flex items-center justify-center px-4 bg-[#f7f7f7]">
+    <form className="w-full max-w-md bg-white rounded-lg p-8 space-y-4"
+      onSubmit={async (e) => {
+        e.preventDefault(); setBusy(true);
+        setErro(await onConfirmar(codigo)); setBusy(false);
+      }}>
+      <h1 className="text-xl font-bold">Confirme seu WhatsApp</h1>
+      <p className="text-sm">Digite o código de 6 dígitos enviado ao número cadastrado.</p>
+      <input inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required
+        value={codigo} onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ""))}
+        className="w-full border rounded-md p-3" aria-label="Código de confirmação" />
+      {erro && <p role="alert" className="text-sm text-red-600">{erro}</p>}
+      <button disabled={busy || codigo.length !== 6} className="w-full py-3 rounded-md text-white font-semibold disabled:opacity-60"
+        style={{ backgroundColor: RED }}>{busy ? "Verificando..." : "Confirmar"}</button>
+    </form>
+  </div>;
 }
 
 function IdentificacaoTelefone({
